@@ -1,0 +1,31 @@
+---
+- name: Add Ruby ppa
+  apt_repository: repo="ppa:brightbox/ruby-ng" update_cache=yes
+
+- name: Install Rubies
+  apt: name="{{ item }}" state=present force=yes
+  with_items:
+    - ruby2.1
+    - ruby2.0-dev
+    - ruby-dev
+    # For compiling ruby gems
+    - libreadline6
+    - libxslt-dev
+    - libxml2-dev
+    - zlib1g-dev
+    - autoconf
+    - libc6-dev
+    - automake
+    - libtool
+
+- name: Install Gems
+  gem: name="{{ item }}" state=latest
+  with_items:
+    # Compile Sass
+    - compass
+    - rmate
+    # Testing 
+    - rspec
+    - rspec-retry
+    - poltergeist
+    - capybara

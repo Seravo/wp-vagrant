@@ -1,0 +1,12 @@
+---
+- name: Create data directories
+  file: path=/data/{{ item }} state=directory owner=vagrant group=vagrant
+  with_items:
+    - log
+    - db
+    - wordpress
+    - home
+    - redis
+
+- name: 777 for log directory
+  file: path=/data/log mode=0777

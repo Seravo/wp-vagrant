@@ -1,0 +1,11 @@
+---
+- name: Autoremove unused packages
+  command: apt-get -y autoremove
+
+- name: Cleanup Bash history
+  command: rm -f /root/.bash_history
+  command: rm -f /home/vagrant/.bash_history
+
+# TODO:
+# To reduce the box size all of these should be in this ansible playbook
+# https://gist.github.com/justindowning/5670884

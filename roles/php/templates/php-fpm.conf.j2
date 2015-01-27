@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;
+; FPM Configuration ;
+;;;;;;;;;;;;;;;;;;;;;
+
+pid = /var/run/php5-fpm/php5-fpm.pid
+error_log = {{ php_fpm_log }}/php-error.log
+log_level = warning
+daemonize = yes
+
+[www]
+user = vagrant
+group = vagrant
+listen = /var/run/php5-fpm/php5-fpm.sock
+listen.owner = vagrant
+listen.group = vagrant
+listen.mode = 0660
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3

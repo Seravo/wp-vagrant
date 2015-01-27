@@ -1,0 +1,21 @@
+---
+- name: Add Nodejs ppa
+  apt_repository: repo="ppa:chris-lea/node.js" update_cache=yes
+
+- name: Install Nodejs
+  apt: name=nodejs state=present force=yes
+
+- name: Install NPM Packages
+  npm: name="{{ item }}" global=yes state=latest
+  with_items:
+    #Nice terminal editor
+    - slap
+    # Dependency handling
+    - bower
+    - gulp
+    # Workflow
+    - grunt
+    - grunt-contrib-coffee
+    - grunt-contrib-sass
+    - grunt-contrib-compass
+    - grunt-contrib-watch

@@ -1,0 +1,52 @@
+##
+# Default web-server
+##
+
+server {
+  # Just listen to any hostname because this image is for single site only
+  listen 80 default_server;
+
+  # Document root is located at /data/wordpress/htdocs/
+  root {{ htdocs }};
+
+  index index.html index.htm index.hh index.php;
+
+  # Don't fill up error logs with not found messages.
+  # You can see 404s in access logs as well
+  log_not_found off;
+
+  access_log {{ logs_dir }}/nginx-access.log extensive;
+  error_log  {{ logs_dir }}/nginx-error.log error;
+
+  # A few wordpress specific rules for subdirectory installations
+  include wordpress.conf;
+
+  #Include custom nginx additions from project
+  include {{ project_dir }}/nginx.conf;
+}
+
+server {
+  listen 443 default_server;
+  server_name _;
+
+  # With vagrant we don't have custom proxy in front
+  # But we would like to use same variables here as well
+  set $proxy_https "on";
+
+  root {{ htdocs }};
+
+  index index.html index.htm index.hh index.php;
+
+  # Don't fill up error logs with not found messages.
+  # You can see 404s in access logs as well
+  log_not_found off;
+
+  access_log {{ logs_dir }}/nginx-access.log extensive;
+  error_log  {{ logs_dir }}/nginx-error.log error;
+
+  # A few wordpress specific rules for subdirectory installations
+  include wordpress.conf;
+
+  #Include custom nginx additions from project
+  include {{ project_dir }}/nginx.conf;  
+}
