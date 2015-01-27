@@ -1,15 +1,44 @@
+##
+# File includes Wordpress specific nginx-rules.
+##
+
+# Rewrite rules to allow for an application-like wordpress directory structure
+if (!-e $request_filename) {
+  rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+  rewrite ^/(wp-.*.php)$ /wordpress/$1 last;
+  rewrite ^/(wp-(content|admin|includes).*) /wordpress/$1 last;
+}
+
+# Enable XML-RPC for WordPress
+rewrite ^/(xmlrpc\.php)$ /wordpress/$1 last;
+
+# Allow fileuploads up to 64M
+client_max_body_size 64M;
+
 location / {
   try_files $uri $uri/ /index.php?$args;
 }
 
-location ~ \.php$ {
+#PHP5-FPM/HHVM for php/hack files
+location ~ \.(php|hh)$ {
   try_files $uri =404;
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-  fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
+  fastcgi_pass unix:/var/run/php5-fpm/php5-fpm.sock;
   client_max_body_size 0;
 }
 
-include h5bp/directive-only/x-ua-compatible.conf;
-include h5bp/location/cross-domain-fonts.conf;
-include h5bp/location/protect-system-files.conf;
+# Yoast SEO sitemap configuration
+# source: https://rtcamp.com/wordpress-nginx/tutorials/plugins/yoast-seo-sitemap/
+location ~ ([^/]*)sitemap(.*)\.x(m|s)l$ {
+  rewrite ^/sitemap\.xml$ /sitemap_index.xml permanent;
+  rewrite ^/([a-z]+)?-?sitemap\.xsl$ /index.php?xsl=$1 last;
+  rewrite ^/sitemap_index\.xml$ /index.php?sitemap=1 last;
+  rewrite ^/([^/]+?)-sitemap([0-9]+)?\.xml$ /index.php?sitemap=$1&sitemap_n=$2 last;
+  
+  # The following lines are for optional addons
+  rewrite ^/news_sitemap\.xml$ /index.php?sitemap=wpseo_news last;
+  rewrite ^/locations\.kml$ /index.php?sitemap=wpseo_local_kml last;
+  rewrite ^/geo_sitemap\.xml$ /index.php?sitemap=wpseo_local last;
+  rewrite ^/video-sitemap\.xsl$ /index.php?xsl=video last;
+}

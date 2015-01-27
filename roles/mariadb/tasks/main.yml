@@ -19,7 +19,7 @@
   mysql_user: name=root
               password="{{ mysql_root_password }}"
               check_implicit_admin=yes
-              login_user="{{ mysql_user }}"
+              login_user="{{ mysql_root_user }}"
               login_password="{{ mysql_root_password }}"
               state=present
   with_items:
@@ -27,6 +27,22 @@
     - 127.0.0.1
     - ::1
     - localhost
+
+- name: Create a new database 'vagrant'
+  mysql_db: name=vagrant
+            state=present
+            collation=utf8_general_ci
+            login_user="{{ mysql_root_user }}"
+            login_password="{{ mysql_root_password }}"
+
+- name: Create a database user 'vagrant'
+  mysql_user: name=vagrant
+              password=vagrant
+              priv=vagrant.*:ALL
+              host=localhost
+              state=present
+              login_user="{{ mysql_root_user }}"
+              login_password="{{ mysql_root_password }}"
 
 - name: Delete anonymous MySQL server user for current hostname
   mysql_user: user=""

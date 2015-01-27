@@ -32,3 +32,11 @@
   template: src="php.ini.j2"
             dest="/etc/php5/fpm/php.ini"
   notify: restart php-fpm
+
+- name: Create run folder for php5-fpm
+  file: path=/var/run/php5-fpm state=directory owner=vagrant group=vagrant
+
+- name: Add php-fpm.conf template
+  template: src="php-fpm.conf.j2"
+            dest="/etc/php5/fpm/php-fpm.conf"
+  notify: restart php-fpm

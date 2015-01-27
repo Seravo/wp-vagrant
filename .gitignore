@@ -1,1 +1,4 @@
 .vagrant
+
+#Ignore boxes
+*.box

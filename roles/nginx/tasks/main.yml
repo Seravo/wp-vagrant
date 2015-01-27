@@ -5,26 +5,17 @@
 - name: Install Nginx
   apt: name=nginx state=present force=yes
 
-- name: Grab h5bp/server-configs-nginx
-  git:  repo=https://github.com/h5bp/server-configs-nginx.git
-        dest=/tmp/server-configs-nginx
-        version="1.0.0"
-        force=yes
-
-- name: Copy over h5bp configuration
-  command: cp -r /tmp/server-configs-nginx/{{ item }} /etc/nginx/{{ item }}
-  with_items:
-    - "mime.types"
-    - "h5bp/"
-
 - name: Install nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
 
-- name: Disable default server
-  file: path=/etc/nginx/sites-enabled/default state=absent
+- name: Create default server
+  template: src=default.conf.j2 dest=/etc/nginx/sites-enabled/default
 
 - name: Create base WordPress config
   template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
 
 - name: Create base WordPress subdirectory Multisite config
   template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
+
+- name: Create fastcgi_params config file
+  template: src=fastcgi_params.j2 dest=/etc/nginx/fastcgi_params

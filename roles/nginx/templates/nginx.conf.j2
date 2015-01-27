@@ -26,7 +26,7 @@ events {
 
 # Default error log file
 # (this is only used when you don't override error_log on a server{} level)
-error_log  {{ logs_root }}/error.log warn;
+error_log  {{ logs_dir }}/error.log warn;
 pid        /run/nginx.pid;
 
 http {
@@ -42,13 +42,14 @@ http {
   charset_types text/xml text/plain text/vnd.wap.wml application/x-javascript application/rss+xml text/css application/javascript application/json;
 
   # Format to use in log files
-  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+  log_format  extensive  '$remote_addr - $remote_user [$time_local] "$request" '
                     '$status $body_bytes_sent "$http_referer" '
-                    '"$http_user_agent" "$http_x_forwarded_for"';
+                    '"$http_user_agent" $upstream_cache_status "$http_x_forwarded_for"';
 
   # Default log file
   # (this is only used when you don't override access_log on a server{} level)
-  access_log {{ logs_root }}/access.log main;
+  access_log {{ logs_dir }}/nginx-access.log extensive;
+  error_log {{ logs_dir }}/nginx-error.log;
 
   # How long to allow each connection to stay idle; longer values are better
   # for each individual client, particularly for SSL, but means that worker

@@ -1,4 +1,7 @@
 ---
-logs_root: /var/log/nginx/
-nginx_user: www-data
+logs_dir: /data/log
+project_dir: /data/wordpress
+htdocs: /data/wordpress/htdocs
+nginx_user: vagrant
 strip_www: true
+environment: development
