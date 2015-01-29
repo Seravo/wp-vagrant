@@ -1,0 +1,29 @@
+---
+- name: Add apt bash-completions
+  apt: name="bash-completion" state=present force=yes
+
+- name: Get wp-cli bash completions
+  get_url:
+    url="{{ wp_cli_completion_url }}"
+    dest="/usr/share/bash-completion/completions/wp"
+
+- name: Create aliases for .bashrc
+  lineinfile:
+    dest=/home/vagrant/.bashrc
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+  with_items:
+    - { regexp: '^alias wp', line: "alias wp='/usr/local/bin/wp --path=/data/wordpress/htdocs/wordpress'" }
+    - { regexp: '^alias mysql', line: "alias mysql='/usr/local/bin/wp db cli --path=/data/wordpress/htdocs/wordpress'" }
+
+#WP CLI needs these
+- name: Create development ENVs for vagrant user
+  lineinfile:
+    dest=/home/vagrant/.bashrc
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+  with_items:
+    - { regexp: '^export DB_NAME', line: 'export DB_NAME=vagrant' }
+    - { regexp: '^export DB_USER', line: 'export DB_USER=vagrant' }
+    - { regexp: '^export DB_PASSWORD', line: 'export DB_PASSWORD=vagrant' }
+
