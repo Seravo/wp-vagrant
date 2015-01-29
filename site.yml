@@ -13,6 +13,7 @@
     - { role: nginx, tags: [nginx] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
+    - { role: profile, tags: [profile] }
     - { role: redis, tags: [redis] }
     - { role: ruby, tags: [ruby] }
     - { role: nodejs, tags: [nodejs] }

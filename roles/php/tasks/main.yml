@@ -21,7 +21,7 @@
   service: name=php5-fpm state=started enabled=true
 
 - name: Create socket directory
-  file: path=/var/run/php5-fpm/ state=directory
+  file: path=/var/run/php5-fpm/ state=directory owner=vagrant group=vagrant
 
 - name: Disable default pool
   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
@@ -32,9 +32,6 @@
   template: src="php.ini.j2"
             dest="/etc/php5/fpm/php.ini"
   notify: restart php-fpm
-
-- name: Create run folder for php5-fpm
-  file: path=/var/run/php5-fpm state=directory owner=vagrant group=vagrant
 
 - name: Add php-fpm.conf template
   template: src="php-fpm.conf.j2"

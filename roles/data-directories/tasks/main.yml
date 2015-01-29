@@ -9,4 +9,4 @@
     - redis
 
 - name: 777 for log directory
-  file: path=/data/log mode=0777
+  file: path=/data/log mode=0777 owner=vagrant group=vagrant
