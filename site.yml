@@ -11,6 +11,7 @@
     - { role: mariadb, tags: [mariadb] }
     - { role: php, tags: [php] }
     - { role: nginx, tags: [nginx] }
+    - { role: xdebug, tags: [xdebug] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: profile, tags: [profile] }

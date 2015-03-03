@@ -2,10 +2,10 @@
 - name: Add Ruby ppa
   apt_repository: repo="ppa:brightbox/ruby-ng" update_cache=yes
 
-- name: Install Rubies
+- name: Install Rubies + Dependencies
   apt: name="{{ item }}" state=present force=yes
   with_items:
-    - ruby2.1
+    - ruby2.2
     - ruby2.0-dev
     - ruby-dev
     # For compiling ruby gems
@@ -18,9 +18,14 @@
     - automake
     - libtool
 
+- name: Correct ruby version selected
+  alternatives: name=ruby path=/usr/bin/ruby2.2
+
 - name: Install Gems
-  gem: name="{{ item }}" state=latest
+  gem: name="{{ item }}" state=present user_install=no include_dependencies=yes
   with_items:
+    - bundler
+    - yaml
     # Compile Sass
     - compass
     - rmate

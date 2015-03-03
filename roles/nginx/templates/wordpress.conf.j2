@@ -19,6 +19,12 @@ location / {
   try_files $uri $uri/ /index.php?$args;
 }
 
+# Set variables to help nginx snippets in /data/wordpress/nginx
+# This differs a lot in production
+if ($scheme = https) {
+  set $ssl true;  
+}
+
 #PHP5-FPM/HHVM for php/hack files
 location ~ \.(php|hh)$ {
   try_files $uri =404;

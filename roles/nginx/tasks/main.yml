@@ -1,9 +1,9 @@
 ---
-- name: Add Nginx PPA
-  apt_repository: repo="ppa:nginx/stable" update_cache=yes
+- name: Add Nginx PPA from rtcamp with pagespeed
+  apt_repository: repo="ppa:rtcamp/nginx" update_cache=yes
 
 - name: Install Nginx
-  apt: name=nginx state=present force=yes
+  apt: name=nginx-custom state=present force=yes
 
 - name: Install nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
@@ -19,3 +19,6 @@
 
 - name: Create fastcgi_params config file
   template: src=fastcgi_params.j2 dest=/etc/nginx/fastcgi_params
+
+- name: Create cache folder
+  file: path=/var/cache/nginx/ngx_pagespeed_cache state=directory owner=vagrant group=vagrant

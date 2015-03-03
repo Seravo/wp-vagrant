@@ -17,5 +17,6 @@ It should ask if you want to enable git commit hooks on master
 
 ##Ruby gems installed only to root user
 * Check ansible gem module to have them globally
+* Even though rspec is installed there's no binary
 
 
