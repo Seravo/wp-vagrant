@@ -1,0 +1,24 @@
+##
+# Webgrind for debugging
+##
+
+server {
+  # listen any domain ending with 'webgrind.'
+  listen 80;
+  listen 443;
+  server_name webgrind.*;
+
+  # Document root is located at /data/wordpress/htdocs/
+  root /var/www/webgrind;
+
+  index index.php;
+
+  #PHP5-FPM/HHVM for php/hack files
+  location ~ \.(php|hh)$ {
+    try_files $uri =404;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_pass unix:/var/run/php5-fpm/php5-fpm.sock;
+    client_max_body_size 0;
+  }
+}

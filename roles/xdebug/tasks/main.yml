@@ -1,0 +1,26 @@
+---
+
+- name: Install php xdebug
+  apt: name=php5-xdebug state=present force=yes
+
+- name: Install webgrind
+  git: repo=https://github.com/jokkedk/webgrind/ dest=/var/www/webgrind
+
+- name: Add xdebug.ini template
+  template: src="20-xdebug.ini.j2"
+            dest="/etc/php5/fpm/conf.d/20-xdebug.ini"
+  notify: restart web
+
+- name: Install graphviz
+  apt: name="{{ item }}" state=present force=yes
+  with_items:
+  - python
+  - graphviz
+
+- name: Symlink dot binary 
+  file: src=/usr/bin/dot dest=/usr/local/bin/dot state=link
+
+- name: Install nginx configs for webgrind
+  template: src="webgrind.conf.j2"
+            dest="/etc/nginx/sites-enabled/webgrind"
+  notify: restart web

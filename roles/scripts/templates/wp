@@ -1,0 +1,12 @@
+#!/bin/bash
+##
+# This is wp-cli with clever hacks which allow to use environment variables
+##
+
+# Source environment if not interactive
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+#Run wp-cli command
+/usr/local/bin/wp-cli "$@" --path=$WP_CORE

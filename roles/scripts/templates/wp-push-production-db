@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+##
+# Pull production database and Search-Replace with details from config.yml
+##
+require 'yaml'
+
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+end
+
+#Gather useful variables for ssh/scp
+port = config['container']['ssh_port']
+host = config['container']['host']
+username = config['name']
+
+dumpfile = "/data/db/development-push-#{Time.now.to_i}.sql"
+backupfile = "/data/db/pre-push-backup-#{Time.now.to_i}.sql"
+
+puts "dumping db into #{dumpfile}..."
+system "wp db export #{dumpfile}"
+
+puts "Copy file to production..."
+system "scp -P #{port} #{dumpfile} #{username}@#{host}:#{dumpfile}"
+
+puts "Log into production and import db..."
+system "ssh #{username}@#{host} -p #{port} 'wp db import #{dumpfile}'"
+
+puts "Delete dump file..."
+system "rm #{dumpfile}"
+
+puts "Search-Replace #{config['development']['domain']} into: #{config['production']['domain']}"
+system "ssh #{username}@#{host} -p #{port} 'wp search-replace ://#{config['development']['domain']} ://#{config['production']['domain']}'"
+
+#TODO: Might be nice addition to run tests now and rollback in case of failure

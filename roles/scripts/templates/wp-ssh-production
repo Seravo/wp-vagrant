@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+##
+# Pull production database and Search-Replace with details from config.yml
+##
+require 'yaml'
+
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+end
+
+#Gather useful variables for ssh/scp
+port = config['container']['ssh_port']
+host = config['container']['host']
+username = config['name']
+
+puts "Log into production and import db..."
+system "ssh #{username}@#{host} -p #{port}"
