@@ -19,5 +19,6 @@
     - { role: ruby, tags: [ruby] }
     - { role: nodejs, tags: [nodejs] }
     - { role: phantomjs, tags: [phantomjs] }
+    - { role: scripts, tags: [scripts] }
     #Cleanup all files 
     - { role: cleanup, tags: [cleanup] }

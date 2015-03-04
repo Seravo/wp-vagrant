@@ -2,7 +2,7 @@
 ; FPM Configuration ;
 ;;;;;;;;;;;;;;;;;;;;;
 
-pid = /var/run/php5-fpm/php5-fpm.pid
+pid = /var/run/php5-fpm.pid
 error_log = {{ php_fpm_log }}/php-error.log
 log_level = warning
 daemonize = yes
@@ -10,7 +10,7 @@ daemonize = yes
 [www]
 user = vagrant
 group = vagrant
-listen = /var/run/php5-fpm/php5-fpm.sock
+listen = /var/run/php5-fpm.sock
 listen.owner = vagrant
 listen.group = vagrant
 listen.mode = 0660
@@ -21,5 +21,5 @@ pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 
 ; enable display of errors
-display_errors = On
-display_startup_errors = On
+php_flag[display_errors] = on
+php_flag[display_startup_errors] = on

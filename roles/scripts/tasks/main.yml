@@ -1,6 +1,7 @@
 - name: Install scripts
-  template: src={{ item }} dest=/usr/local/bin/{{ item }}
+  template: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
   with_items:
    - wp-pull-production-db
    - wp-push-production-db
    - wp
+   - wp-ssh-production
