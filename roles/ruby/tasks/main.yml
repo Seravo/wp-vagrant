@@ -25,11 +25,10 @@
   gem: name="{{ item }}" state=present user_install=no include_dependencies=yes
   with_items:
     - bundler
-    - yaml
     # Compile Sass
     - compass
     - rmate
-    # Testing 
+    # Testing
     - rspec
     - rspec-retry
     - poltergeist

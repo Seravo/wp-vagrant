@@ -1,7 +1,17 @@
 # Seravo Wordpress as Vagrant
 This project is used to create [our precompiled vagrant box](https://vagrantcloud.com/seravo/boxes/wordpress) for virtualbox.
 
-This is for cloning [wordpress-palvelu](http://wp-palvelu.fi) to local development
+This is used for cloning [wordpress-palvelu](http://wp-palvelu.fi) sites to local development
+
+# How to add into atlas cloud
+
+## Package the box into file
+```
+$ vagrant up --provision
+$ vagrant -c 'sudo rm -r /data/log/*.log'
+$ vagrant package
+```
+## Upload it into https://vagrantcloud.com/seravo/boxes/wordpress
 
 #Todo
 
@@ -12,11 +22,3 @@ It would be cool to include ansible scripts which would generate:
 * .ssh/config (for easier logging into production)
 * download production db with details from config.yml
 * enable 
-
-It should ask if you want to enable git commit hooks on master
-
-##Ruby gems installed only to root user
-* Check ansible gem module to have them globally
-* Even though rspec is installed there's no binary
-
-
