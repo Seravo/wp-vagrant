@@ -1,0 +1,24 @@
+#!/bin/bash
+##
+# Gives user easy way to restart nginx
+##
+
+# Stop on errors
+set -e
+
+# Source environment if doesn't exist yet
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+# Need to run as root
+if [ "$(id -u)" != "0" ]; then
+   exec sudo /usr/local/bin/wp-restart-nginx
+   exit 0
+fi
+
+echo "testing nginx configuration..."
+nginx -t
+echo "restarting nginx..."
+service nginx restart
+echo "nginx restarted!"

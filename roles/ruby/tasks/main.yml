@@ -33,3 +33,6 @@
     - rspec-retry
     - poltergeist
     - capybara
+
+- name: Install compass bash completion
+  get_url: url=https://raw.githubusercontent.com/piouPiouM/compass-completion/master/compass-completion.sh dest=/usr/share/bash-completion/completions/compass

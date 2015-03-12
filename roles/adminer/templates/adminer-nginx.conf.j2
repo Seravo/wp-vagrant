@@ -1,15 +1,15 @@
 ##
-# Webgrind for debugging
+# Adminer for DB administration
 ##
 
 server {
-  # listen any domain ending with 'webgrind.'
+  # listen any domain ending with 'adminer.'
   listen 80;
   listen 443 ssl;
-  server_name webgrind.*;
+  server_name adminer.*;
 
   # Document root is located at /data/wordpress/htdocs/
-  root /var/www/webgrind;
+  root {{ adminer_install_path }};
 
   index index.php;
 

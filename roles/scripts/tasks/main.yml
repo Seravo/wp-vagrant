@@ -1,7 +1,7 @@
-- name: Install scripts
-  template: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
-  with_items:
-   - wp-pull-production-db
-   - wp-push-production-db
-   - wp
-   - wp-ssh-production
+- name: Install custom script helpers 
+  template: src={{ item }} dest=/usr/local/bin/{{ item | basename | regex_replace('.j2$','') }} mode=0755
+  with_fileglob:
+  - ../templates/*
+
+- name: Get wp-phptidy for wordpress coding standards
+  get_url: url=https://raw.githubusercontent.com/scribu/wp-phptidy/master/wp-phptidy.php dest=/usr/local/bin/wp-phptidy mode=0755

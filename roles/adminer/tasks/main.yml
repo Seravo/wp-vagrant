@@ -1,0 +1,25 @@
+---
+- name: create adminer directory
+  file:
+    path: "{{ adminer_install_path }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_user }}"
+    mode: 0755
+  tags: [configuration, adminer, adminer-download ]
+
+- name: download (latest) adminer
+  get_url:
+    url: http://www.adminer.org/latest.php
+    dest: "{{ adminer_install_path }}/index.php"
+    force: true
+    owner: "{{ web_user }}"
+    group: "{{ web_user }}"
+    mode: 0644
+  tags: [configuration, adminer, adminer-download]
+
+- name: use adminer nginx config
+  template: src=adminer-nginx.conf.j2 dest=/etc/nginx/sites-available/adminer
+
+- name: enable adminer nginx
+  file: src=/etc/nginx/sites-available/adminer dest=/etc/nginx/sites-enabled/adminer owner={{ web_user }} group={{ web_user }} state=link

@@ -1,0 +1,14 @@
+#!/bin/bash
+##
+# Dump wordpress DB into .vagrant folder
+##
+
+# Stop on errors
+set -e
+
+# Source environment if doesn't exist yet
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+wp db import "$WP_PROJECT/.vagrant/vagrant-dump.sql"

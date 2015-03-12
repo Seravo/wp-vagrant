@@ -22,6 +22,10 @@ server {
   # A few wordpress specific rules for subdirectory installations
   include wordpress.conf;
 
+  # Include custom nginx additions from vagrant
+  # For eg. self-signed ssl-certificates
+  include /data/wordpress/.vagrant/nginx/*.conf;
+
   #Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
 }

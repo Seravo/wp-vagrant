@@ -1,0 +1,24 @@
+---
+#TODO: This doesn't work yet
+
+- name: Install sassc
+  git: repo=https://github.com/sass/sassc dest=/usr/local/lib/sassc
+
+- name: Install libsass
+  git: repo=https://github.com/sass/libsass dest=/usr/local/lib/libsass
+
+- name: Add libsass path to environment
+  lineinfile:
+    dest=/etc/environment
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+  with_items:
+    - { regexp: '^export SASS_LIBSASS_PATH=', line: "export SASS_LIBSASS_PATH='/usr/local/lib/libsass'" }
+
+- name: Install libsass
+  shell: "source /etc/environment && make"
+  args:
+    chdir: /usr/local/lib/sassc/
+
+- name: Symlink binary to $PATH
+  file: src=/url/local/lib/sassc/bin/sassc dest=/usr/local/bin/sassc state=link

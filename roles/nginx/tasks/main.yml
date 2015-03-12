@@ -15,7 +15,7 @@
   template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
 
 - name: Create base WordPress subdirectory Multisite config
-  template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
+  template: src=multisite_subdirectories.conf.j2 dest=/etc/nginx/multisite_subdirectories.conf
 
 - name: Create fastcgi_params config file
   template: src=fastcgi_params.j2 dest=/etc/nginx/fastcgi_params

@@ -1,0 +1,17 @@
+#!/bin/bash
+##
+# Run tests defined in wordpress folder
+##
+
+# Source environment if not interactive
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+# Give execute permissions if not already
+if [ -x /data/wordpress/scripts/run-tests ]; then
+  sudo chmod +x /data/wordpress/scripts/run-tests
+fi
+
+#Run tests defined in wordpress directory
+/data/wordpress/scripts/run-tests

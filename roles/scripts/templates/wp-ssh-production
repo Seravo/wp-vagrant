@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 ##
-# Pull production database and Search-Replace with details from config.yml
+# SSH into production container
 ##
 require 'yaml'
 

@@ -1,0 +1,13 @@
+---
+- name: Install php codesniffer
+  command: pear install PHP_CodeSniffer
+
+- name: Install Codesniffer WordPress additions
+  subversion:
+    repo: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/trunk/WordPress
+    dest: /usr/share/php/PHP/CodeSniffer/Standards/WordPress
+
+- name: Install Codesniffer Security additions
+  subversion:
+    repo: https://github.com/FloeDesignTechnologies/phpcs-security-audit/trunk/Security
+    dest: /usr/share/php/PHP/CodeSniffer/Standards/Security

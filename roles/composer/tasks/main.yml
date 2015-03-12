@@ -7,3 +7,6 @@
 
 - name: Composer self update
   shell: composer self-update
+
+- name: Use bash-completion
+  get_url: url=https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer dest=/usr/share/bash-completion/completions/composer

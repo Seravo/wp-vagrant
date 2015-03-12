@@ -1,0 +1,2 @@
+adminer_install_path: /var/www/adminer
+web_user: vagrant

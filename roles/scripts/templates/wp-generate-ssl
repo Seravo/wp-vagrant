@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+##
+# Generate SSL-certificate with all domains from config.yml
+##
+require 'yaml'
+
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+end
+
+def generate_self_signed_ssl(config)
+  ssl_path = "/data/wordpress/.vagrant/ssl"
+  nginx_path = "/data/wordpress/.vagrant/nginx"
+
+  #Stop now if this is generated already
+  if File.exists?(File.join(ssl_path,"development.crt"))
+    puts "keys already exist in: #{ssl_path}"
+    return
+  end
+  puts "generating new self signed certificate..."
+
+  #Create directory for ssl and nginx
+  system "mkdir -p #{ssl_path}"
+  system "mkdir -p #{nginx_path}"
+
+  #bit hacky but nice way to embed file here
+  open_ssl_file_content = <<EOF
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = FI
+ST = Pirkanmaa
+L = Tampere
+O = Seravo Oy
+CN = #{config['name']}.dev
+emailAddress = wordress@seravo.fi 
+[v3_req]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+basicConstraints = CA:TRUE
+subjectAltName = @alt_names
+
+[alt_names]
+EOF
+
+  #Append domains into string
+  domains = get_domains(config)
+  domains.each_with_index {|domain, index|
+    open_ssl_file_content += "DNS.#{index+1} = #{domain}\n"
+  }
+  #Write to file
+  File.open(File.join(ssl_path,"openssl.cnf"), 'w') { |file| file.write(open_ssl_file_content) }
+
+
+  #Write additional nginx config
+  nginx_additions = <<EOF
+# Generated when site was provisioned
+ssl_certificate #{ssl_path}/development.crt;
+ssl_certificate_key #{ssl_path}/development.key;
+EOF
+  File.open(File.join(nginx_path,"development-ssl.conf"), 'w') { |file| file.write(nginx_additions) }
+
+  system "openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout #{ssl_path}/development.key -out #{ssl_path}/development.crt -config #{ssl_path}/openssl.cnf"
+  system "sudo service nginx restart && sudo rm /data/log/nginx-error.log"
+end
+
+def get_domains(config)
+  domains = config['development']['domains'] || []
+  domains << config['development']['domain'] unless config['development']['domain'].nil?
+
+  domains << "www."+config['name']+".dev"
+  domains << config['name']+".seravo.dev" #test https-domain-alias locally
+  domains << "webgrind."+config['name']+".dev" #For xdebug
+  domains.uniq #remove duplicates
+end
+
+generate_self_signed_ssl(config)
