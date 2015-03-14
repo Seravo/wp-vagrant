@@ -1,0 +1,33 @@
+---
+- name: install mailcatchers apt dependencies
+  apt: name="{{ item }}" state=present
+  with_items:
+  - libsqlite3-dev
+  - ruby1.9.1-dev
+
+- name: install mailcatcher gem
+  gem: name=mailcatcher state=present user_install=no include_dependencies=yes
+  sudo: yes
+
+- name: Configure Mailtcatcher for PHP Global
+  ini_file:
+    dest=/etc/php5/mods-available/mailcatcher.ini
+    section="Mailtcatcher as mail function for debugging"
+    option=sendmail_path
+    value="/usr/local/bin/catchmail"  
+  sudo: yes
+
+- name: Use created php config in fmp+cli
+  command: php5enmod mailcatcher
+
+- name: Setup mailcatcher as service
+  template: src=mailcatcher-init.conf.j2 dest=/etc/init/mailcatcher.conf
+
+- name: Use mailcatcher nginx config
+  template: src=mailcatcher-nginx.conf.j2 dest=/etc/nginx/sites-available/mailcatcher
+  sudo: yes
+
+- name: enable mailcatcher nginx
+  file: src=/etc/nginx/sites-available/mailcatcher dest=/etc/nginx/sites-enabled/mailcatcher owner={{ web_user }} group={{ web_user }} state=link
+  sudo: yes
+  notify: restart web
