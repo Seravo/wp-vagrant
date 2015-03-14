@@ -11,4 +11,8 @@ if [ -z $PS1 ]; then
   source /etc/container_environment.sh
 fi
 
-wp db import "$WP_PROJECT/.vagrant/vagrant-dump.sql"
+#import database with mysql tool
+/usr/bin/mysql -u $DB_USER --password=$DB_PASSWORD $DB_NAME < "$WP_PROJECT/.vagrant/shutdown-dump.sql"
+if [ $? -eq 0 ]; then
+    echo -e "\e[92mSuccess:\e[0m Database was imported correctly!"
+fi

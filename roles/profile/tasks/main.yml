@@ -16,5 +16,13 @@
     regexp="{{ item.regexp }}"
     line="{{ item.line }}"
   with_items:
-    - { regexp: '^alias mysql', line: "alias mysql='/usr/local/bin/wp db cli'" }
+    - { regexp: '^alias mysql', line: "alias mysql='/usr/bin/mysql -u$DB_USER -p$DB_PASSWORD'" }
     - { regexp: '^source /etc/container_environment.sh', line: 'source /etc/container_environment.sh' }
+
+- name: Fix root user - stdin is not a tty - error message when running commands remotely
+  lineinfile:
+    dest=/root/.profile
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+  with_items:
+    - { regexp: '^mesg n', line: "tty -s && mesg n" }

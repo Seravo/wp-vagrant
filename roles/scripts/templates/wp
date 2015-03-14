@@ -9,4 +9,4 @@ if [ -z $PS1 ]; then
 fi
 
 #Run wp-cli command
-/usr/local/bin/wp-cli "$@" --path=$WP_CORE
+/usr/local/bin/wp-cli "$@" --path=$WP_CORE --allow-root

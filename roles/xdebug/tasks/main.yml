@@ -20,7 +20,11 @@
 - name: Symlink dot binary 
   file: src=/usr/bin/dot dest=/usr/local/bin/dot state=link
 
-- name: Install nginx configs for webgrind
-  template: src="webgrind.conf.j2"
-            dest="/etc/nginx/sites-enabled/webgrind"
+- name: Use webgrind nginx config
+  template: src=webgrind-nginx.conf.j2 dest=/etc/nginx/sites-available/webgrind
+  sudo: yes
+
+- name: enable webgrind nginx
+  file: src=/etc/nginx/sites-available/webgrind dest=/etc/nginx/sites-enabled/webgrind owner={{ web_user }} group={{ web_user }} state=link
+  sudo: yes
   notify: restart web

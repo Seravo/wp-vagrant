@@ -40,7 +40,7 @@ ST = Pirkanmaa
 L = Tampere
 O = Seravo Oy
 CN = #{config['name']}.dev
-emailAddress = wordress@seravo.fi 
+emailAddress = wordpress@seravo.fi 
 [v3_req]
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
@@ -78,6 +78,9 @@ def get_domains(config)
   domains << "www."+config['name']+".dev"
   domains << config['name']+".seravo.dev" #test https-domain-alias locally
   domains << "webgrind."+config['name']+".dev" #For xdebug
+  domains << "adminer."+config['name']+".dev" #For DB-administration
+  domains << "mailcatcher."+config['name']+".dev" #For Mail debugging
+  domains << "info."+config['name']+".dev" #For Info page
   domains.uniq #remove duplicates
 end
 

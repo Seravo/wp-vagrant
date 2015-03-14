@@ -19,8 +19,8 @@
     - { role: ruby, tags: [ruby] }
     #- { role: libsass, tags: [libsass] } #TODO: this is not finished
     # TODO: add tidy-html5 for html validation for errors
-    # TODO: Add wpp.dev index page for listing ENV variables and help texts
     - { role: adminer, tags: [adminer] }
+    - { role: mailcatcher, tags: [mailcatcher] }
     - { role: nodejs, tags: [nodejs] }
     - { role: phantomjs, tags: [phantomjs] }
     - { role: scripts, tags: [scripts] }

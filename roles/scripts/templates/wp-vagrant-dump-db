@@ -11,4 +11,10 @@ if [ -z $PS1 ]; then
   source /etc/container_environment.sh
 fi
 
-wp db export "$WP_PROJECT/.vagrant/vagrant-dump.sql"
+#Dump wordpress with mysqldump tool
+/usr/bin/mysqldump -u$DB_NAME --password=$DB_PASSWORD $DB_NAME > "$WP_PROJECT/.vagrant/shutdown-dump.sql" 2>/dev/null
+if [ $? -ne 0 ]; then
+  echo -e "\e[31mError:\e[0m Database couldn't be dumped \e[5m:( \e[25m"
+else
+  echo -e "\e[92mSuccess:\e[0m Database dumped into: .vagrant/shutdown-dump.sql"
+fi

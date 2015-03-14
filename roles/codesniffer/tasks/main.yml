@@ -1,6 +1,8 @@
 ---
 - name: Install php codesniffer
   command: pear install PHP_CodeSniffer
+  args:
+    creates: /usr/bin/phpcs
 
 - name: Install Codesniffer WordPress additions
   subversion:
