@@ -1,21 +1,37 @@
-# Seravo Wordpress as Vagrant
-This project is used to create [our precompiled vagrant box](https://vagrantcloud.com/seravo/boxes/wordpress) for virtualbox.
+# Seravo WordPress Vagrant Box 
 
-This is used for cloning [wordpress-palvelu](http://wp-palvelu.fi) sites to local development
+Brought to you by [wp-palvelu.fi](http://wp-palvelu.fi).
 
-# How to add into atlas cloud
+This project is used to build [our precompiled WordPress Vagrant Box](https://vagrantcloud.com/seravo/boxes/wordpress) for Virtualbox.
 
-## Package the box into file
+See [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress) to get started using this.
+
+This box imitates the functionality of [wp-palvelu.fi](http://wp-palvelu.fi) WordPress instances. We aim to help our users develop WordPress locally with the best tools available.
+
+## Installation
+
+1. Clone [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress).
+2. Install.
 ```
-$ vagrant up --provision
-$ vagrant -c 'sudo rm -r /data/log/*.log'
-$ vagrant package
+composer update
+vagrant up
+````
+
+## Packaging
+
 ```
-## Upload it into https://vagrantcloud.com/seravo/boxes/wordpress
+vagrant up --provision
+vagrant -c 'sudo rm -r /data/log/*.log'
+vagrant package
+```
 
-#Todo
+You may now upload your precompiled package to the Vagrant Cloud!
 
-##Better box packaging
+
+## Todo
+
+### Better box packaging
+
 Vagrant docs say that it is possible to [include provisioning scripts in a box](https://docs.vagrantup.com/v2/cli/package.html)
 
 It would be cool to include ansible scripts which would generate:
