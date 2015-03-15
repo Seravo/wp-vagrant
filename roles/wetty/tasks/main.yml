@@ -5,7 +5,7 @@
 - name: Install npm packages
   command: "npm install"
   args:
-    chdir: {{wetty_install_path}}
+    chdir: "{{wetty_install_path}}"
   sudo: yes
 
 - name: "Check list of Node.js apps running."
@@ -13,9 +13,10 @@
   register: forever_list
   changed_when: false
 
-- name: Start example Node.js app
-  command: forever start "{{wetty_install_path}}/app.js"
+- name: Start wetty app
+  command: forever start "{{wetty_install_path}}/app.js" -p 3000 --sshuser="{{user}}" --sshauth=publickey,password
   when: "forever_list.stdout.find('{{wetty_install_path}}') == -1"
+  sudo: no
 
 - name: use wetty nginx config
   template: src=wetty-nginx.conf.j2 dest=/etc/nginx/sites-available/wetty
