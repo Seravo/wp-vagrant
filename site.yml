@@ -17,11 +17,12 @@
     - { role: profile, tags: [profile] }
     - { role: redis, tags: [redis] }
     - { role: ruby, tags: [ruby] }
+    - { role: nodejs, tags: [nodejs] }
     #- { role: libsass, tags: [libsass] } #TODO: this is not finished
     # TODO: add tidy-html5 for html validation for errors
     - { role: adminer, tags: [adminer] }
     - { role: mailcatcher, tags: [mailcatcher] }
-    - { role: nodejs, tags: [nodejs] }
+    - { role: wetty, tags: [mailcatcher] }
     - { role: phantomjs, tags: [phantomjs] }
     - { role: scripts, tags: [scripts] }
     - { role: codesniffer, tags: [codesniffer] }

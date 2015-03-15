@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+##
+# Activate githooks in scripts folder
+##
+
+# Source environment if doesn't exist yet
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+# Use /data/wordpress path
+cd $WP_PROJECT
+# symlink all files from project into git
+ln -s scripts/hooks/* .git/hooks/

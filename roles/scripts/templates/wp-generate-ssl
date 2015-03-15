@@ -81,6 +81,7 @@ def get_domains(config)
   domains << "adminer."+config['name']+".dev" #For DB-administration
   domains << "mailcatcher."+config['name']+".dev" #For Mail debugging
   domains << "info."+config['name']+".dev" #For Info page
+  domains << "terminal."+config['name']+".dev" #Running ad-hoc commands
   domains.uniq #remove duplicates
 end
 
