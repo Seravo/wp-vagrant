@@ -1,15 +1,16 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL + Redis + Devtools."
+- name: "WordPress Server: LEMP Stack with HHVM, PHP, MariaDB for MySQL, Redis and various development tools."
   hosts: web
   sudo: yes
   remote_user: admin
 
   roles:
-    #Use /data folder for everything project related
+    # Use /data folder for everything project related
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
     - { role: mariadb, tags: [mariadb] }
     - { role: php, tags: [php] }
+    # TODO: also add a hhvm-lts package for testing with hhvm 
     - { role: nginx, tags: [nginx] }
     - { role: xdebug, tags: [xdebug] }
     - { role: composer, tags: [composer] }
@@ -23,6 +24,7 @@
     - { role: adminer, tags: [adminer] }
     - { role: mailcatcher, tags: [mailcatcher] }
     - { role: wetty, tags: [mailcatcher] }
+    - { role: nodejs, tags: [nodejs] }
     - { role: phantomjs, tags: [phantomjs] }
     - { role: scripts, tags: [scripts] }
     - { role: codesniffer, tags: [codesniffer] }
