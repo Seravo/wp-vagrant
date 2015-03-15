@@ -75,6 +75,7 @@ def get_domains(config)
   domains = config['development']['domains'] || []
   domains << config['development']['domain'] unless config['development']['domain'].nil?
 
+  domains << config['name']+".dev"
   domains << "www."+config['name']+".dev"
   domains << config['name']+".seravo.dev" #test https-domain-alias locally
   domains << "webgrind."+config['name']+".dev" #For xdebug
