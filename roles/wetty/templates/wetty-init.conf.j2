@@ -1,0 +1,19 @@
+description "wetty node.js server for terminal"
+author      "onni hakala https://github.com/onnimonni"
+
+# used to be: start on startup
+# until we found some mounts weren't ready yet while booting:
+start on started mountall networking
+stop on shutdown
+
+# Automatically Respawn:
+respawn
+respawn limit 99 5
+
+script
+    # Not sure why $HOME is needed, but we found that it is:
+    export HOME="/root"
+    echo $(date) ": started wetty process" >> /var/log/wetty.log
+
+    exec sudo -u {{ web_user }} /usr/bin/node /var/www/wetty/app.js -p 3000 >> /var/log/node.log 2>&1
+end script
