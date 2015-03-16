@@ -20,8 +20,6 @@
     - grunt-contrib-sass
     - grunt-contrib-compass
     - grunt-contrib-watch
-    # For node.js helper apps
-    - forever
 
 - name: Use NPM bash-completion
   file: src=/usr/lib/node_modules/npm/lib/utils/completion.sh dest=/usr/share/bash-completion/completions/npm state=link
