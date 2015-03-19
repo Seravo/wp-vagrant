@@ -3,18 +3,22 @@
 # Dump wordpress DB into .vagrant folder
 ##
 
-# Stop on errors
-set -e
 
 # Source environment if doesn't exist yet
 if [ -z $PS1 ]; then
   source /etc/container_environment.sh
 fi
 
-#Dump wordpress with mysqldump tool
-/usr/bin/mysqldump -u$DB_NAME --password=$DB_PASSWORD $DB_NAME > "$WP_PROJECT/.vagrant/shutdown-dump.sql" 2>/dev/null
-if [ $? -ne 0 ]; then
-  echo -e "\e[31mError:\e[0m Database couldn't be dumped \e[5m:( \e[25m"
+#Check if wordpress is installed by checking existance of wp_posts table
+mysql -u$DB_NAME --password=$DB_PASSWORD $DB_NAME -e "desc $DB_NAME.wp_posts" > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+  #Dump wordpress with mysqldump tool
+  /usr/bin/mysqldump -u$DB_NAME --password=$DB_PASSWORD $DB_NAME > "$WP_PROJECT/.vagrant/shutdown-dump.sql" 2>/dev/null
+  if [ $? -ne 0 ]; then
+    echo -e "\e[31mError:\e[0m Database couldn't be dump \e[5m:( \e[25m"
+  else
+    echo -e "\e[92mSuccess:\e[0m Database dumped into: .vagrant/shutdown-dump.sql"
+  fi
 else
-  echo -e "\e[92mSuccess:\e[0m Database dumped into: .vagrant/shutdown-dump.sql"
+  echo -e "\e[92mError:\e[0m Wordpress is not installed. Database dump interrupted..."
 fi

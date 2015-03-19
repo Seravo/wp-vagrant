@@ -9,7 +9,7 @@ config_file = File.join('/data/wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+  raise 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
 end
 
 def generate_self_signed_ssl(config)
@@ -18,10 +18,10 @@ def generate_self_signed_ssl(config)
 
   #Stop now if this is generated already
   if File.exists?(File.join(ssl_path,"development.crt"))
-    puts "keys already exist in: #{ssl_path}"
+    puts "==> ssl-keys already exist in: #{ssl_path}"
     return
   end
-  puts "generating new self signed certificate..."
+  puts "==> generating new self signed certificate..."
 
   #Create directory for ssl and nginx
   system "mkdir -p #{ssl_path}"
@@ -67,7 +67,7 @@ ssl_certificate_key #{ssl_path}/development.key;
 EOF
   File.open(File.join(nginx_path,"development-ssl.conf"), 'w') { |file| file.write(nginx_additions) }
 
-  system "openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout #{ssl_path}/development.key -out #{ssl_path}/development.crt -config #{ssl_path}/openssl.cnf"
+  system "openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout #{ssl_path}/development.key -out #{ssl_path}/development.crt -config #{ssl_path}/openssl.cnf > /dev/null 2>&1"
   system "sudo service nginx restart && sudo rm /data/log/nginx-error.log"
 end
 

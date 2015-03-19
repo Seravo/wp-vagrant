@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 ##
 # Activate githooks in scripts folder
 ##
@@ -9,6 +9,6 @@ if [ -z $PS1 ]; then
 fi
 
 # Use /data/wordpress path
-cd $WP_PROJECT
+cd $WP_PROJECT/.git/hooks/
 # symlink all files from project into git
-ln -s scripts/hooks/* .git/hooks/
+ln -sf ../../scripts/hooks/* .
