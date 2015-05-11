@@ -1,11 +1,17 @@
 ---
-#TODO: This doesn't work yet
-
 - name: Install sassc
-  git: repo=https://github.com/sass/sassc dest=/usr/local/lib/sassc
+  git:
+    repo: https://github.com/sass/sassc
+    dest: /usr/local/lib/sassc
+    depth: 1
+    version: 3.2.1
 
 - name: Install libsass
-  git: repo=https://github.com/sass/libsass dest=/usr/local/lib/libsass
+  git:
+    repo: https://github.com/sass/libsass
+    dest: /usr/local/lib/libsass
+    depth: 1
+    version: 3.2.3
 
 - name: Add libsass path to environment
   lineinfile:
@@ -16,9 +22,12 @@
     - { regexp: '^export SASS_LIBSASS_PATH=', line: "export SASS_LIBSASS_PATH='/usr/local/lib/libsass'" }
 
 - name: Install libsass
-  shell: "source /etc/environment && make"
+  command: make
   args:
     chdir: /usr/local/lib/sassc/
+  #root user doesn't seem to use /etc/environment
+  environment:
+      SASS_LIBSASS_PATH: /usr/local/lib/libsass/
 
 - name: Symlink binary to $PATH
-  file: src=/url/local/lib/sassc/bin/sassc dest=/usr/local/bin/sassc state=link
+  file: src=/usr/local/lib/sassc/bin/sassc dest=/usr/local/bin/sassc state=link
