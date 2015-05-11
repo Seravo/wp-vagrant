@@ -58,12 +58,16 @@ http {
 
   # Speed up file transfers by using sendfile() to copy directly
   # between descriptors rather than using read()/write().
-  sendfile        on;
+  # DEV ENVIRONMENT: Keep this off when using virtualbox
+  # source: http://stackoverflow.com/questions/21195635/nginx-not-picking-up-changes-in-vagrant-synced-folder
+  sendfile        off;
 
   # Tell Nginx not to send out partial frames; this increases throughput
   # since TCP frames are filled up before being sent out. (adds TCP_CORK)
   tcp_nopush      on;
-  
 
+  # Include custom vagrant configs
+  include /data/wordpress/.vagrant/nginx/*.conf;
+  
   include sites-enabled/*;
 }
