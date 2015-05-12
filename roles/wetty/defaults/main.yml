@@ -1,4 +1,0 @@
-wetty_install_path: /var/www/wetty
-web_user: vagrant
-
-ssh_user: vagrant

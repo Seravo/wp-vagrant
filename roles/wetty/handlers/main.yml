@@ -1,3 +1,0 @@
----
-- name: restart wetty
-  service: name=wetty state=restarted
