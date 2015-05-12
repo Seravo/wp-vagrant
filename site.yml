@@ -1,5 +1,5 @@
 ---
-- name: "WordPress Server: LEMP Stack with HHVM, PHP, MariaDB for MySQL, Redis and various development tools."
+- name: "WordPress Server: LEMP Stack with PHP, MariaDB for MySQL, Redis and various development tools like browsersync, mailcatcher, xdebug..."
   hosts: web
   sudo: yes
   remote_user: admin
@@ -8,6 +8,7 @@
     # Use /data folder for everything project related
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
+    - { role: libsass, tags: [libsass] }
     - { role: mariadb, tags: [mariadb] }
     - { role: php, tags: [php] }
     # TODO: also add a hhvm-lts package for testing with hhvm 
@@ -19,12 +20,10 @@
     - { role: redis, tags: [redis] }
     - { role: ruby, tags: [ruby] }
     - { role: nodejs, tags: [nodejs] }
-    #- { role: libsass, tags: [libsass] } #TODO: this is not finished
     # TODO: add tidy-html5 for html validation for errors
     - { role: adminer, tags: [adminer] }
+    - { role: browsersync, tags: [browsersync] }
     - { role: mailcatcher, tags: [mailcatcher] }
-    - { role: wetty, tags: [mailcatcher] }
-    - { role: nodejs, tags: [nodejs] }
     - { role: phantomjs, tags: [phantomjs] }
     - { role: scripts, tags: [scripts] }
     - { role: codesniffer, tags: [codesniffer] }

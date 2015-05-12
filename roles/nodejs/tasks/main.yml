@@ -12,14 +12,14 @@
     - slap
     # Dependency handling
     - bower
-    - gulp
     # Workflow
-    - grunt
-    - grunt-cli
-    - grunt-contrib-coffee
-    - grunt-contrib-sass
-    - grunt-contrib-compass
-    - grunt-contrib-watch
+    - gulp
+    - gulp-sass
+    - gulp-coffee
+    - gulp-bower
+    - gulp-util
+    - gulp-watch
+    - gulper
 
 - name: Use NPM bash-completion
   file: src=/usr/lib/node_modules/npm/lib/utils/completion.sh dest=/usr/share/bash-completion/completions/npm state=link

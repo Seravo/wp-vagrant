@@ -1,0 +1,27 @@
+##
+# Do not directly listen web (80) so that we can use middleware (eg. browser-sync)
+# Instead we use 8080 where requests are reverse proxied
+##
+
+server {
+  # Just listen to any hostname because this image is for single site only
+  listen 8080 default_server;
+
+  # Document root is located at /data/wordpress/htdocs/
+  root /data/wordpress/htdocs;
+
+  index index.html index.hh index.php;
+
+  # Don't fill up error logs with not found messages.
+  # You can see 404s in access logs as well
+  log_not_found off;
+
+  access_log /data/log/nginx-access.log extensive;
+  error_log  /data/log/nginx-error.log error;
+
+  # A few wordpress specific rules for subdirectory installations
+  include wordpress.conf;
+
+  #Include custom nginx additions from project
+  include /data/wordpress/nginx/*.conf;
+}

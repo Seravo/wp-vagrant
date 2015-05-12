@@ -21,4 +21,6 @@ php_opcache_revalidate_freq: 60
 php_opcache_fast_shutdown: 1
 php_opcache_enable_cli: 1
 
-php_fpm_log: /data/log
+php_fpm_log_dir: /data/log
+php_fpm_socket_dir: /var/run/php5-fpm
+web_user: vagrant

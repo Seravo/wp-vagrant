@@ -17,11 +17,16 @@
   - php5-dev
   - php5-imap
 
-- name: Start php5-fpm service
-  service: name=php5-fpm state=started enabled=true
-
 - name: Create socket directory
-  file: path=/var/run/php5-fpm/ state=directory owner=vagrant group=vagrant
+  file: path={{php_fpm_socket_dir}} state=directory owner=vagrant group=vagrant
+
+- name: Update php5-fpm upstart script
+  template:
+    src: php5-fpm-upstart.conf.j2
+    dest: /etc/init/php5-fpm.conf
+
+- name: Start php5-fpm service
+  service: name=php5-fpm state=restarted enabled=true
 
 - name: Disable default pool
   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled

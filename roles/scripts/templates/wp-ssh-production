@@ -4,7 +4,7 @@
 ##
 require 'yaml'
 
-config_file = File.join('/data/wordpress','config.yml')
+config_file = File.join('','data','wordpress','config.yml')
 
 if File.exists?(config_file)
   config = YAML.load_file(config_file)

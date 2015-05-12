@@ -1,0 +1,20 @@
+# php5-fpm - The PHP FastCGI Process Manager
+# Modified to run php5-fpm in its own socket directory
+
+description "The PHP FastCGI Process Manager"
+author "Onni Hakala <onni@seravo.fi>"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+# you can uncomment this with recent upstart
+# reload signal USR2
+
+pre-start script
+    mkdir -p -m 0775 {{ php_fpm_socket_dir }}
+    chown {{ web_user }}:{{ web_user }} {{ php_fpm_socket_dir }}
+    exec /usr/lib/php5/php5-fpm-checkconf
+end script
+
+respawn
+exec /usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf

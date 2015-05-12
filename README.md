@@ -21,7 +21,7 @@ vagrant up
 
 ```
 vagrant up --provision
-vagrant -c 'sudo rm -r /data/log/*.log'
+vagrant ssh -c 'sudo rm -r /data/log/*.log'
 vagrant package
 ```
 
@@ -30,11 +30,6 @@ You may now upload your precompiled package to the Vagrant Cloud!
 
 ## Todo
 
-### Better box packaging
-
-Vagrant docs say that it is possible to [include provisioning scripts in a box](https://docs.vagrantup.com/v2/cli/package.html)
-
 It would be cool to include ansible scripts which would generate:
 * .ssh/config (for easier logging into production)
 * download production db with details from config.yml
-* enable 
