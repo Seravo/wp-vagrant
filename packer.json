@@ -37,7 +37,7 @@
                     "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
                 }
             }
-        },
+        }
     ],
     "builders": [
         {
