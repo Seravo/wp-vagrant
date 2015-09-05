@@ -80,7 +80,7 @@
             "artifact_type": "vagrant.box",
             "metadata": {
                 "provider": "virtualbox",
-                "version": "0.0.1"
+                "version": "isotime \"2006.01.02.15.04.05\""
             }
         }]
     ]
