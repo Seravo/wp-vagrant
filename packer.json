@@ -25,7 +25,28 @@
         {
           "type": "ansible-local",
           "playbook_file": "site.yml",
-          "role_paths": ["."]
+          "role_paths": [
+            "roles/data-directories",
+            "roles/common",
+            "roles/libsass",
+            "roles/mariadb",
+            "roles/php",
+            "roles/nginx",
+            "roles/xdebug",
+            "roles/composer",
+            "roles/wp-cli",
+            "roles/profile",
+            "roles/redis",
+            "roles/ruby",
+            "roles/nodejs",
+            "roles/adminer",
+            "roles/browsersync",
+            "roles/mailcatcher",
+            "roles/phantomjs",
+            "roles/scripts",
+            "roles/codesniffer",
+            "roles/cleanup"
+          ]
         },
         {
             "type": "shell",

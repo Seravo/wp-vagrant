@@ -19,7 +19,9 @@
     - libtool
 
 - name: Correct ruby version selected
-  alternatives: name=ruby path=/usr/bin/ruby2.2
+  shell: /usr/sbin/alternatives --set ruby /usr/bin/ruby2.2
+  # This is disabled because atlas.hashicorp has problems with alternatives module
+  # alternatives: name=ruby path=/usr/bin/ruby2.2
 
 - name: Install Gems
   gem: name="{{ item }}" state=present user_install=no include_dependencies=yes
