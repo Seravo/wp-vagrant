@@ -1,4 +1,6 @@
-# Seravo WordPress Vagrant Box 
+![WP-palvelu.fi](https://wp-palvelu.fi/wp-content/uploads/2015/01/wp-palvelu-header.jpg)
+
+# Seravo WordPress Vagrant Box
 
 Brought to you by [wp-palvelu.fi](http://wp-palvelu.fi).
 
