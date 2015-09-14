@@ -4,8 +4,8 @@
       "vcs": true
     },
     "variables": {
-        "atlas_username": "{{env `ATLAS_USERNAME`}}",
-        "atlas_name": "{{env `ATLAS_NAME`}}"
+        "atlas_username": "seravo",
+        "atlas_name": "wordpress"
     },
     "provisioners": [
         {
