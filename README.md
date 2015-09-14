@@ -21,10 +21,20 @@ vagrant up
 
 ## Packaging
 
+# Create vagrant image on your machine
+
+Create it using vagrant cli and then upload to atlas.hashicorp.com
+
 ```
 vagrant up --provision
 vagrant ssh -c 'sudo rm -r /data/log/*.log'
 vagrant package
+```
+
+# Create vagrant image using packer
+
+```
+packer push packer.json
 ```
 
 You may now upload your precompiled package to the Vagrant Cloud!

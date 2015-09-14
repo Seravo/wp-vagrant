@@ -25,7 +25,7 @@
         {
           "type": "ansible-local",
           "playbook_file": "site.yml",
-          "role_paths": ["roles"]
+          "role_paths": ["."]
         },
         {
             "type": "shell",
