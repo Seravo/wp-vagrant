@@ -1,6 +1,6 @@
 ---
 - name: "WordPress Server: LEMP Stack with PHP, MariaDB for MySQL, Redis and various development tools like browsersync, mailcatcher, xdebug..."
-  hosts: web
+  hosts: all
   sudo: yes
   remote_user: admin
 
