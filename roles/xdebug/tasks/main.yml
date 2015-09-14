@@ -4,7 +4,10 @@
   apt: name=php5-xdebug state=present force=yes
 
 - name: Install webgrind
-  git: repo=https://github.com/jokkedk/webgrind/ dest=/var/www/webgrind
+  # Origin repo is: https://github.com/jokkedk/webgrind/
+  # But it has been abandonded since summer of 2015
+  # We are using active fork from alpha0010
+  git: repo=https://github.com/alpha0010/webgrind dest=/var/www/webgrind
 
 - name: Add xdebug.ini template
   template: src="20-xdebug.ini.j2"
