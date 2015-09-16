@@ -8,14 +8,14 @@
     # Use /data folder for everything project related
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
-    - { role: libsass, tags: [libsass] }
-    - { role: mariadb, tags: [mariadb] }
     - { role: php, tags: [php] }
+    - { role: composer, tags: [composer] }
+    - { role: wp-cli, tags: [wp-cli] }
     # TODO: also add a hhvm-lts package for testing with hhvm 
     - { role: nginx, tags: [nginx] }
     - { role: xdebug, tags: [xdebug] }
-    - { role: composer, tags: [composer] }
-    - { role: wp-cli, tags: [wp-cli] }
+    - { role: libsass, tags: [libsass] }
+    - { role: mariadb, tags: [mariadb] }
     - { role: profile, tags: [profile] }
     - { role: redis, tags: [redis] }
     - { role: ruby, tags: [ruby] }
