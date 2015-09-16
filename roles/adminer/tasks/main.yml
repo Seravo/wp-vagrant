@@ -9,14 +9,16 @@
   tags: [configuration, adminer, adminer-download ]
 
 - name: download (latest) adminer
-  get_url:
-    url: http://www.adminer.org/latest.php
-    dest: "{{ adminer_install_path }}/index.php"
+  command: curl -o "{{ adminer_install_path }}/index.php" http://www.adminer.org/latest.php
+  tags: [configuration, adminer, adminer-download]
+
+- name: check adminer permissions
+  file:
+    path: "{{ adminer_install_path }}/index.php"
     force: true
     owner: "{{ web_user }}"
     group: "{{ web_user }}"
     mode: 0644
-  tags: [configuration, adminer, adminer-download]
 
 - name: use adminer nginx config
   template: src=adminer-nginx.conf.j2 dest=/etc/nginx/sites-available/adminer
