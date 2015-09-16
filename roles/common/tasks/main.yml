@@ -8,6 +8,7 @@
   - python-software-properties
   - python-pycurl
   - build-essential
+  - ca-certificates
   - python-mysqldb
   - curl
   - git-core
