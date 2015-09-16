@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+##
+# Runs commands needed during vagrant up
+##
+require 'yaml'
+
+# Generate https-domain-alias from config
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  raise 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
+end
+
+# ADD HTTPS_DOMAIN_ALIAS to envs
+File.open('/etc/container_environment.sh', 'a') do |file|
+  file.write "export HTTPS_DOMAIN_ALIAS=#{site_config['name']}.seravo.local"
+end
+
+# Add it to envs of php5-fpm
+File.open('/etc/nginx/fastcgi_params', 'a') do |file|
+  file.write "fastcgi_param  HTTPS_DOMAIN_ALIAS   #{site_config['name']}.seravo.local;"
+end
+
+# Restart nginx
+system "sudo service nginx restart"
+
+# Reload avahi-daemon so it broadcast hostname of this vagrant box
+system "sudo service avahi-daemon restart"
+
+##
+# Generate .ssh/config if config.yml contains values for that
+## 
+unless config['production'].empty? and config['production']['ssh_port'].empty? and config['production']['domain'].empty?
+  ssh_user = config['production']['user'] || config['name']
+
+  # ssh config file
+  ssh_config = '/home/vagrant/.ssh/config'
+
+  unless File.exists? ssh_config
+    # Create file
+    File.open(ssh_config, "w") {}
+
+    # Add production configs to to ssh config inside vagrant
+    File.open(ssh_config, 'a') do |file|
+      file.puts "##"
+      file.puts "# Automatically generated ssh config from /data/wordpress/config.yml"
+      file.puts "##"
+      file.puts "Host production #{config['name']} #{config['production']['domain']}"
+      file.puts "  Hostname #{config['production']['domain']}"
+      file.puts "  Port #{config['production']['ssh_port']}"
+      file.puts "  User #{ssh_user}"
+    end
+  end
+end

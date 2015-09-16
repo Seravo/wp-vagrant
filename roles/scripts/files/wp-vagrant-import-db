@@ -1,6 +1,6 @@
 #!/bin/bash
 ##
-# Dump wordpress DB into .vagrant folder
+# Import wordpress DB from .vagrant folder
 ##
 
 # Stop on errors

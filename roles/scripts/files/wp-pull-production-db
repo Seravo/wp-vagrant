@@ -12,10 +12,18 @@ else
   raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
 end
 
-#Gather useful variables for ssh/scp
-port = config['container']['ssh_port']
-host = config['container']['host']
-username = config['name']
+# Gather variables for ssh/scp
+port = config['production']['ssh_port']
+host = config['production']['domain']
+user = config['production']['user'] || config['name']
+
+# Pipe database from production to local database
+# For example:
+# ssh -q atom-airsoft@atom-airsoft.wp-palvelu.fi -p 10290 "wp db export -" | head
+
+# This could be saved in .vagrant folder
+
+# We could add a button to adminbar or to an info page
 
 dumpfile = "production-dump-#{Time.now.to_i}.sql"
 
