@@ -8,6 +8,7 @@
     # Use /data folder for everything project related
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
+    - { role: phantomjs, tags: [phantomjs] }
     - { role: php, tags: [php] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
@@ -24,7 +25,6 @@
     - { role: adminer, tags: [adminer] }
     - { role: browsersync, tags: [browsersync] }
     - { role: mailcatcher, tags: [mailcatcher] }
-    - { role: phantomjs, tags: [phantomjs] }
     - { role: scripts, tags: [scripts] }
     - { role: codesniffer, tags: [codesniffer] }
     #Cleanup all files 

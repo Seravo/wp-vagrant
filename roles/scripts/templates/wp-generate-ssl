@@ -75,6 +75,8 @@ def get_domains(config)
   domains = config['development']['domains'] || []
   domains << config['development']['domain'] unless config['development']['domain'].nil?
 
+  # For backwards compatibility:
+  # Eerlier we used the domain .dev and it's still ok
   domains << config['name']+".dev"
   domains << "www."+config['name']+".dev"
   domains << config['name']+".seravo.dev" #test https-domain-alias locally
@@ -84,6 +86,18 @@ def get_domains(config)
   domains << "browsersync."+config['name']+".dev" #For browser-sync admin
   domains << "info."+config['name']+".dev" #For Info page
   domains << "terminal."+config['name']+".dev" #Running ad-hoc commands
+
+  # Main domain should be {{site}}.local so that devices in same network can use them as well through zeroconf
+  domains << config['name']+".local"
+  domains << "www."+config['name']+".local"
+  domains << config['name']+".seravo.local" #test https-domain-alias locally
+  domains << "webgrind."+config['name']+".local" #For xdebug
+  domains << "adminer."+config['name']+".local" #For DB-administration
+  domains << "mailcatcher."+config['name']+".local" #For Mail debugging
+  domains << "browsersync."+config['name']+".local" #For browser-sync admin
+  domains << "info."+config['name']+".local" #For Info page
+  domains << "terminal."+config['name']+".local" #Running ad-hoc commands
+
   domains.uniq #remove duplicates
 end
 

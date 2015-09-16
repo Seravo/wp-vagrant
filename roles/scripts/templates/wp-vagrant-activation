@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+##
+# Runs commands useful during vagrant up
+##
+require 'yaml'
+
+# Generate https-domain-alias from config
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  raise 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
+end
+
+# ADD HTTPS_DOMAIN_ALIAS to envs
+File.open('/etc/container_environment.sh', 'a') do |file|
+  file.write "export HTTPS_DOMAIN_ALIAS=#{site_config['name']}.seravo.local"
+end
+
+# Add it to envs of php5-fpm
+File.open('/etc/nginx/fastcgi_params', 'a') do |file|
+  file.write "fastcgi_param  HTTPS_DOMAIN_ALIAS   #{site_config['name']}.seravo.local;"
+end
+
+# Restart nginx
+system "sudo service nginx restart"
+
+# Reload avahi-daemon so it broadcast hostname of this vagrant box
+system "sudo service avahi-daemon restart"
