@@ -11,13 +11,5 @@
 - name: Use bash-completion
   command: curl -o /usr/share/bash-completion/completions/composer https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer
 
-- name: add {{composer_path}} to system wide path
-  lineinfile: >
-    dest=/etc/environment
-    state=present
-    backrefs=yes
-    regexp='PATH=(["]*)((?!.*?{{composer_path}}).*?)(["]*)$'
-    line="PATH=\1\2:{{composer_path}}\3"
-
 - name: Install phpunit through composer
   command: composer global require "phpunit/phpunit=4.8.*"
