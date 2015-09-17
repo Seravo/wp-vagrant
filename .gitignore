@@ -1,5 +1,7 @@
 .vagrant
 
-#Ignore boxes
+# Ignore virtualbox boxes
 *.box
 
+# Ignore packer caches
+packer_cache
