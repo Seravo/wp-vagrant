@@ -3,7 +3,7 @@
   apt: name="bash-completion" state=present force=yes
 
 - name: Get wp-cli bash completions
-  command: curl -o /usr/share/bash-completion/completions/wp {{ wp_cli_completion_url }}
+  command: curl -L -o /usr/share/bash-completion/completions/wp {{ wp_cli_completion_url }}
 
 - name: Install dummy environment variables
   template: src="container_environment.sh.j2" dest="/etc/container_environment.sh"

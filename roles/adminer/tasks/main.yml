@@ -9,7 +9,7 @@
   tags: [configuration, adminer, adminer-download ]
 
 - name: download (latest) adminer
-  command: curl -o "{{ adminer_install_path }}/index.php" http://www.adminer.org/latest.php
+  command: curl -L -o "{{ adminer_install_path }}/index.php" http://www.adminer.org/latest.php
   tags: [configuration, adminer, adminer-download]
 
 - name: check adminer permissions

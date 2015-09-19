@@ -22,7 +22,7 @@
     - wp-vagrant-import-db
 
 - name: Get wp-phptidy for wordpress coding standards
-  command: curl -o /usr/local/bin/wp-phptidy https://raw.githubusercontent.com/scribu/wp-phptidy/master/wp-phptidy.php
+  command: curl -L -o /usr/local/bin/wp-phptidy https://raw.githubusercontent.com/scribu/wp-phptidy/master/wp-phptidy.php
 
 - name: Give wp-phptidy execute permissions
   file:

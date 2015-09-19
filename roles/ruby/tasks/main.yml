@@ -37,4 +37,4 @@
     - capybara
 
 - name: Install compass bash completion
-  command: curl -o /usr/share/bash-completion/completions/compass https://raw.githubusercontent.com/piouPiouM/compass-completion/master/compass-completion.sh
+  command: curl -L -o /usr/share/bash-completion/completions/compass https://raw.githubusercontent.com/piouPiouM/compass-completion/master/compass-completion.sh

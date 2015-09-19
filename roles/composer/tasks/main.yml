@@ -9,7 +9,7 @@
 #  shell: composer self-update
 
 - name: Use bash-completion
-  command: curl -o /usr/share/bash-completion/completions/composer https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer
+  command: curl -L -o /usr/share/bash-completion/completions/composer https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer
 
 - name: Install phpunit through composer
   command: composer global require "phpunit/phpunit=4.8.*"
