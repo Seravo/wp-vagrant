@@ -61,6 +61,9 @@ fastcgi_param  REDIRECT_STATUS    200;
 fastcgi_param  REDIS_HOST   127.0.0.1;
 fastcgi_param  REDIS_PORT   6379;
 
+# Add env to tell about vagrant
+fastcgi_param  WP_ENVIRONMENT development;
+
 fastcgi_param  DB_USER   vagrant;
 fastcgi_param  DB_NAME   vagrant;
 fastcgi_param  DB_PORT   3306;
