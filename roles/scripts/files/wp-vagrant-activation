@@ -14,13 +14,17 @@ else
 end
 
 # ADD HTTPS_DOMAIN_ALIAS to envs
-File.open('/etc/container_environment.sh', 'a') do |file|
-  file.write "export HTTPS_DOMAIN_ALIAS=#{site_config['name']}.seravo.local"
+unless File.readlines("/etc/container_environment.sh").grep(/^export HTTPS_DOMAIN_ALIAS/).any?
+  File.open('/etc/container_environment.sh', "a+") do |file|
+    file.write "\nexport HTTPS_DOMAIN_ALIAS=#{config['name']}.seravo.local\n"
+  end
 end
 
 # Add it to envs of php5-fpm
-File.open('/etc/nginx/fastcgi_params', 'a') do |file|
-  file.write "fastcgi_param  HTTPS_DOMAIN_ALIAS   #{site_config['name']}.seravo.local;"
+unless File.readlines("/etc/nginx/fastcgi_params").grep(/^fastcgi_param  HTTPS_DOMAIN_ALIAS/).any?
+  File.open('/etc/nginx/fastcgi_params', "a+") do |file|
+    file.write "\nfastcgi_param  HTTPS_DOMAIN_ALIAS   #{config['name']}.seravo.local;\n"
+  end
 end
 
 # Restart nginx
@@ -32,13 +36,14 @@ system "sudo service avahi-daemon restart"
 ##
 # Generate .ssh/config if config.yml contains values for that
 ## 
-unless config['production'].empty? and config['production']['ssh_port'].empty? and config['production']['domain'].empty?
+unless config['production'].nil? or config['production']['ssh_port'].nil? or config['production']['domain'].nil?
   ssh_user = config['production']['user'] || config['name']
 
   # ssh config file
   ssh_config = '/home/vagrant/.ssh/config'
 
   unless File.exists? ssh_config
+    puts "Generating ssh configs..."
     # Create file
     File.open(ssh_config, "w") {}
 
