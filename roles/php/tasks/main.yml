@@ -16,6 +16,7 @@
   - php-pear
   - php5-dev
   - php5-imap
+  - phpunit
 
 - name: Create socket directory
   file: path={{php_fpm_socket_dir}} state=directory owner=vagrant group=vagrant

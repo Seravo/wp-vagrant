@@ -24,3 +24,6 @@
     line="{{ item.line }}"
   with_items:
     - { regexp: '^mesg n', line: "tty -s && mesg n" }
+
+- name: Install .profile with composer bins
+  copy: src="skel/.profile" dest="/etc/skel/.profile"
