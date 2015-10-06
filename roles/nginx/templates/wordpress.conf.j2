@@ -22,7 +22,7 @@ location / {
 # Set variables to help nginx snippets in /data/wordpress/nginx
 # This differs a lot in production
 if ($scheme = https) {
-  set $ssl true;  
+  set $ssl true;
 }
 
 #PHP5-FPM/HHVM for php/hack files
@@ -31,7 +31,6 @@ location ~ \.(php|hh)$ {
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
   fastcgi_pass unix:/var/run/php5-fpm/php5-fpm.sock;
-  client_max_body_size 0;
 }
 
 # Yoast SEO sitemap configuration
@@ -41,7 +40,7 @@ location ~ ([^/]*)sitemap(.*)\.x(m|s)l$ {
   rewrite ^/([a-z]+)?-?sitemap\.xsl$ /index.php?xsl=$1 last;
   rewrite ^/sitemap_index\.xml$ /index.php?sitemap=1 last;
   rewrite ^/([^/]+?)-sitemap([0-9]+)?\.xml$ /index.php?sitemap=$1&sitemap_n=$2 last;
-  
+
   # The following lines are for optional addons
   rewrite ^/news_sitemap\.xml$ /index.php?sitemap=wpseo_news last;
   rewrite ^/locations\.kml$ /index.php?sitemap=wpseo_local_kml last;

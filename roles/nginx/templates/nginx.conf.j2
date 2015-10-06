@@ -66,8 +66,11 @@ http {
   # since TCP frames are filled up before being sent out. (adds TCP_CORK)
   tcp_nopush      on;
 
+  # Larger file uploads
+  client_max_body_size 128M;
+
   # Include custom vagrant configs
   include /data/wordpress/.vagrant/nginx/*.conf;
-  
+
   include sites-enabled/*;
 }
