@@ -12,8 +12,8 @@ if (!-e $request_filename) {
 # Enable XML-RPC for WordPress
 rewrite ^/(xmlrpc\.php)$ /wordpress/$1 last;
 
-# Allow fileuploads up to 64M
-client_max_body_size 64M;
+# Allow fileuploads up to 128M
+client_max_body_size 128M;
 
 location / {
   try_files $uri $uri/ /index.php?$args;

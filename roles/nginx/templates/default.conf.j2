@@ -20,6 +20,9 @@ server {
   log_not_found off;
 
   location / {
+    # Allow fileuploads up to 128M
+    client_max_body_size 128M;
+    
     proxy_pass http://wordpress;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
