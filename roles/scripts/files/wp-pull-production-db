@@ -12,35 +12,26 @@ else
   raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
 end
 
+if config['production'].nil?
+  raise "couldn't pull database because production isn't configured in config.yml"
+end
+
 # Gather variables for ssh/scp
-port = config['production']['ssh_port']
-host = config['production']['domain']
-user = config['production']['user'] || config['name']
+port = config['production']['ssh_port'] || config['production']['port']
+host = config['production']['domain'] || config['production']['host']
+username = config['production']['user'] || config['name']
 
-# Pipe database from production to local database
-# For example:
-# ssh -q atom-airsoft@atom-airsoft.wp-palvelu.fi -p 10290 "wp db export -" | head
-
-# This could be saved in .vagrant folder
-
-# We could add a button to adminbar or to an info page
-
-dumpfile = "production-dump-#{Time.now.to_i}.sql"
+backupfile = "pre-production-pull-backup-#{Time.now.to_i}.sql"
 
 puts "backing up earlier db into /data/db/pre-production-pull-backup.sql..."
-system "wp db export /data/db/pre-production-pull-backup.sql"
+system "wp db export #{backupfile}"
 
-puts "Log into production and dump db..."
-system "ssh #{username}@#{host} -p #{port} 'wp db export /tmp/#{dumpfile}'"
+siteurl_development = `wp option get siteurl`.strip
 
-puts "Copy file from production..."
-system "scp -P #{port} #{username}@#{host}:/tmp/#{dumpfile} /data/db/#{dumpfile}"
+puts "Log into production and migrate database..."
+system "ssh -q #{username}@#{host} -p #{port} 'wp db export -' | wp db import - "
 
-puts "Delete dump file..."
-system "ssh #{username}@#{host} -p #{port} 'rm /tmp/#{dumpfile}'"
+siteurl_production = `wp option get siteurl`.strip
 
-puts "Import transfered db..."
-system "wp db import /data/db/#{dumpfile}"
-
-puts "Search-Replace #{config['production']['domain']} into: #{config['development']['domain']}"
-system "wp search-replace ://#{config['production']['domain']} ://#{config['development']['domain']}"
+puts "Search-replacing #{siteurl_production} with #{siteurl_development}"
+system "wp search-replace #{siteurl_production} #{siteurl_development}"
