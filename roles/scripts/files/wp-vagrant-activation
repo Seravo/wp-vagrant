@@ -4,6 +4,11 @@
 ##
 require 'yaml'
 
+##
+# We need sudo for this
+##
+raise 'Must run as root' unless Process.uid == 0
+
 # Generate https-domain-alias from config
 config_file = File.join('/data/wordpress','config.yml')
 
@@ -28,10 +33,57 @@ unless File.readlines("/etc/nginx/fastcgi_params").grep(/^fastcgi_param  HTTPS_D
 end
 
 # Restart nginx
-system "sudo service nginx restart"
+system "service nginx restart"
 
 # Reload avahi-daemon so it broadcast hostname of this vagrant box
-system "sudo service avahi-daemon restart"
+system "service avahi-daemon restart"
+
+
+##
+# Fill /etc/hosts/ with domain entries
+##
+
+def get_domains(config)
+  domains = config['development']['domains'] || []
+  domains << config['development']['domain'] unless config['development']['domain'].nil?
+
+  # For backwards compatibility:
+  # Eerlier we used the domain .dev and it's still ok
+  domains << config['name']+".dev"
+  domains << "www."+config['name']+".dev"
+  domains << config['name']+".seravo.dev" #test https-domain-alias locally
+  domains << "webgrind."+config['name']+".dev" #For xdebug
+  domains << "adminer."+config['name']+".dev" #For DB-administration
+  domains << "mailcatcher."+config['name']+".dev" #For Mail debugging
+  domains << "browsersync."+config['name']+".dev" #For browser-sync admin
+  domains << "info."+config['name']+".dev" #For Info page
+  domains << "terminal."+config['name']+".dev" #Running ad-hoc commands
+
+  # Main domain should be {{site}}.local so that devices in same network can use them as well through zeroconf
+  domains << config['name']+".local"
+  domains << "www."+config['name']+".local"
+  domains << config['name']+".seravo.local" #test https-domain-alias locally
+  domains << "webgrind."+config['name']+".local" #For xdebug
+  domains << "adminer."+config['name']+".local" #For DB-administration
+  domains << "mailcatcher."+config['name']+".local" #For Mail debugging
+  domains << "browsersync."+config['name']+".local" #For browser-sync admin
+  domains << "info."+config['name']+".local" #For Info page
+  domains << "terminal."+config['name']+".local" #Running ad-hoc commands
+
+  domains.uniq #remove duplicates
+end
+
+# Add all domains to /etc/hosts/
+domains = get_domains(config)
+
+domains.each do |domain|
+  unless File.readlines("/etc/hosts").grep(/#{domain}/).any?
+    puts "#{domain} not found!"
+    File.open('/etc/hosts', "a+") do |file|
+      file.write "127.0.0.1 #{domain}\n"
+    end
+  end
+end
 
 ##
 # Generate .ssh/config if config.yml contains values for that
