@@ -7,7 +7,10 @@ require 'yaml'
 ##
 # We need sudo for this
 ##
-raise 'Must run as root' unless Process.uid == 0
+unless Process.uid == 0
+  puts 'ERROR: Must run as root'
+  exit 1
+end
 
 # Generate https-domain-alias from config
 config_file = File.join('/data/wordpress','config.yml')
@@ -21,14 +24,14 @@ end
 # ADD HTTPS_DOMAIN_ALIAS to envs
 unless File.readlines("/etc/container_environment.sh").grep(/^export HTTPS_DOMAIN_ALIAS/).any?
   File.open('/etc/container_environment.sh', "a+") do |file|
-    file.write "\nexport HTTPS_DOMAIN_ALIAS=#{config['name']}.seravo.local\n"
+    file.write "\nexport HTTPS_DOMAIN_ALIAS=#{config['name']}.wp-palvelu.local\n"
   end
 end
 
 # Add it to envs of php5-fpm
 unless File.readlines("/etc/nginx/fastcgi_params").grep(/^fastcgi_param  HTTPS_DOMAIN_ALIAS/).any?
   File.open('/etc/nginx/fastcgi_params', "a+") do |file|
-    file.write "\nfastcgi_param  HTTPS_DOMAIN_ALIAS   #{config['name']}.seravo.local;\n"
+    file.write "\nfastcgi_param  HTTPS_DOMAIN_ALIAS   #{config['name']}.wp-palvelu.local;\n"
   end
 end
 
@@ -76,9 +79,10 @@ end
 # Add all domains to /etc/hosts/
 domains = get_domains(config)
 
+puts "Setting custom domains in /etc/hosts/..."
+
 domains.each do |domain|
   unless File.readlines("/etc/hosts").grep(/#{domain}/).any?
-    puts "#{domain} not found!"
     File.open('/etc/hosts', "a+") do |file|
       file.write "127.0.0.1 #{domain}\n"
     end

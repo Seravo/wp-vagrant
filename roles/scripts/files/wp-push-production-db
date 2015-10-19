@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 ##
-# Pull production database and Search-Replace with details from config.yml
+# Push database to production and Search-Replace with details from config.yml
 ##
 require 'yaml'
 
@@ -12,27 +12,23 @@ else
   raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
 end
 
-#Gather useful variables for ssh/scp
-port = config['container']['ssh_port']
-host = config['container']['host']
-username = config['name']
+# Gather variables for ssh/scp
+port = config['production']['ssh_port'] || config['production']['port']
+host = config['production']['domain'] || config['production']['host']
+username = config['production']['user'] || config['name']
 
-dumpfile = "/data/db/development-push-#{Time.now.to_i}.sql"
-backupfile = "/data/db/pre-push-backup-#{Time.now.to_i}.sql"
 
-puts "dumping db into #{dumpfile}..."
-system "wp db export #{dumpfile}"
+dumpfile = "vagrant-push-#{Time.now.to_i}.sql"
 
-puts "Copy file to production..."
-system "scp -P #{port} #{dumpfile} #{username}@#{host}:#{dumpfile}"
+puts "Backing up earlier db into /data/db/#{dumpfile}..."
+system "wp db export /data/db/#{dumpfile} --quiet"
 
-puts "Log into production and import db..."
-system "ssh #{username}@#{host} -p #{port} 'wp db import #{dumpfile}'"
+puts "Getting production siteurls for later search-replacing..."
+siteurl_development = `wp option get siteurl`.strip
+siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
 
-puts "Delete dump file..."
-system "rm #{dumpfile}"
+puts "Log into production and transfer database, this can take a while..."
+system "wp db export - | ssh -q #{username}@#{host} -p #{port} 'wp db import -'"
 
-puts "Search-Replace #{config['development']['domain']} into: #{config['production']['domain']}"
-system "ssh #{username}@#{host} -p #{port} 'wp search-replace ://#{config['development']['domain']} ://#{config['production']['domain']}'"
-
-#TODO: Might be nice addition to run tests now and rollback in case of failure
+puts "Search-replacing: #{siteurl_development} -> #{siteurl_production}"
+system "ssh -q #{username}@#{host} -p #{port} 'wp search-replace #{siteurl_development} #{siteurl_production}' --network | tail -n1"
