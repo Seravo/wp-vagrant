@@ -35,5 +35,6 @@ system "ssh -q #{username}@#{host} -p #{port} 'wp db export -' | wp db import - 
 
 siteurl_production = `wp option get siteurl`.strip
 
-puts "Search-replacing #{siteurl_production} with #{siteurl_development}"
+# Search Replace all but guid because guid is just a name for post
+puts "Search-replacing #{siteurl_production} with #{siteurl_development} --skip-columns=guid"
 system "wp search-replace #{siteurl_production} #{siteurl_development}"
