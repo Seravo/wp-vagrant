@@ -66,6 +66,7 @@ def get_domains(config)
   domains << config['name']+".local"
   domains << "www."+config['name']+".local"
   domains << config['name']+".seravo.local" #test https-domain-alias locally
+  domains << config['name']+".wp-palvelu.local" #test https-domain-alias locally
   domains << "webgrind."+config['name']+".local" #For xdebug
   domains << "adminer."+config['name']+".local" #For DB-administration
   domains << "mailcatcher."+config['name']+".local" #For Mail debugging
