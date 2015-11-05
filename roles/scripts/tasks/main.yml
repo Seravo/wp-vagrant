@@ -1,7 +1,7 @@
 - name: Install custom script helpers 
   copy: src={{ item }} dest=/usr/local/bin/{{ item | basename }} mode=0755
-  with_items:
-    - ./files/*
+  with_fileglob:
+    - ../files/*
 
 - name: Get wp-phptidy for html coding standards
   command: curl -L -o /usr/local/bin/wp-phptidy https://raw.githubusercontent.com/scribu/wp-phptidy/master/wp-phptidy.php
