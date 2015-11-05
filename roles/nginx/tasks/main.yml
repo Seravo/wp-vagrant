@@ -10,12 +10,12 @@
 
 
 - name: Install all default nginx files
-  copy: src={{ item }} dest={{consul_template_home}}/templates/{{ item | basename }}
+  copy: src={{ item }} dest=/etc/nginx/{{ item | basename }}
   with_fileglob:
   - ../files/*.conf
 
 - name: Install all default nginx sites
-  copy: src={{ item }} dest={{consul_template_home}}/templates/{{ item | basename }}
+  copy: src={{ item }} dest=/etc/nginx/sites-available/{{ item | basename }}
   with_fileglob:
   - ../files/sites-available/*
 
