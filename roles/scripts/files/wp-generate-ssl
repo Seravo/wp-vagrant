@@ -79,8 +79,13 @@ def get_domains(config)
   # Eerlier we used the domain .dev and it's still ok
   domains << config['name']+".dev"
   domains << "www."+config['name']+".dev"
-  domains << config['name']+".seravo.dev" #test https-domain-alias locally
-  domains << "webgrind."+config['name']+".dev" #For xdebug
+
+  # Test https-domain-alias locally
+  domains << config['name']+".wp-palvelu.dev"
+  domains << config['name']+".seravo.dev" 
+
+  # Use xdebug
+  domains << "webgrind."+config['name']+".dev"
   domains << "adminer."+config['name']+".dev" #For DB-administration
   domains << "mailcatcher."+config['name']+".dev" #For Mail debugging
   domains << "browsersync."+config['name']+".dev" #For browser-sync admin
@@ -90,8 +95,13 @@ def get_domains(config)
   # Main domain should be {{site}}.local so that devices in same network can use them as well through zeroconf
   domains << config['name']+".local"
   domains << "www."+config['name']+".local"
-  domains << config['name']+".seravo.local" #test https-domain-alias locally
-  domains << "webgrind."+config['name']+".local" #For xdebug
+
+  # Test https-domain-alias locally
+  domains << config['name']+".wp-palvelu.local"
+  domains << config['name']+".seravo.local" 
+
+  # Use xdebug
+  domains << "webgrind."+config['name']+".local"
   domains << "adminer."+config['name']+".local" #For DB-administration
   domains << "mailcatcher."+config['name']+".local" #For Mail debugging
   domains << "browsersync."+config['name']+".local" #For browser-sync admin
