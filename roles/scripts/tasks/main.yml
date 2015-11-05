@@ -1,27 +1,9 @@
 - name: Install custom script helpers 
-  copy: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
+  copy: src={{ item }} dest=/usr/local/bin/{{ item | basename }} mode=0755
   with_items:
-    # Inject some env variables for wp cli to globally use same path /data/wordpress/
-    - wp
-    # Register git hooks which will be run after commits
-    - wp-activate-git-hooks 
-    # Generates self-signed ssl certificate
-    - wp-generate-ssl
-    # Not working yet but will push/pull database between production
-    - wp-pull-production-db
-    - wp-push-production-db
-    # Restart nginx with same command as in production
-    - wp-restart-nginx
-    # If config.yml contains the data we can ssh to production
-    - wp-ssh-production
-    # For running tests
-    - wp-test
-    # Run commands when vagrant up is run
-    - wp-vagrant-activation
-    - wp-vagrant-dump-db
-    - wp-vagrant-import-db
+    - ../files/*
 
-- name: Get wp-phptidy for wordpress coding standards
+- name: Get wp-phptidy for html coding standards
   command: curl -L -o /usr/local/bin/wp-phptidy https://raw.githubusercontent.com/scribu/wp-phptidy/master/wp-phptidy.php
 
 - name: Give wp-phptidy execute permissions

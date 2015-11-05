@@ -19,9 +19,12 @@ server {
   access_log /data/log/nginx-access.log extensive;
   error_log  /data/log/nginx-error.log error;
 
+  # Nginx Pagespeed module
+  include pagespeed.conf;
+
   # A few wordpress specific rules for subdirectory installations
   include wordpress.conf;
 
-  #Include custom nginx additions from project
+  # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
 }

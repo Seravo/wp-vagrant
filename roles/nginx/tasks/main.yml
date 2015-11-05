@@ -8,24 +8,21 @@
 - name: Install nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
 
-- name: Create default server
-  template: src=default.conf.j2 dest=/etc/nginx/sites-available/default
-- name: Enable default server
-  file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default owner={{ web_user }} group={{ web_user }} state=link
 
-- name: Create wordpress server
-  template: src=wordpress-server.conf.j2 dest=/etc/nginx/sites-available/wordpress-server
-- name: Enable wordpress server
-  file: src=/etc/nginx/sites-available/wordpress-server dest=/etc/nginx/sites-enabled/wordpress-server owner={{ web_user }} group={{ web_user }} state=link
+- name: Install all default nginx files
+  copy: src={{ item }} dest={{consul_template_home}}/templates/{{ item | basename }}
+  with_fileglob:
+  - ../files/*.conf
 
-- name: Create base WordPress config
-  template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
+- name: Install all default nginx sites
+  copy: src={{ item }} dest={{consul_template_home}}/templates/{{ item | basename }}
+  with_fileglob:
+  - ../files/sites-available/*
 
-- name: Create base WordPress subdirectory Multisite config
-  template: src=multisite_subdirectory.conf.j2 dest=/etc/nginx/multisite_subdirectory.conf
-
-- name: Create fastcgi_params config file
-  template: src=fastcgi_params.j2 dest=/etc/nginx/fastcgi_params
+- name: Enable all default nginx sites
+  file: src=/etc/nginx/sites-available/{{ item | basename }} dest=/etc/nginx/sites-enabled/{{ item | basename }} owner={{ web_user }} group={{ web_user }} state=link
+  with_fileglob:
+  - ../files/sites-available/*
 
 - name: Create cache folder
-  file: path=/var/cache/nginx/ngx_pagespeed_cache state=directory owner=vagrant group=vagrant
+  file: path=/var/cache/nginx/ngx_pagespeed_cache state=directory owner={{ web_user }} group={{ web_user }}
