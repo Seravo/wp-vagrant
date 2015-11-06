@@ -9,10 +9,13 @@
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
 
 
-- name: Install all default nginx files
+- name: Install all nginx config files *.conf
   copy: src={{ item }} dest=/etc/nginx/{{ item | basename }}
   with_fileglob:
   - ../files/*.conf
+
+- name: Install fastcgi_params file
+  copy: src=fastcgi_params dest=/etc/nginx/fastcgi_params
 
 - name: Install all default nginx sites
   copy: src={{ item }} dest=/etc/nginx/sites-available/{{ item | basename }}
