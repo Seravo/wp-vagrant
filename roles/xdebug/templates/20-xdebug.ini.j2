@@ -1,11 +1,16 @@
 zend_extension=xdebug.so
 
-; Enable php profiling with get param
+; Enable php profiling with get param XDEBUG_PROFILE=1
 
 xdebug.profiler_output_dir=/tmp
 xdebug.profiler_output_name=cachegrind.out.%t.%p
 xdebug.profiler_enable_trigger=1
 
+; Enable PHP tracing with get param XDEBUG_TRACE=1
+
+xdebug.trace_enable_trigger=1
+xdebug.trace_format=1
+xdebug.show_mem_delta=1
 
 ; Enable dumping detailed info in the frontend when php fatals
 
