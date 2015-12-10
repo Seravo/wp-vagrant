@@ -6,8 +6,7 @@
   apt: name="{{ item }}" state=present force=yes
   with_items:
     - ruby2.2
-    - ruby2.0-dev
-    - ruby-dev
+    - ruby2.2-dev
     # For compiling ruby gems
     - libreadline6
     - libxslt-dev
