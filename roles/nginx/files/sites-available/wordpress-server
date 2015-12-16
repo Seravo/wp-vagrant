@@ -22,9 +22,9 @@ server {
   # Nginx Pagespeed module
   include pagespeed.conf;
 
-  # A few wordpress specific rules for subdirectory installations
-  include wordpress.conf;
-
   # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
+
+  # A few wordpress specific rules for subdirectory installations
+  include wordpress.conf;
 }
