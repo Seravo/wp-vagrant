@@ -1,19 +1,17 @@
+; Load XDebug
 zend_extension=xdebug.so
 
 ; Enable php profiling with get param XDEBUG_PROFILE=1
-
 xdebug.profiler_output_dir=/tmp
 xdebug.profiler_output_name=cachegrind.out.%t.%p
 xdebug.profiler_enable_trigger=1
 
 ; Enable PHP tracing with get param XDEBUG_TRACE=1
-
 xdebug.trace_enable_trigger=1
 xdebug.trace_format=1
 xdebug.show_mem_delta=1
 
 ; Enable dumping detailed info in the frontend when php fatals
-
 xdebug.collect_vars=on
 xdebug.collect_params=4
 xdebug.dump_globals=on
@@ -29,7 +27,7 @@ xdebug.remote_enable = 1
 xdebug.remote_autostart = 0
 xdebug.remote_port = 9000
 xdebug.remote_handler = dbgp
-xdebug.remote_log = "/var/log/xdebug/xdebug.log"
+xdebug.remote_log = "/data/log/xdebug.log"
 
 ; Host machine ( IDE-Environment ) from vagrant box
 xdebug.remote_host=10.0.2.2
