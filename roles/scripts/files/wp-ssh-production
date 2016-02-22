@@ -9,13 +9,19 @@ config_file = File.join('','data','wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+  puts 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
+  exit 1
 end
 
-#Gather useful variables for ssh/scp
-port = config['container']['ssh_port']
-host = config['container']['host']
-username = config['name']
+if config['production'].nil?
+  puts "ERROR: couldn't SSH into production because it isn't configured in config.yml"
+  exit 2
+end
+
+# Gather variables for ssh/scp
+port = config['production']['ssh_port'] || config['production']['port']
+host = config['production']['domain'] || config['production']['host']
+username = config['production']['user'] || config['name']
 
 puts "Log into production and import db..."
 system "ssh #{username}@#{host} -p #{port}"

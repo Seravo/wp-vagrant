@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 ##
-# Pull production database and Search-Replace with details from config.yml
+# Pull production uploads with details from config.yml
 ##
 require 'yaml'
 
@@ -10,6 +10,11 @@ if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
   raise "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
+end
+
+if config['production'].nil?
+  puts "ERROR: couldn't pull uploaded files because production isn't configured in config.yml"
+  exit 2
 end
 
 # Gather variables for ssh/scp
