@@ -39,7 +39,7 @@ C = FI
 ST = Pirkanmaa
 L = Tampere
 O = Seravo Oy
-CN = #{config['name']}.local
+CN = *.#{config['name']}.local
 emailAddress = wordpress@seravo.fi
 [v3_req]
 subjectKeyIdentifier = hash
