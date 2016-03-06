@@ -39,8 +39,8 @@ C = FI
 ST = Pirkanmaa
 L = Tampere
 O = Seravo Oy
-CN = #{config['name']}.dev
-emailAddress = wordpress@seravo.fi 
+CN = #{config['name']}.local
+emailAddress = wordpress@seravo.fi
 [v3_req]
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
@@ -82,7 +82,7 @@ def get_domains(config)
 
   # Test https-domain-alias locally
   domains << config['name']+".wp-palvelu.dev"
-  domains << config['name']+".seravo.dev" 
+  domains << config['name']+".seravo.dev"
 
   # Use xdebug
   domains << "webgrind."+config['name']+".dev"
@@ -98,7 +98,7 @@ def get_domains(config)
 
   # Test https-domain-alias locally
   domains << config['name']+".wp-palvelu.local"
-  domains << config['name']+".seravo.local" 
+  domains << config['name']+".seravo.local"
 
   # Use xdebug
   domains << "webgrind."+config['name']+".local"
