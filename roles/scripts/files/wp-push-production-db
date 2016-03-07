@@ -9,7 +9,7 @@ config_file = File.join('/data/wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  raise 'config.yml was not found. Please provide the needed information for your box in config.yml.'
+  raise "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
 end
 
 # Gather variables for ssh/scp
@@ -20,14 +20,14 @@ username = config['production']['user'] || config['name']
 
 dumpfile = "vagrant-push-#{Time.now.to_i}.sql"
 
-puts "Backing up earlier db into /data/db/#{dumpfile}..."
+puts "Saving backup of current production database in /data/db/#{dumpfile}..."
 system "wp db export /data/db/#{dumpfile} --quiet"
 
-puts "Getting production siteurls for later search-replacing..."
+puts "Define new and old siteurl for later search-replacing..."
 siteurl_development = `wp option get siteurl`.strip
 siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
 
-puts "Log into production and transfer database, this can take a while..."
+puts "Pushing database to production, this can take a while..."
 system "wp db export - | ssh -q #{username}@#{host} -p #{port} 'wp db import -'"
 
 puts "Search-replacing: #{siteurl_development} -> #{siteurl_production}"

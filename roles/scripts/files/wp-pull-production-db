@@ -9,7 +9,7 @@ config_file = File.join('/data/wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  puts 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
+  puts "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
   exit 1
 end
 
