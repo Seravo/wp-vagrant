@@ -9,8 +9,7 @@ config_file = File.join('/data/wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  puts 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
-  exit 1
+  raise "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
 end
 
 # Gather variables for ssh/scp
@@ -19,5 +18,5 @@ host = config['production']['domain'] || config['production']['host']
 username = config['production']['user'] || config['name']
 
 # Rsync source: http://superuser.com/questions/547282/which-is-the-rsync-command-to-smartly-merge-two-folders
-puts "Sending uploads to production with rsync..."
+puts "Pulling uploads from production with rsync..."
 system "rsync -abviuzP -e 'ssh -p #{port}' #{username}@#{host}:#{ENV['WP_CONTENT']}/uploads/ #{ENV['WP_CONTENT']}/uploads"

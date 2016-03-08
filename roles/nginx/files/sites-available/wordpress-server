@@ -22,6 +22,9 @@ server {
   # Nginx Pagespeed module
   include pagespeed.conf;
 
+  # Set defaults for our variables here and these can be overridden in /data/wordpress/nginx/*.cnf
+  set $force_https 0;
+
   # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
 
