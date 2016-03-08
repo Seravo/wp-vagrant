@@ -9,7 +9,7 @@ config_file = File.join('/data/wordpress','config.yml')
 if File.exists?(config_file)
   config = YAML.load_file(config_file)
 else
-  puts 'ERROR: config.yml was not found. Please provide the needed information for your box in config.yml.'
+  puts "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
   exit 1
 end
 
@@ -25,15 +25,15 @@ username = config['production']['user'] || config['name']
 
 backupfile = "pre-production-pull-backup-#{Time.now.to_i}.sql"
 
-puts "backing up earlier db into /data/db/pre-production-pull-backup.sql..."
+puts "Saving backup of current development database in /data/db/pre-production-pull-backup.sql..."
 system "wp db export #{backupfile}"
 
+puts "Define new and old siteurl for later search-replacing..."
 siteurl_development = `wp option get siteurl`.strip
+siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
 
-puts "Log into production and migrate database..."
+puts "Pulling database from production with 'wp db export'..."
 system "ssh -q #{username}@#{host} -p #{port} 'wp db export -' | wp db import - "
-
-siteurl_production = `wp option get siteurl`.strip
 
 # Search Replace all but guid because guid is just a name for post
 puts "Search-replacing #{siteurl_production} with #{siteurl_development} --skip-columns=guid"
