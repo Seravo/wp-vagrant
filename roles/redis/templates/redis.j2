@@ -51,9 +51,11 @@ databases 16
 #
 #   save ""
 
-save 900 1
-save 300 10
-save 60 10000
+# Don't save anything - Redis is used only for in-memory caching
+#save 900 1
+#save 300 10
+#save 60 10000
+save ""
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
