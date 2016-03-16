@@ -1,0 +1,21 @@
+#!/bin/bash
+
+##
+# Gives user easy way to environment variables which are important for him
+##
+
+# Source environment if doesn't exist yet
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+IFS='%' read -a envvars <<< "$LIST_CONTAINER_ENVS"
+
+echo "##############"
+echo "ENV-Variables:"
+echo "##############"
+for envvar in "${envvars[@]}"
+do
+  ev=$(printenv $envvar)
+  echo "$envvar: $ev"
+done
