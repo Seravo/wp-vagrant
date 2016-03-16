@@ -11,6 +11,9 @@ upload_max_filesize = {{ php_upload_max_filesize }}
 max_input_vars = {{ php_max_input_vars }}
 
 [log]
+log_errors = On
+report_memleaks = On
+html_errors = On
 error_log = {{php_fpm_log_dir}}/php-error.log
 
 [mysqlnd]

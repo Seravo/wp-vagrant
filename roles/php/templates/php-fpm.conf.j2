@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;
 
 pid = {{ php_fpm_socket_dir }}/php5-fpm.pid
-error_log = {{php_fpm_log_dir}}/php5-fpm.log
+error_log = /data/log/php-error.log
 log_level = warning
 daemonize = yes
 
@@ -15,7 +15,11 @@ listen.owner = {{ web_user }}
 listen.group = {{ web_user }}
 listen.mode = 0660
 pm = dynamic
-pm.max_children = 5
-pm.start_servers = 2
+pm.max_children = 25
+pm.start_servers = 1
 pm.min_spare_servers = 1
-pm.max_spare_servers = 3
+pm.max_spare_servers = 5
+; Restart PHP threads at regular intervals to clear memory. This is an easier
+; solution than figuring out what PHP code leaks memory and touching customer's
+; sites code.
+pm.max_requests = 200
