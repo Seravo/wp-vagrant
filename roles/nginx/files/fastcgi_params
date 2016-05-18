@@ -56,11 +56,6 @@ fastcgi_param  HTTP_HOST          $real_host;
 # PHP only, required if PHP was built with --enable-force-cgi-redirect
 fastcgi_param  REDIRECT_STATUS    200;
 
-#These are a bit more sophisticated in production but in development it doesn't matter
-
-fastcgi_param  REDIS_HOST   127.0.0.1;
-fastcgi_param  REDIS_PORT   6379;
-
 # Add env to tell about vagrant
 fastcgi_param  WP_ENVIRONMENT development;
 
@@ -77,4 +72,3 @@ fastcgi_param  AUTH_SALT   vagrant;
 fastcgi_param  SECURE_AUTH_SALT   vagrant;
 fastcgi_param  LOGGED_IN_SALT   vagrant;
 fastcgi_param  NONCE_SALT   vagrant;
-
