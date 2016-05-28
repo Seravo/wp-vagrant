@@ -1,20 +1,9 @@
 ---
-- name: Import the NodeSource GPG key into apt
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-
-- name: Add NodeSource deb repository
-  apt_repository:
-    repo: 'deb https://deb.nodesource.com/node_4.x trusty main'
-    state: present
+- name: Set up Node.js
+  command: bash -c "curl -sL https://deb.nodesource.com/setup_4.x | bash -"
 
 - name: Install Node.js
-  apt:
-    pkg:
-      - nodejs # Use the LTS version
-    state: installed
-    update_cache: yes
+  apt: pkg=nodejs state=installed
 
 - name: Install some NPM Packages
   npm: name="{{ item }}" global=yes state=latest

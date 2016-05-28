@@ -1,11 +1,10 @@
 ---
-- name: "WordPress Server: LEMP Stack with PHP, MariaDB for MySQL, Redis and various development tools like browsersync, mailcatcher, xdebug..."
+- name: "WP-palvelu Vagrant Box"
   hosts: all
   sudo: yes
   remote_user: admin
 
   roles:
-    # Use /data folder for everything project related
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
     - { role: scripts, tags: [scripts] }
@@ -13,7 +12,7 @@
     - { role: php, tags: [php] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    # TODO: also add a hhvm-lts package for testing with hhvm 
+    # TODO: also add a hhvm-lts package for testing with hhvm
     - { role: nginx, tags: [nginx] }
     - { role: xdebug, tags: [xdebug] }
     - { role: libsass, tags: [libsass] }
@@ -22,10 +21,8 @@
     - { role: redis, tags: [redis] }
     - { role: ruby, tags: [ruby] }
     - { role: nodejs, tags: [nodejs] }
-    # TODO: add tidy-html5 for html validation for errors
     - { role: adminer, tags: [adminer] }
     - { role: browsersync, tags: [browsersync] }
     - { role: mailcatcher, tags: [mailcatcher] }
     - { role: codesniffer, tags: [codesniffer] }
-    #Cleanup all files 
     - { role: cleanup, tags: [cleanup] }

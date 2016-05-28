@@ -3,10 +3,7 @@
   apt: name=phantomjs state=present update_cache=yes
 
 - name: Download newer phantomjs binary
-  # Curl the file and follow redirects
-  command: curl -L -O "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-{{ phantomjs_version }}-linux-x86_64.tar.bz2"
-  args:
-    chdir: /tmp
+  get_url: url="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-{{ phantomjs_version }}-linux-x86_64.tar.bz2" dest=/tmp validate_certs=no
 
 - name: Unarchive phantomjs
   unarchive:
