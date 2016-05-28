@@ -1,25 +1,27 @@
 ---
-- name: Add Nodejs ppa
-  apt_repository: repo="ppa:chris-lea/node.js" update_cache=yes
+- name: Import the NodeSource GPG key into apt
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
 
-- name: Install Nodejs
-  apt: name=nodejs state=present force=yes
+- name: Add NodeSource deb repository
+  apt_repository:
+    repo: 'deb https://deb.nodesource.com/node_4.x trusty main'
+    state: present
 
-- name: Install NPM Packages
+- name: Install Node.js
+  apt:
+    pkg:
+      - nodejs # Use the LTS version
+    state: installed
+    update_cache: yes
+
+- name: Install some NPM Packages
   npm: name="{{ item }}" global=yes state=latest
   with_items:
-    #Nice terminal editor
-    - slap
-    # Dependency handling
     - bower
-    # Workflow
-    - gulp
-    - gulp-sass
-    - gulp-coffee
-    - gulp-bower
-    - gulp-util
-    - gulp-watch
-    - gulper
-
-- name: Use NPM bash-completion
-  file: src=/usr/lib/node_modules/npm/lib/utils/completion.sh dest=/usr/share/bash-completion/completions/npm state=link
+    - gulp-cli
+    - grunt-cli
+    - webpack
+    - browserify
+    - babel-cli
