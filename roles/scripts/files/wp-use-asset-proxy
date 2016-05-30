@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+##
+# Set up nginx configuration to proxy static content from production
+##
+require 'yaml'
+
+# auto-attempt sudo inside vagrant if called via vagrant user
+unless Process.uid == 0
+  system "sudo #{__FILE__}"; exit
+end
+
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  exit 0 # fail gracefully
+end
+
+if config['production'].nil? || config['production']['url'].nil?
+  exit 0 # fail gracefully
+end
+
+url = config['production']['url']
+
+conffile = '/etc/nginx/static-files.conf'
+File.write(conffile, File.read(conffile).gsub(/\#proxy_pass.*$/, "proxy_pass #{url};"))
+
+# Reload nginx
+system "/usr/local/bin/wp-restart-nginx"
