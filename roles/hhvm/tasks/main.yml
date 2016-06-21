@@ -1,6 +1,6 @@
 ---
 - name: Add HHVM repo key
-  apt_key: keyserver=keyserver.ubuntu.com id=0x5a16e7281be7a449
+  apt_key: url=http://dl.hhvm.com/conf/hhvm.gpg.key state=present
 
 - name: Add HHVM repo
   apt_repository: repo='deb http://dl.hhvm.com/ubuntu trusty-lts-3.9 main'
