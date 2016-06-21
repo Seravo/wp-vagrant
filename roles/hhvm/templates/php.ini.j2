@@ -1,0 +1,73 @@
+; php options
+upload_max_filesize = 64M
+post_max_size = 64M
+memory_limit = 128M
+max_execution_time = 300
+log_errors = true
+
+; show php/hhvm version in headers
+expose_php=on
+
+; hhvm specific
+hhvm.server.file_socket=/var/run/hhvm/hhvm.sock
+hhvm.server.type = fastcgi
+hhvm.pid_file = /var/run/hhvm/pid
+hhvm.repo.central.path = /var/run/hhvm/hhvm.hhbc
+hhvm.sourceroot = /data/wordpress/htdocs/
+
+; disable performance logging
+hhvm.keep_perf_pid_map = 0
+hhvm.perf_pid_map = 0
+hhvm.perf_data_map = 0
+
+; Double the normal JIT cache sizes
+hhvm.jit = true
+hhvm.jit_a_size = 125829120
+hhvm.jit_a_cold_size = 62914560
+hhvm.jit_a_frozen_size = 62914560
+
+hhvm.log.header = typed_results
+hhvm.log.use_log_file = true
+hhvm.log.use_syslog = false
+hhvm.log.file = /data/log/php-error.log
+hhvm.log.access.file = /data/log/php-access.log
+hhvm.log.access.format = "%u %t \"%r\" %>s %bbyte %Dms"
+hhvm.log.always_log_unhandled_exceptions = true
+hhvm.log.injected_stack_trace = true
+hhvm.log.native_stack_trace = true
+hhvm.log.runtime_error_reporting_level = 32759
+hhvm.mysql.typed_results = false
+
+;debug and error handling
+hhvm.error_handling.call_user_handler_on_fatals = true
+hhvm.error_handling.max_loop_count = 0
+hhvm.error_handling.no_infinite_recursion_detection = false
+hhvm.error_handling.throw_bad_type_exceptions = false
+hhvm.error_handling.throw_too_many_arguments = false
+hhvm.error_handling.warn_too_many_arguments = false
+hhvm.error_handling.throw_missing_arguments = false
+hhvm.error_handling.throw_invalid_arguments = false
+hhvm.error_handling.enable_hip_hop_errors = true
+hhvm.error_handling.notice_frequency = 1
+hhvm.error_handling.warning_frequency = 1
+hhvm.error_handling.assert_active = false
+hhvm.error_handling.assert_warning = false
+
+hhvm.debug.full_backtrace = true
+hhvm.debug.server_stack_trace = true
+hhvm.debug.server_error_message = true
+hhvm.debug.translate_source = true
+hhvm.debug.record_input = false
+hhvm.debug.clear_input_on_success = true
+hhvm.debug.profiler_output_dir = /tmp
+hhvm.debug.core_dump_report = true
+hhvm.debug.core_dump_report_directory = /tmp
+
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+date.timezone = Europe/Helsinki
+
+[Mail]
+sendmail_path = "/usr/sbin/sendmail -t -i"
+

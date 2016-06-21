@@ -1,0 +1,38 @@
+---
+- name: Add HHVM repo key
+  apt_key: keyserver=keyserver.ubuntu.com id=0x5a16e7281be7a449
+
+- name: Add HHVM repo
+  apt_repository: repo='deb http://dl.hhvm.com/ubuntu trusty-lts-3.9 main'
+
+- name: Install HHVM
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - hhvm
+
+- name: Run the HHVM install_fastcgi.sh script
+  shell: /usr/share/hhvm/install_fastcgi.sh
+
+- name: Create socket directory
+  file: path=/var/run/hhvm state=directory owner=vagrant group=vagrant
+
+- name: Set up php.ini for hhvm
+  template:
+    src: php.ini.j2
+    dest: /etc/hhvm/php.ini
+
+- name: Update hhvm upstart script
+  template:
+    src: hhvm-upstart.conf.j2
+    dest: /etc/init/hhvm.conf
+
+- name: Stop any running hhvm processes after the install
+  service: name=hhvm state=stopped
+  ignore_errors: yes
+
+- name: Remove bundled default init.d script
+  file: name=/etc/init.d/hhvm state=absent
+
+- name: Start HHVM service
+  service: name=hhvm state=restarted enabled=true
+

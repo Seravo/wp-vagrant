@@ -10,6 +10,35 @@ See [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress) to get st
 
 This box imitates the functionality of [wp-palvelu.fi](http://wp-palvelu.fi) WordPress instances. We aim to help our users develop WordPress locally with the best tools available.
 
+## What's inside?
+
+A LEMP stack with interchangeable PHP5 / PHP7 / HHVM
+- Nginx
+- MariaDB 10.0
+- PHP5.6
+- PHP7
+- HHVM LTS
+
+Tooling for PHP/WordPress development
+- Composer
+- WP-CLI
+- Adminer
+- XDebug
+- Webgrind
+- Node.js 4.x LTS
+
+Testing suite
+- Codesniffer
+- RSpec
+- Capybara
+- Poltergeist
+- PhantomJS
+- Mailcatcher
+
+Pre-configured for WP-palvelu.fi customers
+- Nginx proxy_pass configuration for static assets from production (images)
+- Scripts for syncing databases between production / staging / development
+
 ## Installation
 
 1. Clone [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress).
