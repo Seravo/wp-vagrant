@@ -32,8 +32,6 @@ server {
   # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
 
-  add_header X-Mode $mode;
-
   # Static file behaviour
   include static-files.conf;
 

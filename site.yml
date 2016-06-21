@@ -8,13 +8,13 @@
     - { role: data-directories, tags: [data-directories] }
     - { role: common, tags: [common] }
     - { role: scripts, tags: [scripts] }
+    - { role: nginx, tags: [nginx] }
     - { role: phantomjs, tags: [phantomjs] }
     - { role: php, tags: [php] }
+    - { role: hhvm, tags: [hhvm] }
+    - { role: xdebug, tags: [xdebug] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    # TODO: also add a hhvm-lts package for testing with hhvm
-    - { role: nginx, tags: [nginx] }
-    - { role: xdebug, tags: [xdebug] }
     - { role: libsass, tags: [libsass] }
     - { role: mariadb, tags: [mariadb] }
     - { role: profile, tags: [profile] }
