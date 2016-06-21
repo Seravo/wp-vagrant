@@ -1,7 +1,11 @@
 ---
+- name: Add xdebug.ini template for php5
+  template: src="20-xdebug.ini.j2"
+            dest="/etc/php/5.6/fpm/conf.d/20-xdebug.ini"
 
-- name: Install php xdebug
-  apt: name=php5-xdebug state=present force=yes
+- name: Add xdebug.ini template for php7
+  template: src="20-xdebug.ini.j2"
+            dest="/etc/php/7.0/fpm/conf.d/20-xdebug.ini"
 
 - name: Install webgrind
   # Origin repo is: https://github.com/jokkedk/webgrind/
@@ -9,18 +13,13 @@
   # We are using active fork from alpha0010
   git: repo=https://github.com/alpha0010/webgrind dest=/var/www/webgrind
 
-- name: Add xdebug.ini template
-  template: src="20-xdebug.ini.j2"
-            dest="/etc/php5/fpm/conf.d/20-xdebug.ini"
-  notify: restart web
-
 - name: Install graphviz
   apt: name="{{ item }}" state=present force=yes
   with_items:
   - python
   - graphviz
 
-- name: Symlink dot binary 
+- name: Symlink dot binary
   file: src=/usr/bin/dot dest=/usr/local/bin/dot state=link
 
 - name: Use webgrind nginx config

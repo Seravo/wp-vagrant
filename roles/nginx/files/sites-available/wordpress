@@ -1,8 +1,12 @@
+# php upstreams: php5, php7, hhvm
+include upstreams.conf;
+
 ##
 # Do not directly listen web (80) so that we can use middleware (eg. browser-sync)
 # Instead we use 8080 where requests are reverse proxied
 ##
 
+# main server block
 server {
   # Just listen to any hostname because this image is for single site only
   listen 8080 default_server;
@@ -19,18 +23,22 @@ server {
   access_log /data/log/nginx-access.log extensive;
   error_log  /data/log/nginx-error.log error;
 
-  # Nginx Pagespeed module
-  include pagespeed.conf;
-
   # Set defaults for our variables here and these can be overridden in /data/wordpress/nginx/*.cnf
   set $force_https 0;
 
+  # Default upstream is php5-fpm
+  set $mode php5;
+
   # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
+
+  add_header X-Mode $mode;
 
   # Static file behaviour
   include static-files.conf;
 
   # A few wordpress specific rules for subdirectory installations
+  include wordpress-addons.conf;
   include wordpress.conf;
 }
+

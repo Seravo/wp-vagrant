@@ -1,45 +1,102 @@
 ---
-- name: Add PHP 5.6 PPA
-  apt_repository: repo="ppa:ondrej/php5-5.6" update_cache=yes
+- name: Add ondrej/php repo with PHP5 and PHP7
+  apt_repository: repo="ppa:ondrej/php"
 
-- name: Install PHP 5.6
-  apt: name="{{ item }}" state=present force=yes
+- name: Install PHP
+  apt: name="{{ item }}" state=present force=yes update_cache=yes
   with_items:
-  - php5-common
-  - php5-fpm
-  - php5-mysqlnd
-  - php5-xmlrpc
-  - php5-mcrypt
-  - php5-curl
-  - php5-gd
-  - php5-cli
+  - php5.6-common
+  - php5.6-fpm
+  - php5.6-mysql
+  - php5.6-curl
+  - php5.6-gd
+  - php5.6-mcrypt
+  - php5.6-memcache
+  - php5.6-tidy
+  - php5.6-xmlrpc
+  - php5.6-xsl
+  - php5.6-redis
+  - php5.6-mbstring
+  - php5.6-soap
+  - php5.6-zip
+  - php5.6-imagick
+  - php5.6-dev
+  - php5.6-imap
+  - php5.6-xdebug
+  - php7.0-common
+  - php7.0-fpm
+  - php7.0-mysql
+  - php7.0-curl
+  - php7.0-gd
+  - php7.0-mcrypt
+  - php7.0-memcache
+  - php7.0-tidy
+  - php7.0-xmlrpc
+  - php7.0-xsl
+  - php7.0-redis
+  - php7.0-mbstring
+  - php7.0-soap
+  - php7.0-zip
+  - php7.0-imagick
+  - php7.0-dev
+  - php7.0-imap
+  - php7.0-xdebug
   - php-pear
-  - php5-dev
-  - php5-imap
   - phpunit
 
-- name: Create socket directory
-  file: path={{php_fpm_socket_dir}} state=directory owner=vagrant group=vagrant
+- name: Create socket directories
+  file: path={{item}} state=directory owner=vagrant group=vagrant
+  with_items:
+    - /var/run/php5-fpm/
+    - /var/run/php7-fpm/
+
+- name: Stop any running php processes after the install
+  service: name={{item}} state=stopped
+  with_items:
+    - php5.6-fpm
+    - php7.0-fpm
+
+- name: Remove bundled default upstart scripts
+  file: name={{item}} state=absent
+  with_items:
+    - /etc/init.d/php5.6-fpm
+    - /etc/init/php5.6-fpm.conf
+    - /etc/init.d/php7.0-fpm
+    - /etc/init/php7.0-fpm.conf
 
 - name: Update php5-fpm upstart script
   template:
     src: php5-fpm-upstart.conf.j2
     dest: /etc/init/php5-fpm.conf
 
+- name: Update php7-fpm upstart script
+  template:
+    src: php7-fpm-upstart.conf.j2
+    dest: /etc/init/php7-fpm.conf
+
 - name: Start php5-fpm service
   service: name=php5-fpm state=restarted enabled=true
 
-- name: Disable default pool
-  command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
-  when: disable_default_pool
-  notify: restart php-fpm
+- name: Start php7-fpm service
+  service: name=php7-fpm state=restarted enabled=true
 
-- name: Add php.ini template
-  template: src="php.ini.j2"
-            dest="/etc/php5/fpm/php.ini"
-  notify: restart php-fpm
+- name: Add php.ini template for php5-fpm
+  template: src="php5.6/php.ini.j2"
+            dest="/etc/php/5.6/fpm/php.ini"
+  notify: restart php5-fpm
 
-- name: Add php-fpm.conf template
-  template: src="php-fpm.conf.j2"
-            dest="/etc/php5/fpm/php-fpm.conf"
-  notify: restart php-fpm
+- name: Add php.ini template for php7-fpm
+  template: src="php7.0/php.ini.j2"
+            dest="/etc/php/7.0/fpm/php.ini"
+  notify: restart php7-fpm
+
+- name: Add php-fpm.conf template for php5-fpm
+  template: src="php5.6/php-fpm.conf.j2"
+            dest="/etc/php/5.6/fpm/php-fpm.conf"
+  notify: restart php5-fpm
+
+- name: Add php-fpm.conf template for php7-fpm
+  template: src="php7.0/php-fpm.conf.j2"
+            dest="/etc/php/7.0/fpm/php-fpm.conf"
+  notify: restart php7-fpm
+
