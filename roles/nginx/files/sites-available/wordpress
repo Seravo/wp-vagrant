@@ -26,6 +26,9 @@ server {
   # Set defaults for our variables here and these can be overridden in /data/wordpress/nginx/*.cnf
   set $force_https 0;
 
+  # Nginx Pagespeed module
+  include pagespeed.conf;
+
   # Default upstream is php5-fpm
   set $mode php5;
 
