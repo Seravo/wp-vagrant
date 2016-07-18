@@ -8,7 +8,6 @@
 - name: Install nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
 
-
 - name: Install all nginx config files *.conf
   copy: src={{ item }} dest=/etc/nginx/{{ item | basename }}
   with_fileglob:
@@ -26,3 +25,7 @@
   file: src=/etc/nginx/sites-available/{{ item | basename }} dest=/etc/nginx/sites-enabled/{{ item | basename }} owner={{ web_user }} group={{ web_user }} state=link
   with_fileglob:
   - ../files/sites-available/*
+
+- name: Create a temp directory to serve screenshots from
+  file: dest=/tmp/screenshots state=directory mode=775
+
