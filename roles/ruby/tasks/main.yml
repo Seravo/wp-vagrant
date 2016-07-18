@@ -34,6 +34,7 @@
     - rspec-retry
     - poltergeist
     - capybara
+    - capybara-screenshot
 
 - name: Install compass bash completion
   command: curl -L -o /usr/share/bash-completion/completions/compass https://raw.githubusercontent.com/piouPiouM/compass-completion/master/compass-completion.sh
