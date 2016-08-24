@@ -1,0 +1,7 @@
+#!/bin/bash
+##
+# wp-watch-logs
+##
+
+# Start watching all the logs under /data/log/
+tail -Fn0 /data/log/*.log
