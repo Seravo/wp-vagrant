@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+##
+# Pull database from staging and Search-Replace with details from config.yml
+##
+require 'yaml'
+
+config_file = File.join('/data/wordpress','config.yml')
+
+if File.exists?(config_file)
+  config = YAML.load_file(config_file)
+else
+  puts "ERROR: config.yml was not found. Please provide the needed information for your box in config.yml."
+  exit 1
+end
+
+if config['staging'].nil?
+  puts "ERROR: couldn't pull database because staging isn't configured in config.yml"
+  exit 2
+end
+
+# Gather variables for ssh/scp
+port = config['staging']['ssh_port'] || config['staging']['port']
+host = config['staging']['domain'] || config['staging']['host']
+username = config['staging']['user'] || config['name']
+
+backupfile = "pre-staging-pull-backup-#{Time.now.to_i}.sql"
+
+puts "Saving backup of current development database in /data/db/pre-staging-pull-backup.sql..."
+system "wp db export #{backupfile}"
+
+puts "Define new and old siteurl for later search-replacing..."
+siteurl_development = `wp option get siteurl`.strip
+siteurl_staging = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
+
+puts "Pulling database from staging with 'wp db export'..."
+system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transaction' " +
+ "| pv -Wrbp " +
+ "| wp db import -"
+
+# Search Replace all but guid because guid is just a name for post
+puts "Search-replacing #{siteurl_staging} with #{siteurl_development} --skip-columns=guid"
+system "wp search-replace #{siteurl_staging} #{siteurl_development}"
