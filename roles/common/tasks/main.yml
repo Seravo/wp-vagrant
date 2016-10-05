@@ -8,7 +8,7 @@
   - ca-certificates
   - python-mysqldb
   - curl
-  - git-core
+  - git
   - subversion
   - avahi-daemon
   - bash-completion
@@ -16,6 +16,7 @@
   - htop
   - graphicsmagick
   - apt-transport-https
+  - pv
 
 - name: Add DigiCertHighAssuranceEVRootCA-2.crt to trusted since that's what github uses
   copy: src=DigiCertHighAssuranceEVRootCA-2.crt dest=/usr/local/share/ca-certificates/DigiCertHighAssuranceEVRootCA-2.crt

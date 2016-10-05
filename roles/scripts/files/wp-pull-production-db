@@ -33,7 +33,9 @@ siteurl_development = `wp option get siteurl`.strip
 siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
 
 puts "Pulling database from production with 'wp db export'..."
-system "ssh -q #{username}@#{host} -p #{port} 'wp db export -' | wp db import - "
+system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transaction' " +
+ "| pv -Wrbp " +
+ "| wp db import -"
 
 # Search Replace all but guid because guid is just a name for post
 puts "Search-replacing #{siteurl_production} with #{siteurl_development} --skip-columns=guid"
