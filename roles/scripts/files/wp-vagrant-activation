@@ -116,3 +116,10 @@ unless config['production'].nil? or config['production']['ssh_port'].nil? or con
     end
   end
 end
+
+
+##
+# Auto-update WP-CLI to the newest version
+##
+puts "Updating WP-CLI to the newest version..."
+system "wp cli update"
