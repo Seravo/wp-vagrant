@@ -1,0 +1,21 @@
+#!/bin/bash
+##
+# Gives user easy way to restart nginx
+##
+
+# Stop on errors
+set -e
+
+# Source environment if doesn't exist yet
+if [ -z $PS1 ]; then
+  source /etc/container_environment.sh
+fi
+
+# Need to run as root
+if [ "$(id -u)" != "0" ]; then
+   exec sudo /usr/local/bin/wp-restart-php5-fpm
+   exit 0
+fi
+
+echo "restarting php5-fpm..."
+service php5-fpm restart
