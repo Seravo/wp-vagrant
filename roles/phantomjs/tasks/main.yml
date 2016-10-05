@@ -3,7 +3,7 @@
   apt: name=phantomjs state=present update_cache=yes
 
 - name: Download newer phantomjs binary
-  get_url: url="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-{{ phantomjs_version }}-linux-x86_64.tar.bz2" dest=/tmp validate_certs=no
+  get_url: url="https://seravo.fi/downloads/phantomjs-{{ phantomjs_version }}-linux-x86_64.tar.bz2" dest=/tmp validate_certs=no
 
 - name: Unarchive phantomjs
   unarchive:
