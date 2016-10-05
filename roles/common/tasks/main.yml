@@ -1,7 +1,6 @@
 ---
 - name: Install essentials
-  apt: name="{{ item }}" state=present
-  #update_cache: true
+  apt: name="{{ item }}" state=present update_cache=true
   with_items:
   - software-properties-common
   - python-pycurl
