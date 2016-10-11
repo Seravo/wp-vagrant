@@ -39,4 +39,4 @@ system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transacti
 
 # Search Replace all but guid because guid is just a name for post
 puts "Search-replacing #{siteurl_production} with #{siteurl_development} --skip-columns=guid"
-system "wp search-replace #{siteurl_production} #{siteurl_development}"
+system "wp search-replace #{siteurl_production} #{siteurl_development} --skip-columns=guid --network --url=#{siteurl_production}"
