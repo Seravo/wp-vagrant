@@ -22,3 +22,16 @@ GRUB_CMDLINE_LINUX="debian-installer=en_US"
 EOF
 
 update-grub
+
+  # Install the same locales as in production
+# Enable multiple North-European locales but keep C as default locale
+DEBIAN_FRONTEND=noninteractive locale-gen --purge \
+  en_US en_US.utf8 \
+  fi_FI fi_FI.utf8 \
+  sv_SE sv_SE.UTF-8 \
+  fr_FR fr_FR.UTF-8 \
+  de_DE de_DE.UTF-8 \
+  ru_RU ru_RU.UTF-8 \
+  et_EE et_EE.UTF-8 \
+  nn_NO nn_NO.UTF-8 && \
+  dpkg-reconfigure locales
