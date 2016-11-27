@@ -1,14 +1,14 @@
-![WP-palvelu.fi](https://wp-palvelu.fi/wp-content/uploads/2015/01/wp-palvelu-header.jpg)
+![Seravo.com](https://seravo.com/wp-content/themes/seravo/images/seravo-banner-808x300.png)
 
-# WP-palvelu Vagrant Box
+# Seravo Vagrant Box
 
-Brought to you by [wp-palvelu.fi](https://wp-palvelu.fi).
+Brought to you by [Seravo.com](https://seravo.com).
 
 This project is used to build [our precompiled WordPress Vagrant Box](https://vagrantcloud.com/seravo/boxes/wordpress)
 
 See [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress) to get started using this.
 
-This box imitates the functionality of [wp-palvelu.fi](http://wp-palvelu.fi) WordPress instances. We aim to help our users develop WordPress locally with the best tools available.
+This box imitates the functionality of [seravo.com](https://seravo.com) WordPress instances. We aim to help our users develop WordPress locally with the best tools available.
 
 ## What's inside?
 
@@ -35,7 +35,7 @@ Testing suite
 - PhantomJS
 - Mailcatcher
 
-Pre-configured for WP-palvelu.fi customers
+Pre-configured for Seravo.com customers
 - Nginx proxy_pass configuration for static assets from production (images)
 - Scripts for syncing databases between production / staging / development
 
@@ -67,4 +67,3 @@ packer push packer.json
 ```
 
 You may now upload your precompiled package to the Vagrant Cloud!
-

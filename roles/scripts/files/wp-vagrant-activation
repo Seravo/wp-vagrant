@@ -24,14 +24,14 @@ end
 # ADD HTTPS_DOMAIN_ALIAS to envs
 unless File.readlines("/etc/container_environment.sh").grep(/^export HTTPS_DOMAIN_ALIAS/).any?
   File.open('/etc/container_environment.sh', "a+") do |file|
-    file.write "\nexport HTTPS_DOMAIN_ALIAS=#{config['name']}.wp-palvelu.local\n"
+    file.write "\nexport HTTPS_DOMAIN_ALIAS=#{config['name']}.seravo.local\n"
   end
 end
 
 # Add it to envs of php5-fpm
 unless File.readlines("/etc/nginx/fastcgi_params").grep(/^fastcgi_param  HTTPS_DOMAIN_ALIAS/).any?
   File.open('/etc/nginx/fastcgi_params', "a+") do |file|
-    file.write "\nfastcgi_param  HTTPS_DOMAIN_ALIAS   #{config['name']}.wp-palvelu.local;\n"
+    file.write "\nfastcgi_param  HTTPS_DOMAIN_ALIAS   #{config['name']}.seravo.local;\n"
   end
 end
 

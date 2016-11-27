@@ -1,5 +1,5 @@
 ---
-- name: "WP-palvelu Vagrant Box"
+- name: "Seravo Vagrant Box"
   hosts: all
   sudo: yes
   remote_user: admin
