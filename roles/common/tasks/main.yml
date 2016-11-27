@@ -26,11 +26,6 @@
 
 - name: Customize message of the day
   lineinfile: dest=/etc/motd line={{ item }} create=yes line="WordPress Developer Documentation https://seravo.com/docs/"
-- name: Fetch custom login SSH banner
-  get_url: url=https://raw.githubusercontent.com/Seravo/wp-palvelu-vagrant/master/scripts/ssh-login-banner dest=/etc/ssh/ validate_certs=no
-
-- name: Enable custom login SSH banner
-  lineinfile: dest=/etc/pam.d/sshd regexp=motd= line="session    optional     pam_motd.so  motd=/etc/ssh/ssh-login-banner"
 
 - name: Use vagrant's insecure public key
   authorized_key: user=vagrant key="{{ item }}"
