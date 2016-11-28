@@ -25,7 +25,7 @@
   command: update-ca-certificates
 
 - name: Customize message of the day
-  lineinfile: dest=/etc/motd line={{ item }} create=yes line="WordPress Developer Documentation https://seravo.com/docs/"
+  copy: src=motd dest=/etc/motd
 
 - name: Use vagrant's insecure public key
   authorized_key: user=vagrant key="{{ item }}"
