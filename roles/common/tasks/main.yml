@@ -32,3 +32,23 @@
   with_file:
   - vagrant-new.pub
   - vagrant-old.pub
+
+# Install the same (North-European) locales as in production
+- locale_gen: name={{item}} state=present
+  with_items:
+  - en_US
+  - en_US.UTF-8
+  - fi_FI
+  - fi_FI.UTF-8
+  - sv_SE
+  - sv_SE.UTF-8
+  - fr_FR
+  - fr_FR.UTF-8
+  - de_DE
+  - de_DE.UTF-8
+  - ru_RU
+  - ru_RU.UTF-8
+  - et_EE
+  - et_EE.UTF-8
+  - nn_NO
+  - nn_NO.UTF-8
