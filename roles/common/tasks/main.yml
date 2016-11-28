@@ -30,4 +30,5 @@
 - name: Use vagrant's insecure public key
   authorized_key: user=vagrant key="{{ item }}"
   with_file:
-  - vagrant.pub
+  - vagrant-new.pub
+  - vagrant-old.pub
