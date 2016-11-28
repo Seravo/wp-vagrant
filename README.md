@@ -55,8 +55,8 @@ vagrant up
 ```
 vagrant up --provision
 vagrant ssh -c 'sudo rm -r /data/log/*.log'
+# Also run the scripts/cleanup.sh and zerodisk.sh
 vagrant package
 ```
 
 To publish the box on on Vagrant Cloud you can either use `packer` (requires Vagrant Enterprise subscription) or upload manually at https://atlas.hashicorp.com/
-
