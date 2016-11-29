@@ -2,6 +2,9 @@
 - name: Autoremove unused packages
   command: apt-get -y autoremove
 
+- name: Clean apt cache
+  command: apt-get clean
+
 - name: Cleanup Bash history
   command: rm -f /root/.bash_history
   command: rm -f /home/vagrant/.bash_history
