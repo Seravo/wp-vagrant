@@ -55,3 +55,6 @@
   - et_EE.UTF-8
   - nn_NO
   - nn_NO.UTF-8
+
+- name: Disable update-manager new distro release available nags
+  lineinfile: dest=/etc/update-manager/release-upgrades regexp='^Prompt' line='Prompt=never' owner=root group=root mode=0644
