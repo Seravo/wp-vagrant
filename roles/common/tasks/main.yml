@@ -1,4 +1,7 @@
 ---
+- name: Stamp build date into image
+  shell: "date > /etc/vagrant_box_build_time"
+
 - name: Install essentials
   apt: name="{{ item }}" state=present update_cache=true
   with_items:
