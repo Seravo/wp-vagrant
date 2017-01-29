@@ -7,6 +7,10 @@
   template: src="20-xdebug.ini.j2"
             dest="/etc/php/7.0/fpm/conf.d/20-xdebug.ini"
 
+- name: Add xdebug.ini template for php7.1
+  template: src="20-xdebug.ini.j2"
+            dest="/etc/php/7.1/fpm/conf.d/20-xdebug.ini"
+
 - name: Install webgrind
   # Origin repo is: https://github.com/jokkedk/webgrind/
   # But it has been abandonded since summer of 2015

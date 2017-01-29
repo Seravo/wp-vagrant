@@ -16,8 +16,8 @@ server {
   # Disable stupid error log lines when there's no favicon
   log_not_found off;
 
-  #PHP5-FPM/HHVM for php/hack files
-  location ~ \.(php|hh)$ {
+  # PHP-FPM for PHP files
+  location ~ \.php$ {
     try_files $uri =404;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

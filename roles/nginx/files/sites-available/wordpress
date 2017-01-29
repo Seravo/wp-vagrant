@@ -1,4 +1,4 @@
-# php upstreams: php5, php7, hhvm
+# php upstreams: php5, php7, php7.1
 include upstreams.conf;
 
 ##
@@ -14,7 +14,7 @@ server {
   # Document root is located at /data/wordpress/htdocs/
   root /data/wordpress/htdocs;
 
-  index index.html index.hh index.php;
+  index index.html index.php;
 
   # Don't fill up error logs with not found messages.
   # You can see 404s in access logs as well
@@ -42,4 +42,3 @@ server {
   include wordpress-addons.conf;
   include wordpress.conf;
 }
-

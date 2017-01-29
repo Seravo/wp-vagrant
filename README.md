@@ -12,12 +12,11 @@ This box imitates the functionality of [seravo.com](https://seravo.com) WordPres
 
 ## What's inside?
 
-A LEMP stack with interchangeable PHP5 / PHP7 / HHVM
+A LEMP stack with interchangeable PHP5 / PHP7 / PHP 7.1
 - Nginx
 - MariaDB 10.0
 - PHP5.6
-- PHP7
-- HHVM LTS
+- PHP7.0 / 7.1
 
 Tooling for PHP/WordPress development
 - Composer

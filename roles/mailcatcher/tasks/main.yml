@@ -19,21 +19,25 @@
   with_items:
     - 5.6
     - 7.0
+    - 7.1
 
 - name: Use mailcatcher for php-fpm
   file: src=/etc/php/{{item}}/mods-available/mailcatcher.ini dest=/etc/php/{{item}}/fpm/conf.d/20-mailcatcher.ini owner={{ web_user }} group={{ web_user }} state=link
   with_items:
     - 5.6
     - 7.0
+    - 7.1
 
 - name: Use mailcatcher for php-cli
   file: src=/etc/php/{{item}}/mods-available/mailcatcher.ini dest=/etc/php/{{item}}/cli/conf.d/20-mailcatcher.ini owner={{ web_user }} group={{ web_user }} state=link
   with_items:
     - 5.6
     - 7.0
+    - 7.1
   notify:
     - restart php5-fpm
     - restart php7-fpm
+    - restart php7.1-fpm
 
 - name: Setup mailcatcher as service
   template: src=mailcatcher-init.conf.j2 dest=/etc/init/mailcatcher.conf
