@@ -29,8 +29,8 @@ server {
   # Nginx Pagespeed module
   include pagespeed.conf;
 
-  # Default upstream is php5-fpm
-  set $mode php5;
+  # Default upstream is php7-fpm
+  set $mode php7;
 
   # Include custom nginx additions from project
   include /data/wordpress/nginx/*.conf;
