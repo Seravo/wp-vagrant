@@ -21,9 +21,6 @@
   - apt-transport-https
   - pv
 
-- name: Remove Apache (inherited from default Ubuntu image)
-  apt: name="apache2" state=absent purge=yes
-
 - name: Add DigiCertHighAssuranceEVRootCA-2.crt to trusted since that's what github uses
   copy: src=DigiCertHighAssuranceEVRootCA-2.crt dest=/usr/local/share/ca-certificates/DigiCertHighAssuranceEVRootCA-2.crt
 
