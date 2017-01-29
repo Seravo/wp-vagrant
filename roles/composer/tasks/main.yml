@@ -8,5 +8,8 @@
 - name: Use bash-completion
   command: curl -L -o /usr/share/bash-completion/completions/composer https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer
 
-- name: Composer self update
+- name: Composer self update from 1.0 to anything to get --stable option
+  shell: composer self-update
+
+- name: Composer self update with --stable to latest stable
   shell: composer self-update --stable
