@@ -13,9 +13,9 @@ fi
 
 # Need to run as root
 if [ "$(id -u)" != "0" ]; then
-   exec sudo /usr/local/bin/wp-restart-php5-fpm
+   exec sudo /usr/local/bin/wp-restart-php7-fpm
    exit 0
 fi
 
 echo "restarting php7-fpm..."
-service php5-fpm restart
+service php7-fpm restart
