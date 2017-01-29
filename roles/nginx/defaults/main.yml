@@ -2,6 +2,6 @@
 logs_dir: /data/log
 project_dir: /data/wordpress
 htdocs: /data/wordpress/htdocs
-nginx_user: vagrant
+web_user: vagrant
 strip_www: true
 environment: development
