@@ -5,8 +5,8 @@
 - name: Install Composer
   apt: name=php5-composer state=present force=yes
 
-#- name: Composer self update
-#  shell: composer self-update
-
 - name: Use bash-completion
   command: curl -L -o /usr/share/bash-completion/completions/composer https://raw.githubusercontent.com/iArren/composer-bash-completion/master/composer
+
+- name: Composer self update
+  shell: composer self-update --stable
