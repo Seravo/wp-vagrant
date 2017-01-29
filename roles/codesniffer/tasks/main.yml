@@ -1,15 +1,38 @@
 ---
-- name: Install php codesniffer
-  command: pear install PHP_CodeSniffer
+# NOTE: Current WordPress standards are not compatible with upcoming PHPCS 3.0
+- name: Install PHP CodeSniffer (v2.7.1) from pear.php.net
+  command: pear install PHP_CodeSniffer-2.7.1
   args:
     creates: /usr/bin/phpcs
 
-- name: Install Codesniffer WordPress additions
-  subversion:
-    repo: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/trunk/WordPress
-    dest: /usr/share/php/PHP/CodeSniffer/Standards/WordPress
+- name: Get latest CodeSniffer WordPress standard definitions release (v0.10.0) from GitHub
+  get_url:
+    url: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/archive/0.10.0.tar.gz
+    dest: /tmp
+
+- name: Unpack CodeSniffer WordPress standard definitions
+  command: tar zxvf /tmp/WordPress-Coding-Standards-0.10.0.tar.gz
+  args:
+    chdir: /tmp
+# Available from Ansible 2.0 onwards to skip if already created:
+#    creates: /tmp/WordPress-Coding-Standards-0.10.0/
+
+- name: Install CodeSniffer WordPress standard definitions
+  # Use shell to allow globbing in filename
+  shell: mv /tmp/WordPress-Coding-Standards-0.10.0/WordPress* /usr/share/php/PHP/CodeSniffer/Standards
+  args:
+    creates: /usr/share/php/PHP/CodeSniffer/Standards/WordPress-Core
+    # Don't run again if any of the target dirs already exists
+
+- name: Get latest Codesniffer Security additions (master branch) from GitHub
+  get_url:
+    url: https://github.com/FloeDesignTechnologies/phpcs-security-audit/archive/master.tar.gz
+    dest: /tmp
+
+- name: Unpack Codesniffer Security additions
+  command: tar zxvf /tmp/phpcs-security-audit-master.tar.gz
+  args:
+    chdir: /tmp
 
 - name: Install Codesniffer Security additions
-  subversion:
-    repo: https://github.com/FloeDesignTechnologies/phpcs-security-audit/trunk/Security
-    dest: /usr/share/php/PHP/CodeSniffer/Standards/Security
+  command: mv /tmp/phpcs-security-audit-master/Security /usr/share/php/PHP/CodeSniffer/Standards
