@@ -1,17 +1,2 @@
 ---
-- name: Autoremove unused packages
-  command: apt-get -y autoremove
-
-- name: Clean apt cache
-  command: apt-get clean
-
-- name: Cleanup Bash history
-  command: rm -f /root/.bash_history
-  command: rm -f /home/vagrant/.bash_history
-
-- name: Cleanup log files
-  command: rm -f /data/log/*.log
-
-# TODO:
-# To reduce the box size all of these should be in this ansible playbook
-# https://gist.github.com/justindowning/5670884
+- script: cleanup.sh
