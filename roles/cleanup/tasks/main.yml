@@ -1,2 +1,11 @@
 ---
+- name: Purge unnecessary packages to make the Vagrant box filesize smaller
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  with_items:
+  - juju-core # Ubuntu spells, 398 MB
+  - libgl1-mesa-dri # Graphics drivers, 33 MB
+
 - script: cleanup.sh

@@ -17,6 +17,13 @@ apt-get -y autoremove
 aptitude clean
 aptitude autoclean
 
+# Reset package listing. A simple apt update will re-create them if needed.
+rm -rf /var/cache/apt/*.bin
+rm -rf /var/lib/apt/lists/*
+
+print_green 'Clean Gem cache'
+rm -rf /var/lib/gems/2.2.0/cache/*
+
 print_green 'Cleanup bash history'
 unset HISTFILE
 [ -f /root/.bash_history ] && rm /root/.bash_history
