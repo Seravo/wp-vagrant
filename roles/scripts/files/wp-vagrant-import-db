@@ -12,7 +12,7 @@ if [ -z $PS1 ]; then
 fi
 
 #import database with mysql tool
-/usr/bin/mysql -u $DB_USER --password=$DB_PASSWORD $DB_NAME < "$WP_PROJECT/.vagrant/shutdown-dump.sql"
+/usr/bin/mysql -u $DB_USER --password=$DB_PASSWORD $DB_NAME < "/data/wordpress/.vagrant/shutdown-dump.sql"
 if [ $? -eq 0 ]; then
     echo -e "\e[92mSuccess:\e[0m Database was imported correctly!"
 fi

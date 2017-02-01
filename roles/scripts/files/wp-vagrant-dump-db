@@ -13,7 +13,7 @@ fi
 mysql -u$DB_NAME --password=$DB_PASSWORD $DB_NAME -e "desc $DB_NAME.wp_posts" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   #Dump wordpress with mysqldump tool
-  /usr/bin/mysqldump -u$DB_NAME --password=$DB_PASSWORD $DB_NAME > "$WP_PROJECT/.vagrant/shutdown-dump.sql" 2>/dev/null
+  /usr/bin/mysqldump -u$DB_NAME --password=$DB_PASSWORD $DB_NAME > "/data/wordpress/.vagrant/shutdown-dump.sql" 2>/dev/null
   if [ $? -ne 0 ]; then
     echo -e "\e[31mError:\e[0m Database couldn't be dump \e[5m:( \e[25m"
   else

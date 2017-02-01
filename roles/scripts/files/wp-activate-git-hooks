@@ -9,6 +9,6 @@ if [ -z $PS1 ]; then
 fi
 
 # Use /data/wordpress path
-cd $WP_PROJECT/.git/hooks/
+cd /data/wordpress/.git/hooks/
 # symlink all files from project into git
 ln -sf ../../scripts/hooks/* .
