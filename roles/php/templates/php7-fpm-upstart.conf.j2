@@ -15,5 +15,12 @@ pre-start script
   exec /usr/sbin/php-fpm7.0 -t --fpm-config /etc/php/7.0/fpm/php-fpm.conf
 end script
 
+# Force /data/log/php-error.log to be accessible by the user vagrant
+# Default would be otherwise '-rw------- 1 root vagrant  php-error.log'.
+post-start script
+  chown vagrant:vagrant /data/log/php-error.log
+  chmod 644 /data/log/php-error.log
+end script
+
 respawn
 exec /usr/sbin/php-fpm7.0 --nodaemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
