@@ -3,6 +3,7 @@
 # Pull database from production and Search-Replace with details from config.yml
 ##
 require 'yaml'
+require 'highline/import'
 
 config_file = File.join('/data/wordpress','config.yml')
 
@@ -31,6 +32,19 @@ system "wp db export #{backupfile}"
 puts "Define new and old siteurl for later search-replacing..."
 siteurl_development = `wp option get siteurl`.strip
 siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
+site_network = `if $(wp core is-installed --network --skip-plugins); then echo network; fi`
+
+puts "==> Production site URL: #{siteurl_production}"
+puts "==> Development site URL: #{siteurl_development}"
+
+if site_network == 'network'
+  puts "==> This is a WordPress Network install."
+else
+  puts "==> This is a normal WordPress single install."
+end
+
+# Be a bit more robust and help users avoid unintelligent search-replaces
+exit unless HighLine.agree('Is the information above correct?')
 
 puts "Pulling database from production with 'wp db export'..."
 system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transaction' " +
@@ -38,5 +52,10 @@ system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transacti
  "| wp db import -"
 
 # Search Replace all but guid because guid is just a name for post
-puts "Search-replacing #{siteurl_production} with #{siteurl_development} --skip-columns=guid"
-system "wp search-replace #{siteurl_production} #{siteurl_development} --skip-columns=guid --network --url=#{siteurl_production}"
+puts "Search-replacing #{siteurl_production} with #{siteurl_development}..."
+
+if site_network == 'network'
+  system "wp search-replace #{siteurl_production} #{siteurl_development} --skip-columns=guid --all-tables --network --url=#{siteurl_production}"
+else
+  system "wp search-replace #{siteurl_production} #{siteurl_development} --skip-columns=guid --all-tables"
+end
