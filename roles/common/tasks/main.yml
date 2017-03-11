@@ -20,6 +20,7 @@
   - graphicsmagick
   - apt-transport-https
   - pv
+  - entr
 
 - name: Add DigiCertHighAssuranceEVRootCA-2.crt to trusted since that's what github uses
   copy: src=DigiCertHighAssuranceEVRootCA-2.crt dest=/usr/local/share/ca-certificates/DigiCertHighAssuranceEVRootCA-2.crt
