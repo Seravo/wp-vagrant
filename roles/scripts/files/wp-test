@@ -11,7 +11,7 @@ fi
 if [ -f /data/wordpress/scripts/run-tests ]; then #try run-tests script
   bash /data/wordpress/scripts/run-tests
 elif [ -f /data/wordpress/tests/rspec/test.rb ]; then #try client rspec tests
-  /usr/local/bin/rspec /data/wordpress/tests/rspec/test.rb
+  /usr/local/bin/rspec /data/wordpress/tests/rspec/*.rb
 else
   echo "tests not found :(..."
   exit 1
