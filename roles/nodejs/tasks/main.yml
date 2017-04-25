@@ -1,6 +1,6 @@
 ---
 - name: Set up Node.js
-  command: bash -c "curl -sL https://deb.nodesource.com/setup_4.x | bash -"
+  command: bash -c "curl -sL https://deb.nodesource.com/setup_7.x | bash -"
 
 - name: Install Node.js
   apt: pkg=nodejs state=installed
@@ -8,6 +8,7 @@
 - name: Install some NPM Packages
   npm: name="{{ item }}" global=yes state=latest
   with_items:
+    - yarn
     - bower
     - gulp-cli
     - grunt-cli
