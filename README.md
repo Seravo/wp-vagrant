@@ -45,7 +45,19 @@ Pre-configured for Seravo.com customers
 ```
 composer update
 vagrant up
-````
+```
+
+## Similar projects
+
+See also:
+ * [Varying Vagrant Vagrants](https://varyingvagrantvagrants.org/)
+ * [Kalabox](http://www.kalabox.io/)
+ * [Flywheel Local](https://local.getflywheel.com/)
+
+Unlike some of the alternatives listed above, the Seravo WordPress Vagrant comes
+with all batteries included and there is no separate paid version. Our Vagrant
+box is also fully integrated into the workflow, so that users can effortlessly
+import and export data from and to production.
 
 ## Packaging
 
