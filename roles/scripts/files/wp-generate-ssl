@@ -81,7 +81,6 @@ def get_domains(config)
   domains << "www."+config['name']+".dev"
 
   # Test https-domain-alias locally
-  domains << config['name']+".wp-palvelu.dev"
   domains << config['name']+".seravo.dev"
 
   # Use xdebug
@@ -89,15 +88,12 @@ def get_domains(config)
   domains << "adminer."+config['name']+".dev" #For DB-administration
   domains << "mailcatcher."+config['name']+".dev" #For Mail debugging
   domains << "browsersync."+config['name']+".dev" #For browser-sync admin
-  domains << "info."+config['name']+".dev" #For Info page
-  domains << "terminal."+config['name']+".dev" #Running ad-hoc commands
 
   # Main domain should be {{site}}.local so that devices in same network can use them as well through zeroconf
   domains << config['name']+".local"
   domains << "www."+config['name']+".local"
 
   # Test https-domain-alias locally
-  domains << config['name']+".wp-palvelu.local"
   domains << config['name']+".seravo.local"
 
   # Use xdebug
@@ -105,8 +101,6 @@ def get_domains(config)
   domains << "adminer."+config['name']+".local" #For DB-administration
   domains << "mailcatcher."+config['name']+".local" #For Mail debugging
   domains << "browsersync."+config['name']+".local" #For browser-sync admin
-  domains << "info."+config['name']+".local" #For Info page
-  domains << "terminal."+config['name']+".local" #Running ad-hoc commands
 
   domains.uniq #remove duplicates
 end
