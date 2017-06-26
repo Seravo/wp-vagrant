@@ -1,0 +1,6 @@
+#!/bin/bash
+##
+# wp-makepot
+##
+
+php ~/tools/i18n/makepot.php $1 $2 $3

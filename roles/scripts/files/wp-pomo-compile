@@ -1,0 +1,23 @@
+#!/bin/bash
+##
+# wp-watch-logs
+##
+
+if [ -z $1 ]
+then
+  echo "No path given as argument. Using default path."
+  PATH='/data/wordpress/htdocs/wp-content/'
+else
+  PATH=$1
+fi
+
+echo "Scanning for .po files in $PATH"
+
+# Find PO files, process each with msgfmt and rename the result to MO
+for file in `/usr/bin/find $PATH -name "*.po"`
+do
+  echo "Compiling ${file} ..."
+  /usr/bin/msgfmt -o ${file/.po/.mo} $file
+done
+
+echo "Done!"
