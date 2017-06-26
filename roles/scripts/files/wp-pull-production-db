@@ -31,7 +31,15 @@ system "wp db export #{backupfile}"
 
 puts "Define new and old siteurl for later search-replacing..."
 siteurl_development = `wp option get siteurl`.strip
-siteurl_production = `ssh -q #{username}@#{host} -p #{port} "wp option get siteurl"`.strip
+
+# If session is not interactive, skip StrictHostKeyChecking to avoid
+# interactive "Are you sure you want to continue connecting (yes/no)?"
+if not $stdout.isatty
+  sshopts = '-o StrictHostKeyChecking=no'
+end
+
+siteurl_production = `ssh -q #{username}@#{host} -p #{port} #{sshopts} "wp option get siteurl"`.strip
+
 # Flag varible with 'network' is local dev is a network install
 site_network = `if $(wp core is-installed --network --skip-plugins); then echo network; fi`
 
@@ -44,8 +52,18 @@ else
   puts "==> This is a normal WordPress single install."
 end
 
-# Be a bit more robust and help users avoid unintelligent search-replaces
-exit unless HighLine.agree('Is the information above correct (yes/no)?')
+# Abort if production site URL was empty
+if siteurl_production.length < 1
+  puts "Production site URL empty! Aborting import."
+  exit
+end
+
+# Only ask for confirmation if session is interactive
+if $stdout.isatty
+  # Be a bit more robust and help users avoid unintelligent search-replaces
+  exit unless HighLine.agree('Is the information above correct (yes/no)?')
+end
+
 
 puts "Pulling database from production with 'wp db export'..."
 system "ssh -q #{username}@#{host} -p #{port} 'wp db export - --single-transaction' " +
