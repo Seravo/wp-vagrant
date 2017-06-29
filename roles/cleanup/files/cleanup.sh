@@ -12,6 +12,12 @@ function print_green {
   echo -e "\e[32m${1}\e[0m"
 }
 
+print_green 'Remove unnecessary -dev and -doc packages'
+dpkg --get-selections | grep -e "-dev" | cut -f 1 | xargs apt-get remove --yes
+
+print_green '..but reinstall virtualbox-guest-dkms'
+apt install ---yes virtualbox-guest-dkms
+
 print_green 'Clean Apt'
 apt-get -y autoremove
 aptitude clean
@@ -19,10 +25,27 @@ aptitude autoclean
 
 # Reset package listing. A simple apt update will re-create them if needed.
 rm -rf /var/cache/apt/*.bin
+rm -rf /var/cache/debconf/*-old
 rm -rf /var/lib/apt/lists/*
 
 print_green 'Clean Gem cache'
 rm -rf /var/lib/gems/2.2.0/cache/*
+rm -rf /root/.gem
+
+print_green 'Clean NPM cache'
+rm -rf /root/.npm
+
+print_green 'Clean Composer cache'
+rm -rf /root/.composer
+
+# This step is disabled as subsequent Ansible runs will fail then the git repos
+# it expected to exist have disappeared. This works well then Ansible runs
+# in a single run.
+#print_green 'Delete all git repositories (used during installation phase)'
+#for repo in $(find / -xdev -type d -name .git)
+#do
+#  rm -rf $repo
+#done
 
 print_green 'Cleanup bash history'
 unset HISTFILE

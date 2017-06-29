@@ -7,5 +7,9 @@
   with_items:
   - juju-core # Ubuntu spells, 398 MB
   - libgl1-mesa-dri # Graphics drivers, 33 MB
+  - libsane # Scanner utility, 10 MB with colord
+  - xfonts-base # Fonts, 8 MB
+  - poppler-data # Ghostscript and libs, 25 MB
+  - gsfonts # More Ghostscript
 
 - script: cleanup.sh

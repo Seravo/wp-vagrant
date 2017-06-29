@@ -13,6 +13,10 @@
     depth: 1
     version: 3.2.3
 
+# If either of the above steps fail on provision, you need to manually enter
+# the directories and run:
+# /usr/local/lib/sassc$ sudo git fetch origin +refs/tags/3.2.1:refs/tags/3.2.1
+
 - name: Add libsass path to environment
   lineinfile:
     dest=/etc/environment
