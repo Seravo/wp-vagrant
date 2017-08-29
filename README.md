@@ -63,9 +63,32 @@ import and export data from and to production.
 
 ### Create a Vagrant image on your machine
 
+First make sure you have the latest baseimages on your system by running `vagrant box update`.
+
 ```
 vagrant up --provision
 vagrant package
 ```
 
-To publish the box on on Vagrant Cloud you can either use `packer` (requires Vagrant Enterprise subscription) or upload manually at https://atlas.hashicorp.com/. The packer.json file was removed from this repository in Jan 2017 as it had not been used for a while and it wasn't properly maintained.
+To publish the box on on Vagrant Cloud you can either use `packer` (requires Vagrant Enterprise subscription) or upload manually at https://app.vagrantup.com/seravo/boxes/wordpress. The packer.json file was removed from this repository in Jan 2017 as it had not been used for a while and it wasn't properly maintained.
+
+#### Known problems during provisioning
+
+Problem:
+
+```
+TASK [libsass : Install sassc] *************************************************
+fatal: [default]: FAILED! => {"changed": false, "cmd": "/usr/bin/git checkout --force 3.2.1", "failed": true, "msg": "Failed to checkout 3.2.1", "rc": 1, "stderr": "error: pathspec '3.2.1' did not match any file(s) known to git.\n", "stdout": "", "stdout_lines": []}
+```
+
+Workaround (inside Vagrant, enter with `vagrant ssh`):
+
+```
+cd /usr/local/lib/sassc
+sudo git fetch --tags
+sudo git checkout 3.2.1
+
+/usr/local/lib/libsass
+sudo git fetch --tags
+sudo git checkout 3.2.3
+```

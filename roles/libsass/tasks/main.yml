@@ -1,4 +1,8 @@
 ---
+# @TODO: Consider using newer versions than the 3.2.x series.
+# @TODO: Don't limit to depth 1 here but get full repo and delete the .git folder
+# once the checkout is complete, or download only a release zipball in the first place
+# to avoid excess bandwidth and disk usage.
 - name: Install sassc
   git:
     repo: https://github.com/sass/sassc
