@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+# Execute $0 inside our Docker container with same parameters
+#
+# This file gets copied to Docker host to add backwards compatibility
+# with commands defined in seravo/wordpress:Vagrantfile . Those commands
+# have been moved into container, but existing config files try execute
+# them directly inside Vagrant host
+
+#echo ""
+#echo "WARNING: Your Vagrantfile contains deprecated configuration."
+#echo "  Consider upgrading by running"
+#echo ""
+#echo "      curl -o /data/wordpress/Vagrantfile -fSL \\"
+#echo "              https://raw.githubusercontent.com/Seravo/wordpress/master/Vagrantfile"
+#echo ""
+#echo "  inside your container"
+#echo ""
+#echo ""
+
+export DOCKERSHELL_WRAPPER=1
+
+/bin/dockershell "$0" "$@"

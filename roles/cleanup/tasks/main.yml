@@ -1,15 +1,57 @@
----
-- name: Purge unnecessary packages to make the Vagrant box filesize smaller
+- name: remove non-essential packages
   apt:
-    name: "{{ item }}"
+    pkg: "{{ item }}"
     state: absent
+    autoremove: yes
+    autoclean: yes
     purge: yes
   with_items:
-  - juju-core # Ubuntu spells, 398 MB
-  - libgl1-mesa-dri # Graphics drivers, 33 MB
-  - libsane # Scanner utility, 10 MB with colord
-  - xfonts-base # Fonts, 8 MB
-  - poppler-data # Ghostscript and libs, 25 MB
-  - gsfonts # More Ghostscript
+    - gcc
+    - gcc-5
+    - python2.7
+    - lxc-common
+    - lxd
+    - lxd-client
+    - make
+    - telnet
+    - strace
+    - snapd
+    - pollinate
+    - ntfs-3g
+    - fakeroot
+    - eatmydata
 
-- script: cleanup.sh
+- name: remove temporary content
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/cache/apt/archives
+    - /var/cache/apt/pkgcache.bin
+    - /var/cache/apt/srcpkgcache.bin
+    - /var/lib/apt/lists
+    - /root/.composer
+    - /root/.npm
+    - /root/.gem
+
+- name: restore essential directories
+  file:
+    state: directory
+    dest: "{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - /var/cache/apt/archives
+    - /var/lib/apt/lists
+
+- name: install helper script
+  copy:
+    src: cleanup.sh
+    dest: /cleanup.sh
+    mode: 0700
+    owner: root
+    group: root
+
+- name: erase unused disk space
+  shell: "/cleanup.sh"

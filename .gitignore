@@ -5,3 +5,7 @@
 
 # Ignore packer caches
 packer_cache
+
+*.log
+
+site.retry

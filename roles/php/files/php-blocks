@@ -1,4 +1,0 @@
-# Prevent Apache from being installed
-Package: apache2
-Pin: origin ""
-Pin-Priority: -1

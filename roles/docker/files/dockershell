@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+DOCKER_CONTAINER="seravo_wordpress"
+
+echo "dockershell $@"
+
+# check that docker is running, start & wait if not
+if [ ! -e "${HOME}/.dockerstatus" ]
+then
+    # Stop Docker to ensure existence of mountpoints
+    /usr/bin/docker stop seravo_wordpress
+
+    # Start Docker
+    /usr/bin/docker start "${DOCKER_CONTAINER}"
+    
+    # Create statefile
+    touch "${HOME}/.dockerstatus"
+fi
+
+if [ -n "${DOCKERSHELL_WRAPPER}" ]
+then
+    exec /usr/bin/docker exec --interactive --user root "${DOCKER_CONTAINER}" "$@"
+else
+    exec /usr/bin/docker exec --interactive --tty --user vagrant --workdir=/home/vagrant "${DOCKER_CONTAINER}" bash "$@"
+fi
+

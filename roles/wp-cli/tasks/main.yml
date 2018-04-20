@@ -1,8 +1,0 @@
----
-- name: Install WP-CLI
-  command: curl -o "{{ bin_path }}" "{{ phar_url }}"
-
-- name: Check WP-CLI execute permissions
-  file:
-    path: "{{ bin_path }}"
-    mode: 0755
