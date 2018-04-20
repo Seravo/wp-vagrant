@@ -1,27 +1,20 @@
 ---
+- hosts: all
+  gather_facts: False
+  become: yes
+  tasks:
+  # install python2, required by ansible itself
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  # install aptitude, required by ansible itself (old versions)
+  - name: install aptitude
+    raw: test -e /usr/bin/aptitude-curses || (apt -y update && apt install -y aptitude)
+
 - name: "Seravo Vagrant Box"
   hosts: all
-  sudo: yes
+  become: yes
   remote_user: admin
 
   roles:
-    - { role: data-directories, tags: [data-directories] }
-    - { role: common, tags: [common] }
-    - { role: scripts, tags: [scripts] }
-    - { role: nginx, tags: [nginx] }
-    - { role: phantomjs, tags: [phantomjs] }
-    - { role: php, tags: [php] }
-    - { role: xdebug, tags: [xdebug] }
-    - { role: composer, tags: [composer] }
-    - { role: wp-cli, tags: [wp-cli] }
-    - { role: libsass, tags: [libsass] }
-    - { role: mariadb, tags: [mariadb] }
-    - { role: profile, tags: [profile] }
-    - { role: redis, tags: [redis] }
-    - { role: ruby, tags: [ruby] }
-    - { role: nodejs, tags: [nodejs] }
-    - { role: adminer, tags: [adminer] }
-    - { role: browsersync, tags: [browsersync] }
-    - { role: mailcatcher, tags: [mailcatcher] }
-    - { role: codesniffer, tags: [codesniffer] }
-    - { role: cleanup, tags: [cleanup] }
+    - { role: docker }
+    - { role: cleanup }

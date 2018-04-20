@@ -1,0 +1,119 @@
+---
+# Update basebox, we don't known when it was build
+- name: upgrade the system
+  apt:
+    upgrade: safe
+    update_cache: yes
+
+- name: install dependencies
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - ca-certificates # for SSL certs
+    - localepurge     # strip unnecessary locales => save disk space
+    - curl            # download files...
+    - python-pip      # needed for ansible pip tasks
+    - unattended-upgrades # do automatic updates for the VM
+
+# Read APT key for Docker repository from file
+# (this prevents MITM quite effectively!)
+- name: add apt key for docker
+  apt_key:
+    data: "{{ lookup('file', 'docker.asc') }}"
+    state: present
+    keyring: /etc/apt/trusted.gpg.d/docker.gpg
+
+# We want to use upstream Docker-CE
+- name: add apt repository for docker
+  apt_repository:
+    filename: docker
+    state: present
+    update_cache: yes
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+
+- name: install docker-ce
+  apt:
+    pkg: docker-ce
+    state: present
+
+# This is needed for Ansible docker tasks
+- name: install docker python bindings
+  pip:
+    name: docker-py
+    state: present
+
+# We want the default user in VM to be able to control docker
+- name: add user vagrant to docker group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+
+# To make it easier to run commands inside docker, which in turn is in VM
+- name: create custom shell for jumping to docker
+  copy:
+    src: dockershell
+    dest: /bin/dockershell
+    mode: 0755
+    owner: root
+    group: root
+
+# Use latest available vagrant image, 
+- name: "pull image from docker hub: seravo/wordpress:vagrant"
+  docker_image:
+    name: seravo/wordpress
+    tag: vagrant
+    pull: yes
+    force: yes # force pull
+
+# this speeds up startup later, container already exists
+- name: create docker container for development image
+  docker_container:
+    name: seravo_wordpress
+    image: seravo/wordpress:vagrant
+    volumes:
+      - "/data:/data"
+    published_ports:
+      - '80:80'
+      - '443:443'
+      - '3306:3306'
+      - '2222:22'
+    restart_policy: always
+    state: stopped
+    env:
+      WP_USER: vagrant
+      WP_USER_PASS: vagrant
+
+# Allow user to choose wheter she likes to enter Docker or host VM
+- name: use dockershell if !DOCKER_HOST=1
+  lineinfile:
+    state: present
+    regexp: 'exec /bin/dockershell$'
+    line: 'export DOCKER_HOST_DEFAULT=1 && [ "${DOCKER_HOST:-${DOCKER_HOST_DEFAULT}}" = "0" ] && exec /bin/dockershell'
+    dest: '{{ item }}/.bashrc'
+  with_items:
+    - /home/vagrant
+    - /root
+
+# Because old WordPress repository configs expects these to be found inside VM,
+# add wrappers that execute the same commands inside Docker
+- name: create wrappers for wp-* commands
+  copy:
+    src: wp-wrapper
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - composer
+    - wp
+    - wp-activate-git-hooks
+    - wp-generate-ssl
+    - wp-restart-nginx
+    - wp-use-asset-proxy
+    - wp-vagrant-activation
+    - wp-vagrant-dump-db
+    - wp-vagrant-import-db
+    - wp-watch-logs

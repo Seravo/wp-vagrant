@@ -1,7 +1,0 @@
----
-logs_dir: /data/log
-project_dir: /data/wordpress
-htdocs: /data/wordpress/htdocs
-web_user: vagrant
-strip_www: true
-environment: development

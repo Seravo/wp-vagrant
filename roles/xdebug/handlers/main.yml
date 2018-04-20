@@ -1,6 +1,0 @@
----
-- name: restart web
-  service: name={{ item }} state=restarted
-  with_items:
-  - php5-fpm
-  - nginx
