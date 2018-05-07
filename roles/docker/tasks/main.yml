@@ -86,12 +86,24 @@
       WP_USER: vagrant
       WP_USER_PASS: vagrant
 
+# Create flag file: do not jump to docker if file exists
+- name: create flag file for dockershell
+  lineinfile:
+    regexp: '^1'
+    dest: /home/vagrant/.nodocker
+    mode: 0644
+    owner: vagrant
+    group: root
+    create: yes
+    line: '1'
+
 # Allow user to choose wheter she likes to enter Docker or host VM
-- name: use dockershell if !DOCKER_HOST=1
+# if ~/.nodocker exists, user won't be forwarded to container
+- name: add check for flag file
   lineinfile:
     state: present
     regexp: 'exec /bin/dockershell$'
-    line: 'export DOCKER_HOST_DEFAULT=1 && [ "${DOCKER_HOST:-${DOCKER_HOST_DEFAULT}}" = "0" ] && exec /bin/dockershell'
+    line: '[ ! -e "${HOME}/.nodocker" ] && exec /bin/dockershell'
     dest: '{{ item }}/.bashrc'
   with_items:
     - /home/vagrant

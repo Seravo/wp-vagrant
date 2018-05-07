@@ -14,7 +14,7 @@ build: .vagrant
 
 package.box: .vagrant
 	vagrant up
-#	vagrant ssh -c "sed -i 's/DOCKER_HOST_DEFAULT=1/DOCKER_HOST_DEFAULT=0/g' /home/vagrant/.bashrc"
+	vagrant ssh -c "rm /home/vagrant/.nodocker"
 	vagrant halt
 	vagrant package default
 
