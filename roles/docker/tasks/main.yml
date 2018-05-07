@@ -117,3 +117,36 @@
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-watch-logs
+
+# Delay docker start vagrant finishes mounting /data before docker
+# mounts /data:/data
+- name: delay docker start
+  copy:
+    src: delay.conf
+    dest: /etc/systemd/system/docker.service.d/delay.conf
+    mode: 0644
+    owner: root
+    group: root
+
+# Customize MOTD (message of the day)
+# This allows us to show links etc. when user logs in
+- name: remove upstream motd
+  file:
+    path: /etc/update-motd.d
+    state: absent
+
+- name: re-create motd path
+  file:
+    path: /etc/update-motd.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: add motd
+  copy:
+    src: motd
+    dest: /etc/motd
+    mode: 0644
+    owner: root
+    group: root
