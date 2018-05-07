@@ -120,6 +120,23 @@
 
 # Delay docker start vagrant finishes mounting /data before docker
 # mounts /data:/data
+- name: create directory structure for systemd override
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: add delay helper
+  copy:
+    src: wait-mounts.sh
+    dest: /usr/local/sbin/wait-mounts.sh
+    mode: 0755
+    owner: root
+    group: root
+
 - name: delay docker start
   copy:
     src: delay.conf
