@@ -44,12 +44,15 @@
     name: docker-py
     state: present
 
-# We want the default user in VM to be able to control docker
-- name: add user vagrant to docker group
-  user:
-    name: vagrant
-    groups: docker
-    append: yes
+# this allows us to SSH directly into the Docker container on start
+# source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
+- name: add vagrant private key
+  copy:
+    src: vagrant.key
+    dest: /home/vagrant/.ssh/id_rsa_vagrant
+    mode: 0600
+    owner: vagrant
+    group: vagrant
 
 # To make it easier to run commands inside docker, which in turn is in VM
 - name: create custom shell for jumping to docker
