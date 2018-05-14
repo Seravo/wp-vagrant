@@ -83,6 +83,7 @@
       - '443:443'
       - '3306:3306'
       - '2222:22'
+      - '9000:9000'
     restart_policy: always
     state: stopped
     env:
