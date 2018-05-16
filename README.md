@@ -42,8 +42,8 @@ import and export data from and to production.
 First make sure you have the latest baseimages on your system by running `vagrant box update`.
 
 ```
-vagrant up --provision
-vagrant package
+make rebuild
+make package.box
 ```
 
 To publish the box on on Vagrant Cloud you can either use `packer` (requires Vagrant Enterprise subscription) or upload manually at https://app.vagrantup.com/seravo/boxes/wordpress. The packer.json file was removed from this repository in Jan 2017 as it had not been used for a while and it wasn't properly maintained.
