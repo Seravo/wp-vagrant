@@ -86,9 +86,6 @@
       - '9000:9000'
     restart_policy: always
     state: stopped
-    env:
-      WP_USER: vagrant
-      WP_USER_PASS: vagrant
 
 # Create flag file: do not jump to docker if file exists
 - name: create flag file for dockershell
