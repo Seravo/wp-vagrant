@@ -192,3 +192,7 @@
     mode: 0644
     owner: root
     group: root
+
+# create file that contains build timestamp
+- name: create build timestamp file
+  shell: echo "vagrant-$(date --iso-8601=ns)" >/buildtime
