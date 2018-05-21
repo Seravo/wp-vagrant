@@ -63,6 +63,18 @@
     owner: root
     group: root
 
+# pull docker image, create container
+- name: copy helper script
+  copy:
+    src: docker-rebuild.sh
+    dest: /usr/local/sbin/docker-rebuild
+    mode: 0755
+    owner: root
+    group: root
+
+- name: pull docker image and create container
+  shell: /usr/local/sbin/docker-rebuild no-start
+
 # Use latest available vagrant image, 
 - name: "pull image from docker hub: seravo/wordpress:vagrant"
   docker_image:
