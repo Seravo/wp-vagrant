@@ -12,7 +12,8 @@ docker pull seravo/wordpress:vagrant
 echo "I: Remove current container"
 # it's ok for this to fail, eg. if container doesn't exist yet
 set +e
-docker rm --force seravo_wordpress 
+docker rm --force seravo_wordpress || true
+sleep 5
 set -e
 
 echo "I: Create new container"
