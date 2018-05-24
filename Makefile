@@ -21,4 +21,4 @@ package.box: .vagrant
 rebuild: destroy build
 
 import: package.box
-	vagrant box add --force seravo/wordpress-docker package.box
+	vagrant box add --force seravo/wordpress-beta package.box
