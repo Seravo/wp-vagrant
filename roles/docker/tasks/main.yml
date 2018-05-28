@@ -38,12 +38,6 @@
     pkg: docker-ce
     state: present
 
-# This is needed for Ansible docker tasks
-- name: install docker python bindings
-  pip:
-    name: docker-py
-    state: present
-
 # this allows us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
 - name: add vagrant private key
@@ -73,31 +67,7 @@
     group: root
 
 - name: pull docker image and create container
-  shell: /usr/local/sbin/docker-rebuild no-start
-
-# Use latest available vagrant image, 
-- name: "pull image from docker hub: seravo/wordpress:vagrant"
-  docker_image:
-    name: seravo/wordpress
-    tag: vagrant
-    pull: yes
-    force: yes # force pull
-
-# this speeds up startup later, container already exists
-- name: create docker container for development image
-  docker_container:
-    name: seravo_wordpress
-    image: seravo/wordpress:vagrant
-    volumes:
-      - "/data:/data"
-    published_ports:
-      - '80:80'
-      - '443:443'
-      - '3306:3306'
-      - '2222:22'
-      - '9000:9000'
-    restart_policy: always
-    state: stopped
+  shell: /usr/local/sbin/docker-rebuild pull-and-create
 
 # Create flag file: do not jump to docker if file exists
 - name: create flag file for dockershell
