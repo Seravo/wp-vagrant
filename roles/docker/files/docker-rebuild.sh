@@ -2,43 +2,64 @@
 set -e
 set -o pipefail
 
-# If there is 1 or more arguments, just create the container
-# but don't start it.
-ONLY_CREATE="$1"
+IMAGE_NAME="seravo/wordpress:vagrant"
+CONTAINER_NAME="seravo_wordpress"
 
-echo "I: Pull latest box from Docker Hub"
-docker pull seravo/wordpress:vagrant
+COMMAND="${1:-all}"
+case "${COMMAND}"
+in
+    create)
+        echo "I: Create new container"
+        ID="$(docker create \
+            --name "${CONTAINER_NAME}" \
+            --publish "80:80" \
+            --publish "443:443" \
+            --publish "2222:22" \
+            --publish "3306:3306" \
+            --publish "9000:9000" \
+            --volume "/data:/data" \
+            "${IMAGE_NAME}")"
+        if [ -z "${ID}" ]
+        then
+            echo "E: Container creation failed!"
+            exit 1
+        fi
+    ;;
+    pull)
+        echo "I: Pull latest box from Docker Hub"
+        docker pull "${IMAGE_NAME}"
+        exit 0
+    ;;
+    remove)
+        echo "I: Remove current container"
+        # it's ok for this to fail, eg. if container doesn't exist yet
+        set +e
+        docker rm --force "${CONTAINER_NAME}" || true
+        sleep 5
+        set -e
+        exit 0
+    ;;
+    start)
+        echo "I: Start new container"
+        docker start "${CONTAINER_NAME}"
+        exit 0
+    ;;
+    pull-and-create)
+        $0 pull
+        $0 remove
+        $0 create
+    ;;
+    create-and-start)
+        $0 remove
+        $0 create
+        $0 start
+    ;;
+    all)
+        $0 pull
+        $0 remove
+        $0 create
+        $0 start
+        exit 0
+    ;;
+esac
 
-echo "I: Remove current container"
-# it's ok for this to fail, eg. if container doesn't exist yet
-set +e
-docker rm --force seravo_wordpress || true
-sleep 5
-set -e
-
-echo "I: Create new container"
-ID="$(docker create \
-    --name seravo_wordpress \
-    --volume "/data:/data" \
-    --publish "80:80" \
-    --publish "443:443" \
-    --publish "3306:3306" \
-    --publish "2222:22" \
-    --publish "9000:9000" \
-    --restart always \
-    seravo/wordpress:vagrant)"
-
-if [ -z "${ID}" ]
-then
-    echo "E: Container creation failed!"
-    exit 1
-fi
-
-if [ -n "${ONLY_CREATE}" ]
-then
-    echo "I: Container creation completed, id ${ID}"
-    exit 0
-fi
-
-echo "I: Start new container"
-docker start "${ID}"

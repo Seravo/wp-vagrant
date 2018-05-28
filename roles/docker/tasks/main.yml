@@ -132,13 +132,16 @@
     owner: root
     group: root
 
-- name: delay docker start
+- name: delay docker start, re-create container
   copy:
-    src: delay.conf
-    dest: /etc/systemd/system/docker.service.d/delay.conf
+    src: "{{ item }}.conf"
+    dest: "/etc/systemd/system/docker.service.d/{{ item }}.conf"
     mode: 0644
     owner: root
     group: root
+  with_items:
+      - delay
+      - create-container
 
 # Customize MOTD (message of the day)
 # This allows us to show links etc. when user logs in
