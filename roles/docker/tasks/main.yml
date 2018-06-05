@@ -38,18 +38,15 @@
     pkg: docker-ce
     state: present
 
-# This is needed for Ansible docker tasks
-- name: install docker python bindings
-  pip:
-    name: docker-py
-    state: present
-
-# We want the default user in VM to be able to control docker
-- name: add user vagrant to docker group
-  user:
-    name: vagrant
-    groups: docker
-    append: yes
+# this allows us to SSH directly into the Docker container on start
+# source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
+- name: add vagrant private key
+  copy:
+    src: vagrant.key
+    dest: /home/vagrant/.ssh/id_rsa_vagrant
+    mode: 0600
+    owner: vagrant
+    group: vagrant
 
 # To make it easier to run commands inside docker, which in turn is in VM
 - name: create custom shell for jumping to docker
@@ -60,38 +57,36 @@
     owner: root
     group: root
 
-# Use latest available vagrant image, 
-- name: "pull image from docker hub: seravo/wordpress:vagrant"
-  docker_image:
-    name: seravo/wordpress
-    tag: vagrant
-    pull: yes
-    force: yes # force pull
+# pull docker image, create container
+- name: copy helper script
+  copy:
+    src: docker-rebuild.sh
+    dest: /usr/local/sbin/docker-rebuild
+    mode: 0755
+    owner: root
+    group: root
 
-# this speeds up startup later, container already exists
-- name: create docker container for development image
-  docker_container:
-    name: seravo_wordpress
-    image: seravo/wordpress:vagrant
-    volumes:
-      - "/data:/data"
-    published_ports:
-      - '80:80'
-      - '443:443'
-      - '3306:3306'
-      - '2222:22'
-    restart_policy: always
-    state: stopped
-    env:
-      WP_USER: vagrant
-      WP_USER_PASS: vagrant
+- name: pull docker image and create container
+  shell: /usr/local/sbin/docker-rebuild pull-and-create
+
+# Create flag file: do not jump to docker if file exists
+- name: create flag file for dockershell
+  lineinfile:
+    regexp: '^1'
+    dest: /home/vagrant/.nodocker
+    mode: 0644
+    owner: vagrant
+    group: root
+    create: yes
+    line: '1'
 
 # Allow user to choose wheter she likes to enter Docker or host VM
-- name: use dockershell if !DOCKER_HOST=1
+# if ~/.nodocker exists, user won't be forwarded to container
+- name: add check for flag file
   lineinfile:
     state: present
     regexp: 'exec /bin/dockershell$'
-    line: 'export DOCKER_HOST_DEFAULT=1 && [ "${DOCKER_HOST:-${DOCKER_HOST_DEFAULT}}" = "0" ] && exec /bin/dockershell'
+    line: '[ ! -e "${HOME}/.nodocker" ] && exec /bin/dockershell'
     dest: '{{ item }}/.bashrc'
   with_items:
     - /home/vagrant
@@ -117,3 +112,60 @@
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-watch-logs
+
+# Delay docker start vagrant finishes mounting /data before docker
+# mounts /data:/data
+- name: create directory structure for systemd override
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: add delay helper
+  copy:
+    src: wait-mounts.sh
+    dest: /usr/local/sbin/wait-mounts.sh
+    mode: 0755
+    owner: root
+    group: root
+
+- name: delay docker start, re-create container
+  copy:
+    src: "{{ item }}.conf"
+    dest: "/etc/systemd/system/docker.service.d/{{ item }}.conf"
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+      - delay
+      - create-container
+
+# Customize MOTD (message of the day)
+# This allows us to show links etc. when user logs in
+- name: remove upstream motd
+  file:
+    path: /etc/update-motd.d
+    state: absent
+
+- name: re-create motd path
+  file:
+    path: /etc/update-motd.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: add motd
+  copy:
+    src: motd
+    dest: /etc/motd
+    mode: 0644
+    owner: root
+    group: root
+
+# create file that contains build timestamp
+- name: create build timestamp file
+  shell: echo "vagrant-$(date --iso-8601=ns)" >/buildtime

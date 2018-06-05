@@ -1,27 +1,28 @@
 #!/bin/sh
 set -e
 
+SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -oStrictHostKeyChecking=no"
 DOCKER_CONTAINER="seravo_wordpress"
 
-echo "dockershell $@"
-
-# check that docker is running, start & wait if not
-if [ ! -e "${HOME}/.dockerstatus" ]
+# After boot, once wait for the Docker to start
+if [ ! -e /tmp/.dockerwait ]
 then
-    # Stop Docker to ensure existence of mountpoints
-    /usr/bin/docker stop seravo_wordpress
-
-    # Start Docker
-    /usr/bin/docker start "${DOCKER_CONTAINER}"
-    
-    # Create statefile
-    touch "${HOME}/.dockerstatus"
+    sleep 15
+    touch /tmp/.dockerwait
 fi
+
+# Wait for SSH port to become active
+while ! nc -z localhost 2222
+do
+    echo "Waiting for container SSH..."
+    sleep 10
+done
+
+echo "entering site container... $@"
 
 if [ -n "${DOCKERSHELL_WRAPPER}" ]
 then
-    exec /usr/bin/docker exec --interactive --user root "${DOCKER_CONTAINER}" "$@"
+    ssh ${SSH_FLAGS} root@localhost "$@"
 else
-    exec /usr/bin/docker exec --interactive --tty --user vagrant --workdir=/home/vagrant "${DOCKER_CONTAINER}" bash "$@"
+    ssh ${SSH_FLAGS} vagrant@localhost "$@"
 fi
-

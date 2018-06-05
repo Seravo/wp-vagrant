@@ -33,6 +33,9 @@ Vagrant.configure('2') do |config|
       else 2
     end
 
+    # Disable UART (prevents creating UART config with hard-coded path
+    vb.customize ['modifyvm', :id, '--uartmode1', 'disconnected']
+
     # Customize memory in MB
     vb.customize ['modifyvm', :id, '--memory', 1536]
     vb.customize ['modifyvm', :id, '--cpus', cpus]
