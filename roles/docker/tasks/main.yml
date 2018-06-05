@@ -143,28 +143,14 @@
       - delay
       - create-container
 
-# Customize MOTD (message of the day)
-# This allows us to show links etc. when user logs in
-- name: remove upstream motd
+# Keep the Docker host motd silent and rely on the motd emitted by the container
+- name: Clean away excess motd messges
   file:
-    path: /etc/update-motd.d
+    path: "/etc/{{ item }}"
     state: absent
-
-- name: re-create motd path
-  file:
-    path: /etc/update-motd.d
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
-- name: add motd
-  copy:
-    src: motd
-    dest: /etc/motd
-    mode: 0644
-    owner: root
-    group: root
+  with_items:
+      - update-motd.d
+      - motd
 
 # create file that contains build timestamp
 - name: create build timestamp file
