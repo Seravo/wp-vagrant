@@ -106,6 +106,7 @@
     - wp
     - wp-activate-git-hooks
     - wp-generate-ssl
+    - wp-pull-production-db
     - wp-restart-nginx
     - wp-use-asset-proxy
     - wp-vagrant-activation
