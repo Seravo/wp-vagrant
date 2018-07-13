@@ -1,4 +1,15 @@
 #!/bin/sh
+#
+# Docker SSH shell forwarder
+#
+# Makes all 'vagrant ssh' invocations seamslessly run inside the Docker container
+# and not on the host Vagrant box, making it a fully transparent boot2Docker host.
+#
+# To escape this dockershell and get to the host Vagrant box, run
+#  vagrant -c 'touch /home/vagrant/.nodocker'
+#  vagrant ssh
+#
+
 set -e
 
 SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -oStrictHostKeyChecking=no"
