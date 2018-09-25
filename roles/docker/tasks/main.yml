@@ -17,25 +17,9 @@
     - python-pip      # needed for ansible pip tasks
     - unattended-upgrades # do automatic updates for the VM
 
-# Read APT key for Docker repository from file
-# (this prevents MITM quite effectively!)
-- name: add apt key for docker
-  apt_key:
-    data: "{{ lookup('file', 'docker.asc') }}"
-    state: present
-    keyring: /etc/apt/trusted.gpg.d/docker.gpg
-
-# We want to use upstream Docker-CE
-- name: add apt repository for docker
-  apt_repository:
-    filename: docker
-    state: present
-    update_cache: yes
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
-
-- name: install docker-ce
+- name: install docker
   apt:
-    pkg: docker-ce
+    pkg: docker.io
     state: present
 
 # this allows us to SSH directly into the Docker container on start
