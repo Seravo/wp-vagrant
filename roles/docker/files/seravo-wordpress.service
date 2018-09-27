@@ -1,0 +1,11 @@
+[Unit]
+Description=Seravo WordPress
+After=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/swd autostart
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

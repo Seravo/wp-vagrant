@@ -13,10 +13,8 @@ destroy: clean
 build: .vagrant
 
 package.box: .vagrant
-	vagrant up
-	vagrant ssh -c "rm /home/vagrant/.nodocker"
 	vagrant halt
-	vagrant package default
+	vagrant package default --output package.box
 
 rebuild: destroy build
 

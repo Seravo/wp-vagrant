@@ -21,4 +21,4 @@ set -e
 
 export DOCKERSHELL_WRAPPER=1
 
-/bin/dockershell "$0" "$@"
+/usr/sbin/swd shell "$0" "$@"

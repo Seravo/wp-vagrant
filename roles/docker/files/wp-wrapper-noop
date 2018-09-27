@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+#
+# Do nothing, except tell which command we'd like to execute
+#
+# We've moved some functionality to other parts of the system,
+# but old Vagrantfile configurations are in the wild. As we
+# need to continue supporting those.
+#
+# So, when we update our implementation, let's just change
+# those scripts so that they do nothing. No errors, no duplicate
+# functionality, and no side-effects.
+#
+
+echo "noop: $0 $@"

@@ -12,7 +12,7 @@ This box imitates the functionality of [seravo.com](https://seravo.com) WordPres
 
 ## What's inside?
 
-Quite recent Docker CE. It spins up `seravo/wordpress:vagrant`  docker image, which in turn provides production-like environment for your development needs.
+Quite recent Docker CE. It spins up `seravo/wordpress:development`  Docker image, which in turn provides production-like environment for your development needs.
 
 ## Installation
 
