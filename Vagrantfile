@@ -21,7 +21,8 @@ Vagrant.configure('2') do |config|
     }
     ansible.extra_vars = {
       ansible_ssh_user: 'vagrant',
-      user: 'vagrant'
+      user: 'vagrant',
+      ansible_python_interpreter: '/usr/bin/python3'
     }
   end
 
