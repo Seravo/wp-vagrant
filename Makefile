@@ -22,3 +22,5 @@ rebuild: destroy build
 
 import: package.box
 	vagrant box add --force seravo/wordpress-beta package.box
+
+rimport: rebuild import
