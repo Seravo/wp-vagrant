@@ -116,14 +116,6 @@
     mode: 0755
     recurse: yes
 
-- name: add delay helper
-  copy:
-    src: wait-mounts.sh
-    dest: /usr/local/sbin/wait-mounts.sh
-    mode: 0755
-    owner: root
-    group: root
-
 - name: delay docker start
   copy:
     src: "{{ item }}.conf"
