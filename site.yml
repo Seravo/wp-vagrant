@@ -3,9 +3,6 @@
   gather_facts: False
   become: yes
   tasks:
-  # install python2, required by ansible itself
-  - name: install python 2
-    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
   # install aptitude, required by ansible itself (old versions)
   - name: install aptitude
     raw: test -e /usr/bin/aptitude-curses || (apt -y update && apt install -y aptitude)

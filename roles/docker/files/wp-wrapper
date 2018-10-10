@@ -19,6 +19,6 @@ set -e
 #echo ""
 #echo ""
 
-export DOCKERSHELL_WRAPPER=1
+export SCSHELL_WRAPPER=1
 
-/bin/dockershell "$0" "$@"
+/usr/sbin/sc shell "$0" "$@"

@@ -12,16 +12,16 @@ This box imitates the functionality of [seravo.com](https://seravo.com) WordPres
 
 ## What's inside?
 
-Quite recent Docker CE. It spins up `seravo/wordpress:vagrant`  docker image, which in turn provides production-like environment for your development needs.
+Quite recent Docker CE. It spins up `seravo/wordpress:development`  Docker image, which in turn provides production-like environment for your development needs.
 
 ## Installation
+You just need to clone our project template & start vagrant.
 
-1. Clone [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress).
-2. Install.
-```
-composer update
-vagrant up
-```
+    git clone https://github.com/seravo/wordpress myproject
+    cd myproject
+    vagrant up
+
+Pre-requirement is of course that you have recent VirtualBox and Vagrant installed on your machine.
 
 ## Similar projects
 
@@ -46,5 +46,5 @@ make rebuild
 make package.box
 ```
 
-To publish the box on on Vagrant Cloud you can either use `packer` (requires Vagrant Enterprise subscription) or upload manually at https://app.vagrantup.com/seravo/boxes/wordpress. The packer.json file was removed from this repository in Jan 2017 as it had not been used for a while and it wasn't properly maintained.
+To publish the box on on Vagrant Cloud you can upload manually at https://app.vagrantup.com/seravo/boxes/wordpress.
 

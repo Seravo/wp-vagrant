@@ -13,12 +13,12 @@ destroy: clean
 build: .vagrant
 
 package.box: .vagrant
-	vagrant up
-	vagrant ssh -c "rm /home/vagrant/.nodocker"
 	vagrant halt
-	vagrant package default
+	vagrant package default --output package.box
 
 rebuild: destroy build
 
 import: package.box
 	vagrant box add --force seravo/wordpress-beta package.box
+
+rimport: rebuild import

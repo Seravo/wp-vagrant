@@ -16,11 +16,8 @@
     - curl            # download files...
     - python-pip      # needed for ansible pip tasks
     - unattended-upgrades # do automatic updates for the VM
-
-- name: install docker
-  apt:
-    pkg: docker.io
-    state: present
+    - docker.io
+    - ifupdown
 
 # this allows us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
@@ -32,32 +29,44 @@
     owner: vagrant
     group: vagrant
 
-# To make it easier to run commands inside docker, which in turn is in VM
-- name: create custom shell for jumping to docker
-  copy:
-    src: dockershell
-    dest: /bin/dockershell
-    mode: 0755
-    owner: root
-    group: root
-
 # pull docker image, create container
 - name: copy helper script
   copy:
-    src: docker-rebuild.sh
-    dest: /usr/local/sbin/docker-rebuild
+    src: sc.sh
+    dest: /usr/sbin/sc
     mode: 0755
     owner: root
     group: root
 
-- name: pull docker image and create container
-  shell: /usr/local/sbin/docker-rebuild pull-and-create
+- name: create seravo dir
+  file:
+    dest: /usr/share/seravo
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: configure Seravo environment
+  copy:
+    src: env
+    dest: /usr/share/seravo/env
+    mode: 0644
+    owner: root
+    group: root
+
+- name: create data placeholder
+  file:
+    dest: /data/wordpress
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
 
 # Create flag file: do not jump to docker if file exists
-- name: create flag file for dockershell
+- name: create flag file for docker shell
   lineinfile:
     regexp: '^1'
-    dest: /home/vagrant/.nodocker
+    dest: /data/wordpress/.seravo-controller-shell
     mode: 0644
     owner: vagrant
     group: root
@@ -65,23 +74,21 @@
     line: '1'
 
 # Allow user to choose wheter she likes to enter Docker or host VM
-# if ~/.nodocker exists, user won't be forwarded to container
+# if /data/wordpress/.seravo-controller-shell exists, user won't be forwarded to container
 - name: add check for flag file
   lineinfile:
     state: present
-    regexp: 'exec /bin/dockershell$'
-    line: '[ ! -e "${HOME}/.nodocker" ] && exec /bin/dockershell'
+    regexp: 'exec /usr/bin/sc shell$'
+    line: '[ ! -e "/data/wordpress/.seravo-controller-shell" ] && exec /usr/sbin/sc shell'
     dest: '{{ item }}/.bashrc'
   with_items:
     - /home/vagrant
     - /root
 
-# Because old WordPress repository configs expects these to be found inside VM,
-# add wrappers that execute the same commands inside Docker
-- name: create wrappers for wp-* commands
+- name: create noop-wrappers for obsolete commands
   copy:
-    src: wp-wrapper
-    dest: "/usr/local/bin/{{ item }}"
+    src: wp-wrapper-noop
+    dest: "/usr/local/bin/{{ item }}"
     mode: 0755
     owner: root
     group: root
@@ -90,10 +97,10 @@
     - wp
     - wp-activate-git-hooks
     - wp-generate-ssl
-    - wp-pull-production-db
     - wp-restart-nginx
     - wp-use-asset-proxy
     - wp-vagrant-activation
+    - wp-pull-production-db
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-watch-logs
@@ -117,7 +124,7 @@
     owner: root
     group: root
 
-- name: delay docker start, re-create container
+- name: delay docker start
   copy:
     src: "{{ item }}.conf"
     dest: "/etc/systemd/system/docker.service.d/{{ item }}.conf"
@@ -126,16 +133,33 @@
     group: root
   with_items:
       - delay
-      - create-container
 
 # Keep the Docker host motd silent and rely on the motd emitted by the container
-- name: Clean away excess motd messges
+- name: Clean away excess motd messages
   file:
     path: "/etc/{{ item }}"
     state: absent
   with_items:
       - update-motd.d
       - motd
+
+- name: Add Seravo WordPress service
+  copy:
+    src: seravo-wordpress.service
+    dest: /etc/systemd/system/seravo-wordpress.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: configure systemd services
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: stopped
+    name: seravo-wordpress
+
+- name: pull docker image and create container
+  shell: /usr/sbin/sc pull
 
 # create file that contains build timestamp
 - name: create build timestamp file
