@@ -100,14 +100,14 @@ in
         # and not on the host Vagrant box, making it a fully transparent boot2Docker host.
         #
         # To escape this dockershell and get to the host Vagrant box, run
-        #  touch .nodocker # in wordpress project repo
+        #  touch .seravo-controller-shell # in wordpress project repo
         #  vagrant ssh
         #
 
         SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no"
         echo "entering site container... (ssh -- $@)"
         
-        if [ -n "${DOCKERSHELL_WRAPPER}" ]
+        if [ -n "${SCSHELL_WRAPPER}" ]
         then
             # When running via the wp-wrapper, keep SSH silent with -q to
             # avoid displaying too many SSH banners.

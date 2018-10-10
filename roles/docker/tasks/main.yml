@@ -66,7 +66,7 @@
 - name: create flag file for docker shell
   lineinfile:
     regexp: '^1'
-    dest: /data/wordpress/.nodocker
+    dest: /data/wordpress/.seravo-controller-shell
     mode: 0644
     owner: vagrant
     group: root
@@ -74,12 +74,12 @@
     line: '1'
 
 # Allow user to choose wheter she likes to enter Docker or host VM
-# if ~/.nodocker exists, user won't be forwarded to container
+# if /data/wordpress/.seravo-controller-shell exists, user won't be forwarded to container
 - name: add check for flag file
   lineinfile:
     state: present
     regexp: 'exec /usr/bin/sc shell$'
-    line: '[ ! -e "/data/wordpress/.nodocker" ] && exec /usr/sbin/sc shell'
+    line: '[ ! -e "/data/wordpress/.seravo-controller-shell" ] && exec /usr/sbin/sc shell'
     dest: '{{ item }}/.bashrc'
   with_items:
     - /home/vagrant
