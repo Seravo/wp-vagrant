@@ -82,7 +82,7 @@ in
         exit 0
     ;;
     autostart)
-        if [ -e "/data/wordpress/.seravo_autoupdate" ]
+        if [ -e "/data/wordpress/.seravo-controller-autoupdate" ]
         then
             $0 pull
             $0 remove
