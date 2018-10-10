@@ -32,8 +32,8 @@
 # pull docker image, create container
 - name: copy helper script
   copy:
-    src: swd.sh
-    dest: /usr/sbin/swd
+    src: sc.sh
+    dest: /usr/sbin/sc
     mode: 0755
     owner: root
     group: root
@@ -78,8 +78,8 @@
 - name: add check for flag file
   lineinfile:
     state: present
-    regexp: 'exec /usr/bin/swd shell$'
-    line: '[ ! -e "/data/wordpress/.nodocker" ] && exec /usr/sbin/swd shell'
+    regexp: 'exec /usr/bin/sc shell$'
+    line: '[ ! -e "/data/wordpress/.nodocker" ] && exec /usr/sbin/sc shell'
     dest: '{{ item }}/.bashrc'
   with_items:
     - /home/vagrant
@@ -159,7 +159,7 @@
     name: seravo-wordpress
 
 - name: pull docker image and create container
-  shell: /usr/sbin/swd pull
+  shell: /usr/sbin/sc pull
 
 # create file that contains build timestamp
 - name: create build timestamp file
