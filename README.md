@@ -15,13 +15,13 @@ This box imitates the functionality of [seravo.com](https://seravo.com) WordPres
 Quite recent Docker CE. It spins up `seravo/wordpress:development`  Docker image, which in turn provides production-like environment for your development needs.
 
 ## Installation
+You just need to clone our project template & start vagrant.
 
-1. Clone [github.com/Seravo/wordpress](https://github.com/Seravo/wordpress).
-2. Install.
-```
-composer update
-vagrant up
-```
+    git clone https://github.com/seravo/wordpress myproject
+    cd myproject
+    vagrant up
+
+Pre-requirement is of course that you have recent VirtualBox and Vagrant installed on your machine.
 
 ## Similar projects
 
