@@ -54,7 +54,7 @@ in
     ;;
     maybe-create)
         set +e
-        docker ps |grep -q seravo_wordpress
+        docker ps | grep -q seravo_wordpress
         if [ "$?" = "1" ]
         then
             shift
@@ -105,8 +105,8 @@ in
         #
 
         SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no"
-        echo "entering site container... (ssh -- $@)"
-        
+        echo "Connecting to local Vagrant environment... (ssh -- $@)"
+
         if [ -n "${SCSHELL_WRAPPER}" ]
         then
             # When running via the wp-wrapper, keep SSH silent with -q to
@@ -120,7 +120,7 @@ in
     ;;
     wait-mounts)
         MPATH="/data/wordpress/config.yml"
-        
+
         for i in $(seq -s " " 15)
         do
             if [ -e "${MPATH}" ]
@@ -130,7 +130,7 @@ in
             fi
             sleep 5
         done
-        
+
         echo "ERROR: Mounting /data failed, '${MPATH}' not found!"
         exit 1
     ;;
@@ -138,4 +138,3 @@ in
         docker logs --follow seravo_wordpress
     ;;
 esac
-

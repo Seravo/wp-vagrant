@@ -1,11 +1,11 @@
 ---
 # Update basebox, we don't known when it was build
-- name: upgrade the system
+- name: Upgrade the base system
   apt:
     upgrade: safe
     update_cache: yes
 
-- name: install dependencies
+- name: Install dependencies
   apt:
     pkg: "{{ item }}"
     state: present
@@ -21,7 +21,7 @@
 
 # this allows us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
-- name: add vagrant private key
+- name: Add vagrant private key
   copy:
     src: vagrant.key
     dest: /home/vagrant/.ssh/id_rsa_vagrant
@@ -30,7 +30,7 @@
     group: vagrant
 
 # pull docker image, create container
-- name: copy helper script
+- name: Copy Seravo Controller script
   copy:
     src: sc.sh
     dest: /usr/sbin/sc
@@ -53,8 +53,7 @@
     mode: 0644
     owner: root
     group: root
-
-- name: create data placeholder
+- name: Create data mount directory placeholder
   file:
     dest: /data/wordpress
     state: directory
@@ -63,10 +62,13 @@
     group: root
 
 # Create flag file: do not jump to docker if file exists
-- name: create flag file for docker shell
+# This file will be in place during the Vagrant provisioning Ansible run
+# and it will automatically disappear when the box is restarted and there
+# is a new /data/worpdress date mount in place.
+- name: Create flag file for docker shell
   lineinfile:
     regexp: '^1'
-    dest: /data/wordpress/.seravo-controller-shell
+    path: /data/wordpress/.seravo-controller-shell
     mode: 0644
     owner: vagrant
     group: root
@@ -75,7 +77,7 @@
 
 # Allow user to choose wheter she likes to enter Docker or host VM
 # if /data/wordpress/.seravo-controller-shell exists, user won't be forwarded to container
-- name: add check for flag file
+- name: Add check for flag file
   lineinfile:
     state: present
     regexp: 'exec /usr/bin/sc shell$'
@@ -85,7 +87,7 @@
     - /home/vagrant
     - /root
 
-- name: create noop-wrappers for obsolete commands
+- name: Create noop-wrappers for obsolete commands
   copy:
     src: wp-wrapper-noop
     dest: "/usr/local/bin/{{ item }}"
@@ -107,7 +109,7 @@
 
 # Delay docker start vagrant finishes mounting /data before docker
 # mounts /data:/data
-- name: create directory structure for systemd override
+- name: Create directory structure for systemd override
   file:
     path: /etc/systemd/system/docker.service.d
     state: directory
@@ -116,7 +118,7 @@
     mode: 0755
     recurse: yes
 
-- name: delay docker start
+- name: Delay docker start
   copy:
     src: "{{ item }}.conf"
     dest: "/etc/systemd/system/docker.service.d/{{ item }}.conf"
@@ -124,7 +126,7 @@
     owner: root
     group: root
   with_items:
-      - delay
+    - delay
 
 # Keep the Docker host motd silent and rely on the motd emitted by the container
 - name: Clean away excess motd messages
@@ -132,8 +134,8 @@
     path: "/etc/{{ item }}"
     state: absent
   with_items:
-      - update-motd.d
-      - motd
+    - update-motd.d
+    - motd
 
 - name: Add Seravo WordPress service
   copy:
@@ -150,9 +152,9 @@
     state: stopped
     name: seravo-wordpress
 
-- name: pull docker image and create container
+- name: Pull Docker image
   shell: /usr/sbin/sc pull
 
-# create file that contains build timestamp
-- name: create build timestamp file
-  shell: echo "vagrant-$(date --iso-8601=ns)" >/buildtime
+# Create file that contains build timestamp
+- name: Create build timestamp file
+  shell: echo "vagrant-$(date --iso-8601=ns)" > /buildtime

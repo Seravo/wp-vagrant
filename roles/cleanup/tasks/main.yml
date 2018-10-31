@@ -1,4 +1,4 @@
-- name: remove non-essential packages
+- name: Remove non-essential packages
   apt:
     pkg: "{{ item }}"
     state: absent
@@ -21,7 +21,7 @@
     - fakeroot
     - eatmydata
 
-- name: remove temporary content
+- name: Remove temporary content
   file:
     dest: "{{ item }}"
     state: absent
@@ -34,7 +34,7 @@
     - /root/.npm
     - /root/.gem
 
-- name: restore essential directories
+- name: Restore essential directories
   file:
     state: directory
     dest: "{{ item }}"
@@ -45,7 +45,7 @@
     - /var/cache/apt/archives
     - /var/lib/apt/lists
 
-- name: install helper script
+- name: Install cleanup script
   copy:
     src: cleanup.sh
     dest: /cleanup.sh
@@ -53,5 +53,5 @@
     owner: root
     group: root
 
-- name: erase unused disk space
+- name: Run cleanup script to save disk space
   shell: "/cleanup.sh"
