@@ -137,20 +137,20 @@
     - update-motd.d
     - motd
 
-- name: Add Seravo WordPress service
+- name: Add Seravo Controller systemd service definition
   copy:
-    src: seravo-wordpress.service
-    dest: /etc/systemd/system/seravo-wordpress.service
+    src: seravo-controller.service
+    dest: /etc/systemd/system/seravo-controller.service
     mode: 0644
     owner: root
     group: root
 
-- name: configure systemd services
+- name: Configure Seravo Controller systemd services
   systemd:
     daemon_reload: yes
     enabled: yes
     state: stopped
-    name: seravo-wordpress
+    name: seravo-controller
 
 - name: Pull Docker image
   shell: /usr/sbin/sc pull

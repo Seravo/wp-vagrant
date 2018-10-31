@@ -1,5 +1,5 @@
 [Unit]
-Description=Seravo WordPress
+Description=Seravo Controller
 After=docker.service
 
 [Service]
