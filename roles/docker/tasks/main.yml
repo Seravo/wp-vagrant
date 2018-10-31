@@ -122,6 +122,12 @@
     - update-motd.d
     - motd
 
+- name: Silence the host last login line from SSH as unnecessary in Vagrant box
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PrintLastLog no'
+    line: 'PrintLastLog no'
+
 - name: Add Seravo Controller systemd service definition
   copy:
     src: seravo-controller.service
