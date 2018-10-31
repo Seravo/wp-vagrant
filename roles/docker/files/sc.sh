@@ -10,13 +10,6 @@ then
     sudo "$0" "$@"
 fi
 
-if [ -e "/data/wordpress/.seravo-env" ]
-then
-    ENVFILE="/data/wordpress/.seravo-env"
-else
-    ENVFILE="/usr/share/seravo/env"
-fi
-
 COMMAND="${1:-autostart}"
 case "${COMMAND}"
 in
@@ -35,7 +28,6 @@ in
         mkdir -p /data/db/mysql
         ID="$(docker create \
             --name "${CONTAINER_NAME}" \
-            --env-file "${ENVFILE}" \
             --publish "80:80" \
             --publish "443:443" \
             --publish "2222:22" \

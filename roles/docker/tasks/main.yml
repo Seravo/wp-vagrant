@@ -38,21 +38,6 @@
     owner: root
     group: root
 
-- name: create seravo dir
-  file:
-    dest: /usr/share/seravo
-    state: directory
-    mode: 0755
-    owner: root
-    group: root
-
-- name: configure Seravo environment
-  copy:
-    src: env
-    dest: /usr/share/seravo/env
-    mode: 0644
-    owner: root
-    group: root
 - name: Create data mount directory placeholder
   file:
     dest: /data/wordpress
