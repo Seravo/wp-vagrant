@@ -17,7 +17,7 @@ in
         set +e
         while true
         do
-            sudo docker exec -it seravo_wordpress bash && break
+            sudo docker exec -it "${CONTAINER_NAME}" bash && break
             sleep 1
         done
         set -e
@@ -46,7 +46,7 @@ in
     ;;
     maybe-create)
         set +e
-        docker ps | grep -q seravo_wordpress
+        docker ps | grep -q "${CONTAINER_NAME}"
         if [ "$?" = "1" ]
         then
             shift
@@ -127,6 +127,6 @@ in
         exit 1
     ;;
     log|logs)
-        docker logs --follow seravo_wordpress
+        docker logs --follow "${CONTAINER_NAME}"
     ;;
 esac
