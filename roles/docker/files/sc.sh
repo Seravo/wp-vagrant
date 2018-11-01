@@ -4,6 +4,7 @@ set -o pipefail
 
 IMAGE_NAME="seravo/wordpress:development"
 CONTAINER_NAME="seravo_wordpress"
+HOSTNAME="$(hostname -s)"
 
 if [ "$(id -u)" != "0" ]
 then
@@ -28,6 +29,7 @@ in
         mkdir -p /data/db/mysql
         ID="$(docker create \
             --name "${CONTAINER_NAME}" \
+            --hostname "${CONTAINER_NAME}_vagrant" \
             --publish "80:80" \
             --publish "443:443" \
             --publish "2222:22" \
