@@ -6,11 +6,6 @@ IMAGE_NAME="seravo/wordpress:development"
 CONTAINER_NAME="seravo_wordpress"
 HOSTNAME="$(hostname -s)"
 
-if [ "$(id -u)" != "0" ]
-then
-    sudo "$0" "$@"
-fi
-
 COMMAND="${1:-autostart}"
 case "${COMMAND}"
 in
@@ -101,15 +96,20 @@ in
         SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no"
         echo "Connecting to local Vagrant environment... (ssh -- $@)"
 
+        # Wait for SSH port to become active
+        while ! nc -z localhost 2222
+        do
+            echo "Waiting for environment to start..."
+            sleep 10
+        done
+
         if [ -n "${SCSHELL_WRAPPER}" ]
         then
             # When running via the wp-wrapper, keep SSH silent with -q to
             # avoid displaying too many SSH banners.
             ssh ${SSH_FLAGS} -q root@localhost "$@"
-            exit 0
         else
             ssh ${SSH_FLAGS} vagrant@localhost "$@"
-            exit 0
         fi
     ;;
     wait-mounts)
