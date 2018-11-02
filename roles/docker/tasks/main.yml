@@ -72,9 +72,11 @@
     - /home/vagrant
     - /root
 
-- name: Create noop-wrappers for obsolete commands
+# Ensure the commands the Vagrantfile issues in non-interactive mode are not
+# run on the host but passed on to the Docker container.
+- name: Create wrappers for necessary Vagrantfile commands
   copy:
-    src: wp-wrapper-noop
+    src: wp-wrapper
     dest: "/usr/local/bin/{{ item }}"
     mode: 0755
     owner: root
@@ -90,6 +92,16 @@
     - wp-pull-production-db
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
+
+# Move here all commands that have been deprecated from the Vagrantfile
+- name: Create noop-wrappers for obsolete commands
+  copy:
+    src: wp-wrapper-noop
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
     - wp-watch-logs
 
 # Delay docker start vagrant finishes mounting /data before docker

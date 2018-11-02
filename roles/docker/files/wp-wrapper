@@ -1,5 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+
+# Ensure error codes are passed though and not masked by 'tee'
+# Note: Use of pipefail requires bash
+set -o pipefail
 
 # Execute $0 inside our Docker container with same parameters
 #
@@ -21,4 +25,10 @@ set -e
 
 export SCSHELL_WRAPPER=1
 
-/usr/sbin/sc shell "$0" "$@"
+# Ensure path exists
+mkdir -p /data/log/vagrant
+
+# Log what was run
+echo "Ran: '$0 $@'" >> /data/log/vagrant/wp-wrapper.log
+
+/usr/sbin/sc shell "$0" "$@" | tee -a "/data/log/vagrant/wp-wrapper.log"
