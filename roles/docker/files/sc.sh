@@ -96,11 +96,11 @@ in
         SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no"
         echo "Connecting to local Vagrant environment... (ssh -- $@)"
 
-        # Wait for SSH port to become active
-        while ! nc -z localhost 2222
+        # Wait for SSH port to become operational
+        while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
         do
-            echo "Waiting for environment to start..."
-            sleep 10
+            echo "Waiting for SSH to come online..."
+            sleep 5
         done
 
         if [ -n "${SCSHELL_WRAPPER}" ]
