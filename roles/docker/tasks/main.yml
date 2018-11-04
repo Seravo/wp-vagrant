@@ -88,7 +88,6 @@
     - wp-generate-ssl
     - wp-restart-nginx
     - wp-use-asset-proxy
-    - wp-vagrant-activation
     - wp-pull-production-db
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
@@ -102,6 +101,7 @@
     owner: root
     group: root
   with_items:
+    - wp-vagrant-activation
     - wp-watch-logs
 
 # Delay docker start vagrant finishes mounting /data before docker
