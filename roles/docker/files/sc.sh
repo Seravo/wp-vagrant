@@ -5,6 +5,9 @@ set -o pipefail
 IMAGE_NAME="seravo/wordpress:development"
 CONTAINER_NAME="seravo_wordpress"
 HOSTNAME="$(hostname -s)"
+# The end user will see the hostname of the Docker container in their terminal
+# window title and in the console prompt. Inheriting the hostname from the host
+# is good as Vagrant automatically assigns it the box name.
 
 COMMAND="${1:-autostart}"
 case "${COMMAND}"
@@ -24,7 +27,7 @@ in
         mkdir -p /data/db/mysql
         ID="$(docker create \
             --name "${CONTAINER_NAME}" \
-            --hostname "${CONTAINER_NAME}_vagrant" \
+            --hostname "${HOSTNAME}" \
             --publish "80:80" \
             --publish "443:443" \
             --publish "2222:22" \
