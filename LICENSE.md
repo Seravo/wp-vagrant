@@ -1,5 +1,5 @@
 Copyright (c) Roots 2015
-Copyright Seravo Oy 2015-2017
+Copyright Seravo Oy 2015-2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
