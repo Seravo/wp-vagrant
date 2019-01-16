@@ -32,6 +32,11 @@ in
             --publish "443:443" \
             --publish "2222:22" \
             --publish "3306:3306" \
+            --publish "1337:1337" \
+            --publish "1338:1338" \
+            --publish "5353:5353" \
+            --publish "5353:5353/udp" \
+            --publish "8080:8080" \
             --publish "9000:9000" \
             --volume "/data:/data" \
             --volume "/data/db/mysql:/var/lib/mysql" \
