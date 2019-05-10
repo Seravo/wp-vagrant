@@ -101,7 +101,7 @@ in
         #  vagrant ssh
         #
 
-        SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no"
+        SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no "
         echo "Connecting to local Vagrant environment... (ssh -- $@)"
 
         # Wait for SSH port to become operational
@@ -115,10 +115,13 @@ in
         then
             # When running via the wp-wrapper, keep SSH silent with -q to
             # avoid displaying too many SSH banners.
-            ssh ${SSH_FLAGS} -q root@localhost "$@"
-        else
-            ssh ${SSH_FLAGS} vagrant@localhost "$@"
+            SSH_FLAGS+="-q "
         fi
+
+        # Always enter as user 'vagrant'. None of our commands need root, or if
+        # they do, the command can be prefixed with 'sudo'.
+        ssh ${SSH_FLAGS} vagrant@localhost "$@"
+
     ;;
     wait-mounts)
         MPATH="/data/wordpress/config.yml"
