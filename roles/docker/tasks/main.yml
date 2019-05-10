@@ -89,8 +89,11 @@
     - wp-restart-nginx
     - wp-use-asset-proxy
     - wp-pull-production-db
+    - wp-pull-production-themes
+    - wp-pull-production-plugins
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
+    - wp-test
 
 # Move here all commands that have been deprecated from the Vagrantfile
 - name: Create noop-wrappers for obsolete commands
