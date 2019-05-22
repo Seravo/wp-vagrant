@@ -18,6 +18,17 @@
     - unattended-upgrades # do automatic updates for the VM
     - docker.io
     - ifupdown
+    - avahi-daemon    # Avahi in VirtualBox to be fully network visible
+    - avahi-utils     # To run `avahi-browse --all --resolve --terminate`
+
+# Avahi must be running on the VirtualBox host so that it is properly visible
+# on the local network. Running from inside the Docker container with ports
+# exposed and forwarded wasn't enough to get all network advertisements visible.
+- name: Install Avahi config
+  copy:
+    src: avahi-services/
+    dest: /etc/avahi/services/
+    mode: 0644
 
 # this allows us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>

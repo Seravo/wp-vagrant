@@ -34,8 +34,6 @@ in
             --publish "3306:3306" \
             --publish "1337:1337" \
             --publish "1338:1338" \
-            --publish "5353:5353" \
-            --publish "5353:5353/udp" \
             --publish "8080:8080" \
             --publish "9000:9000" \
             --volume "/data:/data" \
@@ -43,6 +41,17 @@ in
             --restart "always" \
             "$@" \
             "${IMAGE_NAME}")"
+
+        # NOTE! If running pure Docker without a VirtualBox wrapper, remember
+        # to expose Avahi ports with:
+        #   --publish "5353:5353" \
+        #   --publish "5353:5353/udp" \
+
+        # Update Avahi hostname to match container hostname
+        sed "s/wordpress.local/$HOSTNAME.local/g" -i /etc/avahi/services/http.service
+        # Ensure hostname change takes effect
+        systemctl restart avahi-daemon
+
         if [ -z "${ID}" ]
         then
             echo "E: Container creation failed!"
