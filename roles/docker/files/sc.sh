@@ -109,6 +109,8 @@ in
         do
             echo "Waiting for SSH to come online..."
             sleep 5
+            echo "Previous event:"
+            docker logs --tail 1 "${CONTAINER_NAME}" || true
         done
 
         if [ -n "${SCSHELL_WRAPPER}" ]
