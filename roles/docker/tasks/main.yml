@@ -30,6 +30,12 @@
     dest: /etc/avahi/services/
     mode: 0644
 
+- name: Install rc.local with extra Avahi commands
+  copy:
+    src: rc.local
+    dest: /etc/
+    mode: 0744
+
 # this allows us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
 - name: Add vagrant private key
