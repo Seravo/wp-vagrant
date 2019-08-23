@@ -110,8 +110,8 @@ in
         #  vagrant ssh
         #
 
-        SSH_FLAGS="-A -i "/home/vagrant/.ssh/id_rsa_vagrant" -p 2222 -o StrictHostKeyChecking=no "
-        echo "Connecting to local Vagrant environment... (ssh -- $@)"
+        SSH_FLAGS="-A -i '/home/vagrant/.ssh/id_rsa_vagrant' -p 2222 -o StrictHostKeyChecking=no "
+        echo "Connecting to local Vagrant environment... (ssh -- $*)"
 
         # Wait for SSH port to become operational
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
@@ -137,7 +137,7 @@ in
     wait-mounts)
         MPATH="/data/wordpress/config.yml"
 
-        for i in $(seq -s " " 15)
+        for _ in $(seq -s " " 15)
         do
             if [ -e "${MPATH}" ]
             then
