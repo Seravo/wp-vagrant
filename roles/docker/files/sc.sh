@@ -113,13 +113,31 @@ in
         SSH_FLAGS="-A -i '/home/vagrant/.ssh/id_rsa_vagrant' -p 2222 -o StrictHostKeyChecking=no "
         echo "Connecting to local Vagrant environment... (ssh -- $*)"
 
+        # Count total wait time to be able to bale out if SSH never seems to get up
+        TIME_PASSED=0
+
+        # Always wait first for 2 seconds that Docker had a chance to start
+        sleep 2
+
         # Wait for SSH port to become operational
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
         do
-            echo "Waiting for SSH to come online..."
-            sleep 5
-            echo "Previous event:"
-            docker logs --tail 1 "${CONTAINER_NAME}" || true
+            # If to omuch time passed, just abort and exit
+            if  [[ "$TIME_PASSED" -gt 60 ]]
+            then
+              echo "Previous event:"
+              docker logs --tail 50 "${CONTAINER_NAME}" || true
+              echo "SSH did not come online in 60 seconds, aborting..."
+              exit
+
+            else
+              echo "Previous event:"
+              docker logs --tail 1 "${CONTAINER_NAME}" || true
+              echo "Waiting for SSH to come online..."
+
+              sleep 5
+              TIME_PASSED=$((TIME_PASSED+5))
+            fi
         done
 
         if [ -n "${SCSHELL_WRAPPER}" ]
