@@ -110,7 +110,7 @@ in
         #  vagrant ssh
         #
 
-        SSH_FLAGS="-A -i '/home/vagrant/.ssh/id_rsa_vagrant' -p 2222 -o StrictHostKeyChecking=no "
+        SSH_FLAGS="-A -i /home/vagrant/.ssh/id_rsa_vagrant -p 2222 -o StrictHostKeyChecking=no "
         echo "Connecting to local Vagrant environment... (ssh -- $*)"
 
         # Count total wait time to be able to bale out if SSH never seems to get up
