@@ -116,8 +116,8 @@ in
         # Count total wait time to be able to bale out if SSH never seems to get up
         TIME_PASSED=0
 
-        # Always wait first for 2 seconds that Docker had a chance to start
-        sleep 2
+        # Always wait first for 5 seconds that Docker had a chance to start
+        sleep 5
 
         # Wait for SSH port to become operational
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
