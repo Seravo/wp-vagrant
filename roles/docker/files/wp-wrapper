@@ -32,3 +32,4 @@ mkdir -p /data/log/vagrant
 echo "Ran: '$0 $@'" >> /data/log/vagrant/wp-wrapper.log
 
 /usr/sbin/sc shell "$0" "$@" | tee -a "/data/log/vagrant/wp-wrapper.log"
+# NOTE! The use of pipe and tee above makes all commands non-interactive

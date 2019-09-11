@@ -111,6 +111,7 @@
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-test
+    - wp-development-up
 
 # Move here all commands that have been deprecated from the Vagrantfile
 - name: Create noop-wrappers for obsolete commands
