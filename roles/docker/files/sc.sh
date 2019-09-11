@@ -159,7 +159,7 @@ in
         do
             if [ -e "${MPATH}" ]
             then
-                # vagrant mount succesful, exit & allow docker to launch
+                # Vagrant mount successful, exit & allow Docker to launch
                 exit 0
             fi
             sleep 5

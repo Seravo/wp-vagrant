@@ -124,7 +124,7 @@
     - wp-vagrant-activation
     - wp-watch-logs
 
-# Delay docker start vagrant finishes mounting /data before docker
+# Delay Docker start until Vagrant finishes mounting /data before Docker
 # mounts /data:/data
 - name: Create directory structure for systemd override
   file:
@@ -135,15 +135,13 @@
     mode: 0755
     recurse: yes
 
-- name: Delay docker start
+- name: Delay Docker start until /data/wordpress is mounted
   copy:
-    src: "{{ item }}.conf"
-    dest: "/etc/systemd/system/docker.service.d/{{ item }}.conf"
+    src: "delay.conf"
+    dest: "/etc/systemd/system/docker.service.d/delay.conf"
     mode: 0644
     owner: root
     group: root
-  with_items:
-    - delay
 
 # Keep the Docker host motd silent and rely on the motd emitted by the container
 - name: Clean away excess motd messages
