@@ -1,11 +1,15 @@
 [Unit]
 Description=Seravo Controller
 After=docker.service
+RequiresMountsFor=/data/wordpress
 
 [Service]
 Type=simple
 ExecStart=/usr/sbin/sc autostart
+ExecStop=/usr/sbin/sc stop
+RemainAfterExit=yes
 Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

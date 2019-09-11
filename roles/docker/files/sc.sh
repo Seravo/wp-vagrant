@@ -83,11 +83,12 @@ in
         exit 0
     ;;
     start)
-        echo "I: Start new container"
+        echo "I: Start container"
         docker start "${CONTAINER_NAME}"
         exit 0
     ;;
     autostart)
+        echo "I: Autostart container"
         if [ -e "/data/wordpress/.seravo-controller-autoupdate" ]
         then
             $0 pull
@@ -178,5 +179,12 @@ in
     ;;
     log|logs)
         docker logs --follow "${CONTAINER_NAME}"
+    ;;
+    stop)
+        # Triggers to run when Vagrant box is stopped/halted
+        echo "I: Stop container"
+        # Give the Docker container 60 seconds to exit gracefully, e.g. dump
+        # the database and run other triggers
+        docker stop --time=60 "${CONTAINER_NAME}"
     ;;
 esac
