@@ -147,6 +147,14 @@ in
             SSH_FLAGS+="-q "
         fi
 
+        # If SSH session was interactive and a (pseudo) tty was allocated, continue
+        # to do so in the subsession so that all interactive prompts can work
+        if [ -t 1 ]
+        then
+          echo "SSH session is interactive"
+          SSH_FLAGS+="-t "
+        fi
+
         # Always enter as user 'vagrant'. None of our commands need root, or if
         # they do, the command can be prefixed with 'sudo'.
         ssh ${SSH_FLAGS} vagrant@localhost "$@"
