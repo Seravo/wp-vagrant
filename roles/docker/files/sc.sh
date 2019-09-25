@@ -24,7 +24,6 @@ in
     create)
         shift
         echo "I: Create new container"
-        mkdir -p /data/db/mysql
         ID="$(docker create \
             --name "${CONTAINER_NAME}" \
             --hostname "${HOSTNAME}" \
@@ -37,7 +36,6 @@ in
             --publish "8080:8080" \
             --publish "9000:9000" \
             --volume "/data:/data" \
-            --volume "/data/db/mysql:/var/lib/mysql" \
             --restart "always" \
             "$@" \
             "${IMAGE_NAME}")"
