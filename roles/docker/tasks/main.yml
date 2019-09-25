@@ -100,7 +100,6 @@
     group: root
   with_items:
     - composer
-    - wp
     - wp-activate-git-hooks
     - wp-generate-ssl
     - wp-restart-nginx
@@ -111,6 +110,18 @@
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-test
+
+# Ensure the commands the Vagrantfile issues in interactive mode are not
+# run on the host but passed on to the Docker container.
+- name: Create interactive wrappers for necessary Vagrantfile commands
+  copy:
+    src: wp-wrapper-interactive
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - wp
     - wp-development-up
 
 # Move here all commands that have been deprecated from the Vagrantfile
