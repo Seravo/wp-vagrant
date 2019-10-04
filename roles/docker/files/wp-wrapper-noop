@@ -19,9 +19,12 @@ mkdir -p /data/log/vagrant
 # Log what was attempted
 echo "Attempted: '$0 $@'" >> /data/log/vagrant/wp-wrapper-noop.log
 
-echo "DEPRECATION WARNING: Your Vagrantfile tried to run '$0 $@'.
+echo "DEPRECATION WARNING: Your Vagrantfile tried to run: $0 $@
 This command is nowadays obsolete. This is just a warning and there is
 no need to panic. At your convenience please update your Vagrantfile
 (or whole project template) to the latest version available
-at https://github.com/Seravo/WordPress/
-"
+at https://github.com/Seravo/WordPress/ or use the wp-fix-project command.
+" >&2
+# Output to stderr so that Vagrant will show the warning in red. Otherwise
+# 'vagran up' shows all stdout messages in green, which can be confusing to
+# users when warnings are shown in green.
