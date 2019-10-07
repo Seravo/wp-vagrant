@@ -21,10 +21,10 @@ in
         done
         set -e
     ;;
-    create)
+    start)
         shift
-        echo "I: Create new container"
-        ID="$(docker create \
+        echo "I: Starting container"
+        ID="$(docker run -d \
             --name "${CONTAINER_NAME}" \
             --hostname "${HOSTNAME}" \
             --publish "80:80" \
@@ -37,6 +37,7 @@ in
             --publish "9000:9000" \
             --volume "/data:/data" \
             --restart "always" \
+            --entrypoint "/sbin/swd_init_debug" \
             "$@" \
             "${IMAGE_NAME}")"
 
@@ -55,16 +56,7 @@ in
             echo "E: Container creation failed!"
             exit 1
         fi
-    ;;
-    maybe-create)
-        set +e
-        docker ps | grep -q "${CONTAINER_NAME}"
-        if [ "$?" = "1" ]
-        then
-            shift
-            $0 create "$@"
-        fi
-        set -e
+        exit 0
     ;;
     pull)
         echo "I: Pull latest box from Docker Hub"
@@ -80,19 +72,13 @@ in
         set -e
         exit 0
     ;;
-    start)
-        echo "I: Start container"
-        docker start "${CONTAINER_NAME}"
-        exit 0
-    ;;
     autostart)
         echo "I: Autostart container"
         if [ -e "/data/wordpress/.seravo-controller-autoupdate" ]
         then
             $0 pull
-            $0 remove
         fi
-        $0 maybe-create
+        $0 remove
         $0 start
         exit 0
     ;;
