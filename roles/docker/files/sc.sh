@@ -115,14 +115,14 @@ in
         # Count total wait time to be able to bale out if SSH never seems to get up
         TIME_PASSED=0
 
-        # Always wait first for 5 seconds that Docker had a chance to start
-        sleep 5
+        # Always wait first for 10 seconds that Docker had a chance to start
+        sleep 10
 
         # Wait for SSH port to become operational
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
         do
             # If to omuch time passed, just abort and exit
-            if  [[ "$TIME_PASSED" -gt 60 ]]
+            if  [[ "$TIME_PASSED" -gt 30 ]]
             then
               echo "Previous event:"
               docker logs --tail 50 "${CONTAINER_NAME}" || true
