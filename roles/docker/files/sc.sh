@@ -121,8 +121,8 @@ in
         # Wait for SSH port to become operational
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
         do
-            # If to omuch time passed, just abort and exit
-            if  [[ "$TIME_PASSED" -gt 30 ]]
+            # If too much time has passed, just abort and exit
+            if  [[ "$TIME_PASSED" -gt 60 ]]
             then
               echo "Previous event:"
               docker logs --tail 50 "${CONTAINER_NAME}" || true
