@@ -1,3 +1,9 @@
+- name: Stop Docker image as it should not be running in packaged box
+  shell: /usr/sbin/sc stop || true
+
+- name: Remove Docker image so a new one is created on next startup
+  shell: /usr/sbin/sc remove || true
+
 - name: Remove non-essential packages
   apt:
     pkg: "{{ item }}"
