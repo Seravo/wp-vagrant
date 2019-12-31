@@ -15,6 +15,7 @@ build: .vagrant
 package.box: .vagrant
 	vagrant halt
 	vagrant package default --output package.box
+	sha256sum package.box # Vagrant 2.0.2 only support 256, so don't use longer
 
 rebuild: destroy build
 
