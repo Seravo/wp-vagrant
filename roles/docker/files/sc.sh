@@ -97,7 +97,7 @@ in
         #
 
         SSH_FLAGS="-A -i /home/vagrant/.ssh/id_rsa_vagrant -p 2222 -o StrictHostKeyChecking=no "
-        echo "Connecting to local Vagrant environment... (ssh -- $*)"
+        echo "Connecting to development environment... (ssh -- $*)"
 
         # Count total wait time to be able to bale out if SSH never seems to get up
         TIME_PASSED=0
@@ -106,23 +106,35 @@ in
         sleep 10
 
         # Wait for SSH port to become operational
+        # shellcheck disable=SC2086
         while ! ssh ${SSH_FLAGS} -q localhost echo "SSH connection confirmed"
         do
-            # If too much time has passed, just abort and exit
-            if  [[ "$TIME_PASSED" -gt 60 ]]
+            echo "Waiting for SSH connection..."
+            # Sleep one second longer than what is the docker logs scope to
+            # ensure there are no duplicate lines
+            sleep 6
+            TIME_PASSED=$((TIME_PASSED+6))
+
+            # Show events from Docker logs so users can have a hint about what
+            # the bootstrap is doing
+            LOGS="$(docker logs --since 5s "${CONTAINER_NAME}")"
+            if [ -n "$LOGS" ]
             then
-              echo "Previous event:"
-              docker logs --tail 50 "${CONTAINER_NAME}" || true
-              echo "SSH did not come online in 60 seconds, aborting..."
-              exit
+                echo "Events in past 5 seconds:"
+                echo "$LOGS"
+            fi
 
-            else
-              echo "Previous event:"
-              docker logs --tail 1 "${CONTAINER_NAME}" || true
-              echo "Waiting for SSH to come online..."
-
-              sleep 5
-              TIME_PASSED=$((TIME_PASSED+5))
+            # If too much time has passed and there is nothing in the logs,
+            # just abort and exit
+            if [[ "$TIME_PASSED" -gt 180 ]] && [ -z "$LOGS" ]
+            then
+                echo "Last 30 events:"
+                docker logs --tail 30 "${CONTAINER_NAME}"
+                echo
+                echo "Development environment did not come online in 3 minutes" >&2
+                echo "Skipped running commands ($*)" >&2
+                echo
+                exit
             fi
         done
 
@@ -143,6 +155,7 @@ in
 
         # Always enter as user 'vagrant'. None of our commands need root, or if
         # they do, the command can be prefixed with 'sudo'.
+        # shellcheck disable=SC2086,SC2029
         ssh ${SSH_FLAGS} vagrant@localhost "$@"
 
     ;;
