@@ -38,6 +38,7 @@ in
             --volume "/data:/data" \
             --restart "always" \
             --entrypoint "/sbin/swd_init_debug" \
+            --env VAGRANT="$(cat /buildtime)" \
             "$@" \
             "${IMAGE_NAME}")"
 
