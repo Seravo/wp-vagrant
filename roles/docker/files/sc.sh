@@ -37,7 +37,7 @@ in
             --publish "9000:9000" \
             --volume "/data:/data" \
             --restart "always" \
-            --entrypoint "/sbin/swd_init_debug" \
+            --entrypoint "/sbin/swd_init" \
             --env VAGRANT="$(cat /buildtime)" \
             "$@" \
             "${IMAGE_NAME}")"

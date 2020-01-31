@@ -36,8 +36,10 @@
     dest: /etc/
     mode: 0744
 
-# this allows us to SSH directly into the Docker container on start
+# This key enables us to SSH directly into the Docker container on start
 # source: <https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant>
+# Note that the SSH key used on 'vagrant ssh' is a separate one, and it is stored at
+# ~/.vagrant.d/boxes/seravo-VAGRANTSLASH-wordpress/NNNNNNN.0.0/virtualbox/vagrant_private_key
 - name: Add vagrant private key
   copy:
     src: vagrant.key
