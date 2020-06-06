@@ -14,6 +14,7 @@
   with_items:
     - gcc
     - gcc-5
+    - gcc-7-base
     - python2.7
     - lxc-common
     - lxd
@@ -26,6 +27,23 @@
     - ntfs-3g
     - fakeroot
     - eatmydata
+    - python3-twisted
+    - lvm2
+    - perl-modules-5.26
+    - vim
+    - vim-runtime
+    - iso-codes
+    - btrfs-progs
+
+- name: Remove docs and locales very unlikely to be needed
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/share/locale
+    - /usr/share/doc
+    - /usr/share/man
+    - /usr/share/i18n
 
 - name: Remove temporary content
   file:
