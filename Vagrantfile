@@ -16,15 +16,12 @@ Vagrant.configure('2') do |config|
   config.vm.provision :ansible do |ansible|
     ansible.compatibility_mode = '2.0'
     ansible.playbook = File.join(ANSIBLE_PATH, 'site.yml')
-    ansible.groups = {
-      'web' => ['default'],
-      'development' => ['default']
-    }
     ansible.extra_vars = {
       ansible_ssh_user: 'vagrant',
       user: 'vagrant',
       ansible_python_interpreter: '/usr/bin/python3'
     }
+    ansible.raw_arguments = ['--diff']
   end
 
   config.vm.provider 'virtualbox' do |vb|

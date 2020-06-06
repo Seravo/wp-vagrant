@@ -98,7 +98,7 @@
 - name: Add check for flag file
   lineinfile:
     state: present
-    regexp: 'exec /usr/bin/sc shell$'
+    regexp: 'exec /usr/sbin/sc shell$'
     line: '[ ! -e "/data/wordpress/.seravo-controller-shell" ] && exec /usr/sbin/sc shell'
     dest: '{{ item }}/.bashrc'
   with_items:

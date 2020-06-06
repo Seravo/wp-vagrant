@@ -1,17 +1,8 @@
 ---
-- hosts: all
-  gather_facts: False
-  become: yes
-  tasks:
-  # install aptitude, required by ansible itself (old versions)
-  - name: install aptitude
-    raw: test -e /usr/bin/aptitude-curses || (apt -y update && apt install -y aptitude)
-
 - name: "Seravo Vagrant Box"
   hosts: all
   become: yes
   remote_user: admin
-
   roles:
-    - { role: docker }
-    - { role: cleanup }
+    - docker
+    - cleanup
