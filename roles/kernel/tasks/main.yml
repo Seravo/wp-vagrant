@@ -1,0 +1,60 @@
+---
+- name: Allow removal of running kernel
+  debconf:
+    name: linux-base
+    question: linux-base/removing-running-kernel
+    value: 'true'
+    vtype: boolean
+
+- name: Install latest kernel for virtual machines (kernel 5.3.0-53-generic with VirtualBox module 6.0.14_Ubuntu)
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - linux-virtual-hwe-18.04
+    - virtualbox-guest-dkms
+    - virtualbox-guest-utils
+
+- name: Purge deprecated packages
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+    purge: yes
+  with_items:
+    - linux-virtual
+    - linux-*-4.15.0-*
+
+- name: Remove outdated apt packages, mainly 4.15 series kernels
+  apt:
+    autoremove: yes
+
+- name: Reboot for new kernel to apply
+  shell: sleep 2 && /sbin/shutdown -r now
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: Wait 300 seconds, but only start checking after 10 seconds
+  wait_for_connection:
+    delay: 10
+    timeout: 300
+
+# @TODO: Requires Ansible 2.7:
+#- name: Reboot for new kernel to apply
+#  reboot:
+#    post_reboot_delay: 10
+
+- name: Remove Linux headers not needed anymore since DKMS already ran
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+    purge: yes
+  with_items:
+    - linux-headers-*
+
+- name: Remove outdated apt packages, mainly 4.15 series kernels
+  apt:
+    autoremove: yes
+# If the step above also removes linux-image-virtual-hwe-18.04, we can bare it
+# since the kernel packages themselves stay around

@@ -4,5 +4,6 @@
   become: yes
   remote_user: admin
   roles:
+    - kernel
     - docker
     - cleanup
