@@ -13,6 +13,6 @@ script:
   - set -e
 
   # Run our custom Git commit checks
-  - python3 ./gnitpick.py
+  - python3 ./gnitpick.py --target-repository https://github.com/seravo/wp-palvelu-vagrant.git
 
   - ansible-playbook --syntax-check -i hosts/development site.yml
