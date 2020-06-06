@@ -8,6 +8,11 @@ sync
 rm -f /EMPTY
 sync
 
+# Run zerofree as well
+echo "u" > /proc/sysrq-trigger
+mount /dev/mapper / -o remount,ro
+zerofree -v /dev/sda1
+
 # remove myself
 rm -f "$0"
 sync
