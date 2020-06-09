@@ -35,6 +35,15 @@
     - iso-codes
     - btrfs-progs
 
+- name: Disable unnecessary services to avoid excess error messages during bootup
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+    masked: yes
+  with_items:
+    - motd-news.service
+    - motd-news.timer
+
 - name: Remove docs and locales very unlikely to be needed
   file:
     dest: "{{ item }}"
