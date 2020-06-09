@@ -114,6 +114,7 @@
     - wp-vagrant-dump-db
     - wp-vagrant-import-db
     - wp-test
+    - s-test-commands
 
 # Ensure the commands the Vagrantfile issues in interactive mode are not
 # run on the host but passed on to the Docker container.
