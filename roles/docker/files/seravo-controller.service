@@ -1,6 +1,8 @@
 [Unit]
 Description=Seravo Controller
 After=docker.service
+
+# This does the same as the delay.conf
 RequiresMountsFor=/data/wordpress
 
 [Service]

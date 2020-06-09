@@ -20,6 +20,7 @@
     - ifupdown
     - avahi-daemon    # Avahi in VirtualBox to be fully network visible
     - avahi-utils     # To run `avahi-browse --all --resolve --terminate`
+    - tree            # To list /data contents nicely if debugging
 
 # Avahi must be running on the VirtualBox host so that it is properly visible
 # on the local network. Running from inside the Docker container with ports
@@ -189,6 +190,11 @@
     enabled: yes
     state: stopped
     name: seravo-controller
+
+- name: Add user 'vagrant' to group 'docker' so it can run Docker commands
+  user:
+    name: vagrant
+    groups: docker
 
 - name: Pull Docker image
   shell: /usr/sbin/sc pull
