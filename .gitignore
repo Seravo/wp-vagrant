@@ -9,3 +9,6 @@ packer_cache
 *.log
 
 site.retry
+
+# Test project
+tmp/
