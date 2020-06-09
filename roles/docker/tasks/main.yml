@@ -65,10 +65,12 @@
     owner: root
     group: root
 
-# Create flag file: do not jump to docker if file exists
-# This file will be in place during the Vagrant provisioning Ansible run
-# and it will automatically disappear when the box is restarted and there
-# is a new /data/wordpress date mount in place.
+# Create flag file to ensure SC does not forward SSH shells to the Docker
+# container but runs all commands issued by Ansible provisioning on host.
+# This will automatically disappear when the box is restarted and there is a new
+# /data/wordpress date mount in place.
+# Populate the flag with some sensible text so in case it accidentally is left
+# behind, it will be easier for somebody to debug where the file came from.
 - name: Create flag file for docker shell
   lineinfile:
     regexp: '^1'
@@ -77,21 +79,7 @@
     owner: vagrant
     group: root
     create: yes
-    line: '1'
-
-# Create wait-mount file: Docker service will not start if file does not exist
-# This workaround is needed during the Vagrant provisioning Ansible run
-# and it will automatically disappear when the box is restarted and there
-# is a new /data/wordpress date mount in place.
-- name: Create flag file for wait-mount
-  lineinfile:
-    regexp: '^1'
-    path: /data/wordpress/config.yml
-    mode: 0644
-    owner: vagrant
-    group: root
-    create: yes
-    line: '1'
+    line: 'Vagrant Ansible provisioning placeholder'
 
 # Allow user to choose wheter she likes to enter Docker or host VM
 # if /data/wordpress/.seravo-controller-shell exists, user won't be forwarded to container
@@ -156,17 +144,17 @@
 # mounts /data:/data
 - name: Create directory structure for systemd override
   file:
-    path: /etc/systemd/system/docker.service.d
+    path: /etc/systemd/system/seravo-controller.service.d
     state: directory
     owner: root
     group: root
     mode: 0755
     recurse: yes
 
-- name: Delay Docker start until /data/wordpress is mounted
+- name: Delay Seravo Controller start until /data/wordpress is mounted
   copy:
     src: "delay.conf"
-    dest: "/etc/systemd/system/docker.service.d/delay.conf"
+    dest: "/etc/systemd/system/seravo-controller.service.d/delay.conf"
     mode: 0644
     owner: root
     group: root
@@ -203,6 +191,13 @@
 
 - name: Pull Docker image
   shell: /usr/sbin/sc pull
+
+- name: Ensure there are no running containers when provision ends
+  shell: docker ps
+  register: docker_containers_running
+
+- debug:
+    msg: "{{ docker_containers_running.stdout_lines }}"
 
 # Create file that contains build timestamp
 - name: Create build timestamp file
