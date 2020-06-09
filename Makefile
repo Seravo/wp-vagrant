@@ -6,11 +6,11 @@ clean:
 destroy: clean
 	vagrant destroy -f
 	rm -rf .vagrant
+	vagrant box update # Next run will be with latest box version
+	vagrant box prune --name ubuntu/bionic64
 
-.vagrant:
+build:
 	vagrant up --provision
-
-build: .vagrant
 
 package.box: .vagrant
 	vagrant halt
