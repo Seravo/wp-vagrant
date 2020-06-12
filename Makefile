@@ -1,4 +1,4 @@
-all: build
+all: build package.box import test
 
 clean:
 	rm -f *.log *.box site.retry
