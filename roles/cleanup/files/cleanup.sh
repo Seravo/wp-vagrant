@@ -1,20 +1,14 @@
 #!/bin/sh
 
+# Some Vagrant boxes have sda1, others vda1
+ROOT_FS_DEVICE=$(mount / 2>&1 | grep -o -e '/dev/[a-z0-9]*')
+
 # Run zerofree
 echo "u" > /proc/sysrq-trigger
-mount / -o remount,ro
+mount -o remount,ro /
 
-# Some Vagrant boxes have sda1, others vda1
-if [ -e /dev/sda1 ]
-then
-  zerofree -v /dev/sda1
-elif [ -e /dev/vda1 ]
-then
-  zerofree -v /dev/vda1
-else
-  echo "ERROR: Root filesystem not found at any of the expected locations"
-  exit 1
-fi
+zerofree -v "$ROOT_FS_DEVICE"
 
-# Mount writeable again, otherwise Ansible will error
-mount / -o remount,rw
+# Try to mount writeable again, otherwise Ansible will error. This does however
+# not work on libvirt where it seems only a reboot makes / writeable again
+mount -o remount,rw / || true
