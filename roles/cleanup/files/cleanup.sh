@@ -1,20 +1,20 @@
 #!/bin/sh
 
-## @TODO: Disable this as if makes Trqvis-CI fail on timout after there was
-## no output in 10 minutes
-# Fill disk until it's full
-#dd if=/dev/zero of=/EMPTY
-#sync
-
-# Remove contents
-rm -f /EMPTY
-sync
-
-# remove myself
-rm -f "$0"
-sync
-
-# Run zerofree as well
+# Run zerofree
 echo "u" > /proc/sysrq-trigger
-mount /dev/mapper / -o remount,ro
-zerofree -v /dev/sda1
+mount / -o remount,ro
+
+# Some Vagrant boxes have sda1, others vda1
+if [ -e /dev/sda1 ]
+then
+  zerofree -v /dev/sda1
+elif [ -e /dev/vda1 ]
+then
+  zerofree -v /dev/vda1
+else
+  echo "ERROR: Root filesystem not found at any of the expected locations"
+  exit 1
+fi
+
+# Mount writeable again, otherwise Ansible will error
+mount / -o remount,rw
