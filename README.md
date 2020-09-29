@@ -58,3 +58,8 @@ Make Vagrant box available for local testing with `make import` and fire up a Wo
 Make available for public testing by publishing first as [Seravo/WordPress-Beta](https://app.vagrantup.com/seravo/boxes/wordpress-beta) and only later as the official [Seravo/WordPress](https://app.vagrantup.com/seravo/boxes/wordpress) Vagrant box.
 
 When publishing on Vagrant boxes, see previous releases on how to define the version number, release notes and checksums. When making new official releases (not beta), also remember to write release notes at https://seravo.com/docs/get-started/release-notes/.
+
+### Alternative Vagrant box formats
+
+To create a libvirt box, make sure you have installed the same dependencies as listed in .travis.yml, and run the same commands as Travis-CI does to provision a libvirt image. The resulting image is 1.5x larger than the VirtualBox image and the audience of libvirt is rather limited, so for now we have not put much effort in publishing boxes in the libvirt format.
+
