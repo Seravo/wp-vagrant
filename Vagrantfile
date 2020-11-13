@@ -24,8 +24,4 @@ Vagrant.configure('2') do |config|
     ansible.raw_arguments = ['--diff']
   end
 
-  config.vm.provider 'virtualbox' do |vb|
-    # Disable UART (prevents creating UART config with hard-coded path
-    vb.customize ['modifyvm', :id, '--uartmode1', 'disconnected']
-  end
 end
