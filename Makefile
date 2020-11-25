@@ -1,5 +1,7 @@
-all: build package.box import test
+all: sudo destroy build package.box import test
 
+sudo:
+	sudo echo "Sudo confirmed to work! Will be used while running test.sh in a later step."
 clean:
 	rm -f *.log *.box site.retry
 
