@@ -78,6 +78,23 @@
     - /var/cache/apt/archives
     - /var/lib/apt/lists
 
+
+# NOTE: These two are to make the image Virtualbox 6 compliant
+- name: Check whether 50-cloudimg-settings.cfg exists
+  stat:
+    path: /etc/default/grub.d/50-cloudimg-settings.cfg
+  register: stat_result
+
+- name: Remove unneeded serial port from grub config
+  lineinfile:
+    path: /etc/default/grub.d/50-cloudimg-settings.cfg
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+    line: GRUB_CMDLINE_LINUX_DEFAULT="console=tty1"
+  when: stat_result.stat.exists
+
+- name: Update grub
+  command: update-grub
+
 - name: Install cleanup script
   copy:
     src: cleanup.sh
