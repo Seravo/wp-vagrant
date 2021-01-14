@@ -23,5 +23,7 @@ Vagrant.configure('2') do |config|
     }
     ansible.raw_arguments = ['--diff']
   end
-
+  config.vm.provider 'virtualbox' do |vb|
+    vb.customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+  end
 end
