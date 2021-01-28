@@ -191,6 +191,22 @@ in
         echo "ERROR: Mounting /data failed, '${MPATH}' not found!"
         exit 1
     ;;
+    wait-log-dir)
+        MPATH="/data/log"
+
+        for _ in $(seq 30)
+        do
+            if find /data/log -maxdepth 0 -user vagrant
+            then
+                # Directory exists and is owned by user
+                exit 0
+            fi
+            sleep 2
+        done
+
+        echo "ERROR: Path '${MPATH}' not found!"
+        exit 1
+    ;;
     log|logs)
         docker logs --follow "${CONTAINER_NAME}"
     ;;

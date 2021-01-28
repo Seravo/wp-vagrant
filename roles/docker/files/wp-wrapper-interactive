@@ -7,6 +7,9 @@ set -e
 # interactive mode from working. Use this wrapper for commands that need to
 # retain the interactive tty session to reply to prompts etc.
 
+# Ensure no command runs too fast (e.g. if wp-development-up if very fast to run)
+/usr/sbin/sc wait-log-dir
+
 export SCSHELL_WRAPPER=1
 
 # Ensure path exists

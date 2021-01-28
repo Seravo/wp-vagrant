@@ -13,6 +13,9 @@ set -e
 # functionality, and no side-effects.
 #
 
+# Ensure no command runs too fast (e.g. if wp-development-up if very fast to run)
+/usr/sbin/sc wait-log-dir
+
 # Ensure path exists
 mkdir -p /data/log/vagrant
 
