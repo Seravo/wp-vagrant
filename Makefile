@@ -7,7 +7,8 @@ clean:
 
 destroy: clean
 	vagrant destroy -f
-	rm -rf .vagrant
+	(cd tmp; vagrant destroy -f)
+	rm -rf .vagrant tmp
 	vagrant box update # Next run will be with latest box version
 	vagrant box prune --name ubuntu/bionic64
 
