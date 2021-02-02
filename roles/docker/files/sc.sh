@@ -194,16 +194,19 @@ in
     wait-log-dir)
         MPATH="/data/log"
 
-        for _ in $(seq 30)
+        for _ in $(seq 60)
         do
-            if find /data/log -maxdepth 0 -user vagrant
+            if find /data/log -maxdepth 0 -user vagrant > /dev/null 2>&1
             then
                 # Directory exists and is owned by user
                 exit 0
             fi
+            echo "Waiting for /data/log to become available.."
             sleep 2
         done
 
+        ls -la /data # Provide some debug data in failure
+        echo
         echo "ERROR: Path '${MPATH}' not found!"
         exit 1
     ;;
