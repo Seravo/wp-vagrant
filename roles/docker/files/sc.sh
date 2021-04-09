@@ -142,15 +142,20 @@ in
             # just abort and exit
             if [[ "$TIME_PASSED" -gt 180 ]] && [ -z "$LOGS" ]
             then
-                # Spit out some debug info and exit with error
-                sc debug
-                echo
-                echo "Development environment did not come online in 3 minutes" >&2
-                echo "Skipped running commands ($*)" >&2
-                echo
-                echo "If this repeats, please file an issue at https://github.com/Seravo/WordPress"
-                echo
-                exit 1
+                LONGLOGS="$(docker logs --since 180s "${CONTAINER_NAME}")"
+                if [ -z "$LONGLOGS" ]
+                then
+                    # Spit out some debug info and exit with error
+                    sc debug
+                    echo
+                    echo "Development environment has been silent for 3 minutes" >&2
+                    echo "Aborting startup" >&2
+                    echo "Skipped running commands ($*)" >&2
+                    echo
+                    echo "If this repeats, please file an issue at https://github.com/Seravo/WordPress"
+                    echo
+                    exit 1
+                fi
             fi
         done
 
