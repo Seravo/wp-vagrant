@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-IMAGE_NAME="seravo/wordpress:development"
+IMAGE_NAME="seravo/wordpress:nightly"
 CONTAINER_NAME="seravo_wordpress"
 
 COMMAND="${1:-autostart}"

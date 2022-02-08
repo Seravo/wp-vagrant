@@ -40,13 +40,25 @@ import and export data from and to production.
 
 ### Create a Vagrant image on your machine
 
-First make sure you have the latest Ubuntu base images on your system by running `vagrant box update`.
-
-Then build the Seravo Vagrant box using with `make rebuild`.
+Seravo Vagrant box is built with Packer. Make sure you have a fairly
+recent version of Packer installed before building the box with the following:
+```
+packer build -force virtualbox.pkr.hcl
+```
+You may also specify the version (default `0`) or show the VirtualBox GUI to see the build happen. Be sure to not touch any keys running with `headless=false`:
+```
+packer build -var "version=20220216.0.0" -var "headless=false" -force virtualbox.pkr.hcl
+```
 
 ### Test the new box locally first
 
-Make Vagrant box available for local testing with `make import` and fire up a WordPress project where the `Vagrantfile` has been modified to contain:
+To make the box available for local testing, find the build files and import the box file:
+```
+cd build/virtualbox/
+vagrant box add --name "seravo/wordpress-beta" seravo-wordpress_20220216.box
+```
+
+You should then be ready to fire up a WordPress project where the `Vagrantfile` has been modified to contain:
 
 ```
   config.vm.box_version = "= 0"
@@ -61,5 +73,4 @@ When publishing on Vagrant boxes, see previous releases on how to define the ver
 
 ### Alternative Vagrant box formats
 
-To create a libvirt box, make sure you have installed the same dependencies as listed in .travis.yml, and run the same commands as Travis-CI does to provision a libvirt image. The resulting image is 1.5x larger than the VirtualBox image and the audience of libvirt is rather limited, so for now we have not put much effort in publishing boxes in the libvirt format.
-
+Alternative Vagrant box formats may be published in the future.

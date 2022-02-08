@@ -1,14 +1,7 @@
-.vagrant
+# Output files
+build/
 
-# Ignore virtualbox boxes
-*.box
+# IDE files
+.idea
+*.iml
 
-# Ignore packer caches
-packer_cache
-
-*.log
-
-site.retry
-
-# Test project
-tmp/

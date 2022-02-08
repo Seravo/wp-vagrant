@@ -11,6 +11,7 @@
 #
 # By default this script does nothing.
 
+echo "Waiting Avahi for 30 secs"
 sleep 30 # Wait until Avahi is running
 
 HOSTNAME=$(hostname -s)

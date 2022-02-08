@@ -1,8 +1,0 @@
----
-- name: "Seravo Vagrant Box"
-  hosts: all
-  become: yes
-  remote_user: admin
-  roles:
-    - docker
-    - cleanup
