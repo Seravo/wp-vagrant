@@ -140,7 +140,7 @@ in
 
             # If too much time has passed and there is nothing in the logs,
             # just abort and exit
-            if [[ "$TIME_PASSED" -gt 180 ]] && [ -z "$LOGS" ]
+            if [[ "$TIME_PASSED" -gt 600 ]] && [ -z "$LOGS" ]
             then
                 # Spit out some debug info and exit with error
                 sc debug
